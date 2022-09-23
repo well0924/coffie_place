@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+	layout:decorate="~{layout/leafframe}">
+<head>
+<meta charset="UTF-8">
+<title>회원 아이디 및 비밀번호 찾기</title>
+<!-- Bootstrap CDN -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<th:block layout:fragment="content">
+<div class="container" style="margin-top:100px">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="card shadow">
+				<div class="card-header">
+					회원 비밀번호 찾기
+				</div>
+				<div class="card-body">
+					<h3>비밀번호 재수정</h3>
+					<form action="" method="post" id="updatePw">
+						<div class="form-group">
+							<label for="temp_pw">임시번호 입력</label>
+							<input type="text" id="temp_pw" class="form-control"/>
+						</div>
+						<div class="form-group">
+							<label for="user_id">회원아이디</label>
+							<input type="text" id="user_id" name="userId" class="form-control"/>
+							<label for="user_pw">비밀번호</label>
+							<input type="password" id="user_pw" name="userPw" class="form-control"/>
+							<label for="user_pwcheck">비밀번호 확인</label>
+							<input type="password" id="user_pwcheck" class="form-control"onchange="pwdcheck()"/>
+							<!-- 확인창 -->
+							<div id="pwdcheck"></div>
+						</div>
+						<div class="form-group text-right">
+							<button type="button" class="btn btn-primary" onclick="temporarynumber()">비밀번호 재수정</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>			
+<script type="text/javascript">
+//유효성검사
+function validation(){
+	let tmpw = document.getElementById('temp_pw').value;
+	let pw = document.getElementById('user_pw').value;
+	
+	if(tmpw.trim().length == 0){
+		alert('임시번호를 입력해 주세요.');
+		return false;
+	}
+	
+	if(pw.trim().length ==0){
+		alert('비밀번호를 입력해주세요.');
+		return false;
+	}
+	return true;
+}
+
+//비밀번호 확인
+function pwdcheck(){
+	let pw = document.getElementById('user_pw').value;
+	let pwcheck = document.getElementById('user_pwcheck').value;
+	
+	console.log(pw);
+	console.log(pwcheck);
+	
+	if(pw == pwcheck){
+		document.getElementById('pwdcheck').innerHTML="비밀번호가 일치합니다.";
+		document.getElementById('pwdcheck').style.color='blue';
+	}else{
+		document.getElementById('pwdcheck').innerHTML="비밀번호가 일치하지 않습니다.";
+		document.getElementById('pwdcheck').style.color='red';
+	}
+}
+//비밀번호 재수정기능
+function temporarynumber(){
+	//유효성검사후 비밀번호 수정재 수정.
+	if(validation()){
+		
+		let pw = document.getElementById('user_pw').value;
+		let id = document.getElementById('user_id').value;
+		
+		var date = {
+			userPw : pw,
+			userId : id
+		}
+		
+			$.ajax({
+				url:'/api/login/updatepw',
+				type:'put',
+				dataType:'json',
+				data:JSON.stringify(date),
+				contentType:'application/json; charset=UTF-8'
+			}).done(function(data){
+				alert('비밀번호가 수정이 되었습니다.');
+				location.href='/main/mainpage';
+			});
+	}	
+}
+</script>
+</th:bock>
+</body>
+</html>

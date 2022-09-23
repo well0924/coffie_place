@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kr.coffie.place.mapper.PlaceMapper">
+
+	<select id="placelist" resultType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceResponseDto">
+		select 
+			*
+		from 
+			tbl_place
+		<include refid="mapper.common.common_mapper.placesearch"/>		
+		order by 
+			place_id desc
+		<include refid="mapper.common.common_mapper.paging"/>		
+	</select>
+	
+	<select id="placeDetail" parameterType="Integer" resultType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceResponseDto">
+		select 
+			*
+		 from 
+		 	tbl_place
+		 where
+		 	place_id = #{placeId}		
+	</select>
+	
+	<select id="placetotal" resultType="Integer">
+		select 
+			count(*) 
+		from 
+			tbl_place
+		order by
+			place_id desc
+	</select>
+	
+	<select id="excellist" resultType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceResponseDto">
+		select 
+			*
+		 from 
+		 	tbl_place
+		 order by place_id asc		
+	</select>
+	
+	<!-- top5 o.k-->
+	<select id="Top5CafeList" resultType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceImageResponseDto">
+		select
+			p.place_id,
+			p.place_name,
+			p.place_addr1,
+			p.place_start,
+			p.place_close,
+			p.review_rate,
+			i.file_group_id,
+			i.thumb_file_image_path,
+			i.is_title,
+			i.img_path
+		from 
+			tbl_place p
+		inner join 
+			tbl_place_images i
+		on
+			p.place_id = i.place_id		
+		where
+			i.is_title = 1
+		order by
+			p.review_rate desc
+		limit 5					
+	</select>
+	
+	<!-- 가게 등록o.k -->
+	<insert id="placeregister" parameterType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceRequestDto" useGeneratedKeys="true" keyProperty="placeId">
+		insert into 
+			tbl_place
+			(	
+				place_id,
+				place_name,
+				place_lng,
+				place_lat,
+				place_addr1,
+				place_addr2,
+				place_phone,
+				place_start,
+				place_close,
+				file_group_id,
+				place_author,
+				created_at
+			)
+		values
+			(
+				#{placeId},
+				#{placeName},
+				#{placeLng},
+				#{placeLat},
+				#{placeAddr1},
+				#{placeAddr2},
+				#{placePhone},
+				#{placeStart},
+				#{placeClose},
+				#{fileGroupId},
+				#{placeAuthor},
+				now()
+			)
+	</insert>
+	
+	<update id="placeupdate" parameterType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceRequestDto" useGeneratedKeys="true" keyProperty="placeId"> 
+		update 
+			tbl_place
+			<set>
+				<if test="placeName neq null and placeName neq ''">
+					place_name = #{placeName},
+				</if>
+				<if test="placeLng neq null and placeLng neq ''">
+					place_lng = #{placeLng},
+				</if>
+				<if test="placeLat neq null and placeLat neq ''">
+					place_lat = #{placeLat},
+				</if>
+				<if test="placeAddr1 neq null and placeAddr1 neq ''">
+					place_addr1 = #{placeAddr1},
+				</if>
+				<if test="placeAddr2 neq null and placeAddr2 neq ''">
+					place_addr2 = #{placeAddr2},
+				</if>
+				<if test="placePhone neq null and placePhone neq ''">
+					place_phone = #{placePhone},
+				</if>
+				<if test="placeStart neq null and placeStart neq ''">
+					place_start = #{placeStart},
+				</if>
+				<if test="placeClose neq null and placeClose neq ''">
+					place_close = #{placeClose},
+				</if>
+				<if test="placeAuthor neq null and placeAuthor neq ''">
+					place_author = #{placeAuthor},
+				</if>
+			</set>
+		where
+			place_id = #{placeId}	
+	</update>
+	
+	<delete id="placedelete" parameterType="Integer">
+		delete from 
+			tbl_place
+		where 
+			place_id = #{placeId}
+	</delete>
+	
+	<select id="placeautocomplete" parameterType="map" resultType="map">
+		select
+			place_id,
+			place_name
+		from
+			tbl_place
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			place_name like CONCAT('%',#{value},'%')
+		</trim>		
+	</select>
+	
+	<update id="cafeReviewRate">
+		update
+			tbl_place
+		set
+			review_rate = #{reviewRate}
+		where
+			place_id = #{placeId}		
+	</update>
+</mapper>

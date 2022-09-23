@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kr.coffie.board.mapper.BoardMapper">
+
+<select id="boardlist" resultType="com.kr.coffie.board.vo.dto.BoardDto$BoardResponseDto">
+	select 
+		*
+	from 
+		tbl_board
+	<include refid="mapper.common.common_mapper.search"/>	
+	order by 
+		board_id desc
+	<include refid="mapper.common.common_mapper.paging"/>		
+</select>
+
+<select id="boarddetail" parameterType="Integer" resultType="com.kr.coffie.board.vo.dto.BoardDto$BoardResponseDto">
+	select 
+		board_id,
+		board_title,
+		board_contents,
+		board_author,
+		read_count,
+		passwd,
+		file_group_id,
+		created_at,
+		updated_at 
+	from 
+		tbl_board 
+	where 
+		board_id = #{boardId}
+</select>
+
+<insert id="boardwrite" parameterType="com.kr.coffie.board.vo.dto.BoardDto$BoardRequestDto" useGeneratedKeys="true" keyProperty="boardId">
+	insert into tbl_board( board_title, board_contents, board_author,read_count, passwd,file_group_id,created_at)
+		values( #{boardTitle},#{boardContents},#{boardAuthor}, 0,#{passWd}, #{fileGroupId},now() )
+</insert>
+
+<update id="boardupdate" parameterType="com.kr.coffie.board.vo.dto.BoardDto$BoardRequestDto" useGeneratedKeys="true" keyProperty="boardId">
+	update 
+		tbl_board 
+	set
+		board_title = #{boardTitle},
+		board_contents = #{boardContents},
+		updated_at = now()
+	where 
+		board_id = #{boardId}
+</update>
+
+<delete id="boarddelete" parameterType="Integer">
+	delete from tbl_board where board_id = #{boardId}
+</delete>
+
+<select id="totalarticle" resultType="Integer">
+	select count(*) from tbl_board
+</select>
+
+<update id="readcountup" parameterType="Integer">
+	update tbl_board set read_count = read_count+1 where board_id = #{boardId}
+</update>
+
+<select id="passwordcheck"  parameterType="Integer" resultType="com.kr.coffie.board.vo.dto.BoardDto$BoardResponseDto">
+	select * from tbl_board where passwd = #{passWd} and board_id =#{boardId}
+</select>
+</mapper>

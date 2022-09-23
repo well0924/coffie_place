@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kr.coffie.notice.mapper.NoticeMapper">
+	<select id="noticelist" resultType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeResponseDto">
+		SELECT 
+			*
+		FROM 
+			tbl_notice_board 
+		<include refid="mapper.common.common_mapper.noticesearch"/>	
+		order by 
+			notice_fixed DESC, notice_id desc 
+		<include refid="mapper.common.common_mapper.paging"/>		
+	</select>
+	
+	<select id="noticedetail" parameterType="Integer" resultType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeResponseDto">
+		select 
+			* 
+		from 
+			tbl_notice_board 
+		where 
+			notice_id = #{noticeId}
+	</select>
+	
+	<insert id="noticeinsert" parameterType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeRequestDto">
+		insert into tbl_notice_board
+		(
+			notice_group,
+			notice_title,
+			notice_contents,
+			notice_fixed,
+			created_by,
+			created_at)
+		values
+		(
+			#{noticeGroup},
+			#{noticeTitle},
+			#{noticeContents},
+			#{isFixed},
+			#{createdBy},
+			now()
+		)
+	</insert>
+	
+	<delete id="noticedelete" parameterType="Integer">
+		delete from 
+			tbl_notice_board 
+		where 
+			notice_id = #{noticeId}
+	</delete>
+	
+	<update id="noticeupdate" parameterType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeRequestDto">
+		update 
+			tbl_notice_board 
+		set 
+			notice_title = #{noticeTitle},
+			notice_contents = #{noticeContents}, 
+			notice_fixed = #{isFixed},
+			notice_group = #{noticeGroup},
+			updated_at = now()
+		where 
+			notice_id = #{noticeId}	
+	</update>
+	
+	<select id="noticetotalcount" resultType="Integer">
+		select 
+			count(*) 
+		from 
+			tbl_notice_board		 
+	</select>
+</mapper>

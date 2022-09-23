@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.common.common_mapper">
+<!-- 검색기능 -->
+<sql id="search">
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<!-- 자유게시판 -->
+		<if test="searchType =='T'.toString() and keyword != null and keyword != '' ">
+			AND board_title like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType =='C'.toString() and keyword != null and keyword != '' ">
+			AND board_contents like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType =='W'.toString() and keyword != null and keyword != '' ">
+			AND board_author like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType =='TC'.toString() and keyword != null and keyword != '' ">
+			AND (board_title like CONCAT('%', #{keyword},'%') 
+				or board_contents like CONCAT('%',#{keyword},'%'))
+		</if>
+		<if test="searchType =='all'.toString() and keyword != null and keyword != '' ">
+			AND(board_title like CONCAT('%', #{keyword},'%') 
+				or board_contents like CONCAT('%',#{keyword},'%') 
+				or board_author like CONCAT('%',#{keyword},'%'))
+		</if>
+	</trim>
+</sql>
+
+<sql id="adminsearch">
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<!-- 어드민 페이지 검색 -->
+		<if test="searchType=='MALL'.toString() and keyword != null and keyword != '' ">
+			AND (user_id like CONCAT('%', #{keyword}, '%')
+			or user_id like CONCAT('%', #{keyword}, '%')
+			or user_name like CONCAT('%', #{keyword}, '%')
+			or user_email like CONCAT('%', #{keyword}, '%'))
+		</if>
+		<if test="searchType=='MI'.toString() and keyword != null and keyword != '' ">
+			AND user_id like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType=='MN'.toString() and keyword != null and keyword != '' ">
+			AND user_name like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType=='ME'.toString() and keyword != null and keyword != '' ">
+			AND user_email like CONCAT('%', #{keyword}, '%')
+		</if>
+	</trim>
+</sql>
+
+<sql id="noticesearch">
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<!-- 공지게시판 검색 -->
+		<if test="searchType=='NT'.toString() and keyword != null and keyword != '' ">
+			AND notice_title like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType=='NC'.toString() and keyword != null and keyword != '' ">
+			AND notice_contents like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType=='NTC'.toString() and keyword != null and keyword != '' ">
+			AND (notice_title like CONCAT('%', #{keyword},'%') 
+				or notice_contents like CONCAT('%',#{keyword},'%'))
+		</if>
+		<if test="searchType=='NW'.toString() and keyword != null and keyword != '' ">
+				AND notice_author like CONCAT('%',#{keyword},'%')
+		</if>
+		<if test="searchType=='Nall'.toString() and keyword != null and keyword != '' ">
+				AND(notice_title like CONCAT('%', #{keyword},'%') 
+				or notice_contents like CONCAT('%',#{keyword},'%') 
+				or notice_fixed like CONCAT('%',#{keyword},'%')
+				or notice_author like CONCAT('%',#{keyword},'%'))
+		</if>
+	</trim>
+</sql>
+
+<sql id="placesearch">
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<!-- 가게검색 -->
+		<if test="searchType=='CN'.toString() and keyword != null and keyword != '' ">
+			AND place_name like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchType=='CA'.toString() and keyword != null and keyword != '' ">
+			AND place_addr1 like CONCAT('%', #{keyword}, '%')
+		</if>
+	</trim>
+</sql>
+
+<!-- 페이징 -->
+<sql id="paging">
+	LIMIT #{perPageNum}	 OFFSET #{pageStart}
+</sql>
+
+<!-- 자유게시판 컬럼 -->
+<sql id="board_colums">
+	board_id,
+	board_title,
+	board_contents,
+	board_author,
+	file_group_id,
+	read_count,
+	passwd,
+	created_at,
+	updated_at
+</sql>
+
+<!-- 공지게시판 컬럼 -->
+<sql id="notice_colums">
+	notice_id,
+	notice_title,
+	notice_author,
+	notice_contents,
+	notice_fixed,
+	notice_group,
+	created_at,
+	updated_at
+</sql>
+
+<!-- 첨부파일 컬럼 -->
+<sql id="file_colums">
+	file_id,
+	board_id,
+	notice_id,
+	file_path,
+	origin_name,
+	stored_name,
+	created_at
+</sql>
+
+<!-- 회원컬럼 -->
+<sql id="member_colums">
+	user_id,
+	user_name,
+	user_age,
+	user_gender,
+	user_phone,
+	user_email,
+	user_addr1,
+	user_addr2,
+	user_auth,
+	user_pw,
+	created_at
+</sql>
+
+<!-- 가게 컬럼 -->
+<sql id="place_colums">
+	place_id,
+	place_lng,
+	place_lat,
+	review_rate,
+	file_group_id,
+	place_name,
+	place_addr1,
+	place_addr2,
+	place_phone,
+	place_start,
+	place_close,
+	place_author,
+	created_at
+</sql>
+
+<!-- 위시리스트 컬럼 -->
+<sql id="mypage_colums">
+	favorite_id,
+	place_id,
+	user_id,
+	file_group_id
+</sql>
+</mapper>

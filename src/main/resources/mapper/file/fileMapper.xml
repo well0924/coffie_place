@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kr.coffie.common.file.mapper.FileMapper">
+
+<select id="boardFileList" parameterType="Integer" resultType="com.kr.coffie.common.file.vo.dto.FileDto$FileResponseDto">
+	select 
+		<include refid="mapper.common.common_mapper.file_colums"/>
+	from 
+		tbl_board_file 
+	where 
+		board_id = #{boardId}
+</select>
+
+<select id="noticeFileList" parameterType="Integer" resultType="com.kr.coffie.common.file.vo.dto.FileDto$FileResponseDto">
+	select
+		<include refid="mapper.common.common_mapper.file_colums"/>
+	from
+		tbl_board_file
+	where
+		notice_id = #{noticeId}		
+</select>
+
+<insert id="boardFileInsert" parameterType="com.kr.coffie.common.file.vo.dto.FileDto$FileResponseDto">
+	insert into tbl_board_file 
+		(board_id,file_path,stored_name,origin_name,created_at)
+	values
+		(#{boardId},#{filePath},#{storedName},#{originName},now())
+</insert>
+
+<insert id="noticeFileInsert" parameterType="com.kr.coffie.common.file.vo.dto.FileDto$FileResponseDto">
+	insert into tbl_board_file
+		(notice_id,file_path,stored_name,origin_name,created_at)
+	values
+		(#{noticeId},#{filePath},#{storedName},#{originName},now())	
+</insert>
+
+<delete id="boardFileDelete" parameterType="Integer">
+	delete from 
+		tbl_board_file 
+	where
+		board_id = #{board_id}		
+</delete>
+
+<delete id="noticeFileDelete" parameterType="Integer">
+	delete from 
+		tbl_board_file
+	where 
+		notice_id = #{noticeId}	
+</delete>
+
+<select id="editorImagelit" parameterType="String" resultType="com.kr.coffie.common.file.vo.dto.FileDto$ImageResponseDto">
+	select 
+		img_path,
+		thumb_file_image_path as thumbFilePath,
+		stored_name,
+		origin_name,
+		is_title
+	from
+		tbl_place_images
+	where
+		file_group_id = #{fileGroupId}
+	order by
+		is_title is null asc			
+</select>
+
+<select id="imagelist" parameterType="Integer" resultType="com.kr.coffie.common.file.vo.dto.FileDto$ImageResponseDto">
+	select 
+		*
+	from
+		tbl_place_images
+	where
+		place_id = #{placeId}		
+</select>
+
+<insert id="placeimageinsert" parameterType="com.kr.coffie.common.file.vo.dto.FileDto$ImageRequestDto">
+	insert into 
+		tbl_place_images
+		(
+			place_id,
+			file_group_id,
+			file_type,
+			img_group,
+			img_path,
+			stored_name,
+			origin_name,
+			thumb_file_image_path,
+			thumb_file_path,
+			image_uploader,
+			is_title,
+			created_at
+		)
+	values
+		(
+			#{placeId},
+			#{fileGroupId},
+			#{fileType},
+			#{imgGroup},
+			#{imgPath},
+			#{storedName},
+			#{originName},
+			#{thumbFileImagePath},
+			#{thumbFilePath},
+			#{imgUploader},
+			#{isTitle},
+			now()
+		)
+</insert>
+
+<delete id="placeimagedelete">
+	delete from 
+		tbl_place_images 
+	where 
+		file_group_id = #{fileGroupId}
+</delete>
+
+<insert id="uploadeditor" parameterType="com.kr.coffie.common.file.vo.dto.FileDto$ImageRequestDto">
+	insert into 
+		tbl_place_images
+		(
+			file_group_id,
+			img_path,
+			stored_name,
+			origin_name,
+			created_at
+		)
+	values(
+			#{fileGroupId},
+			#{imgPath},
+			#{storedName},
+			#{originName},
+			now()
+		)
+</insert>
+</mapper>

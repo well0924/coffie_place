@@ -1,0 +1,36 @@
+package com.kr.coffie.login.service;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Service;
+
+import com.kr.coffie.login.mapper.LoginMapper;
+import com.kr.coffie.login.vo.dto.LoginDto;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+public class LoginService {
+	
+	private final LoginMapper mapper;
+	
+	public int userduplicate(String userId)throws Exception{
+		return mapper.userduplicate(userId);
+	};
+
+	public LoginDto.LoginResponseDto loginProc(LoginDto.LoginRequestDto dto)throws Exception{
+		return mapper.loginProc(dto);
+	};
+
+	public LoginDto.LoginResponseDto idSearch(@Param("userName") String userName,@Param("userEmail") String userEmail)throws Exception{
+		return mapper.idSearch(userName, userEmail);
+	};
+
+	public int pwSearch(LoginDto.LoginRequestDto dto)throws Exception{
+		String userpw = dto.getUserPw();
+		String encodepw = "";
+		dto.setUserPw(encodepw);
+		return mapper.pwSearch(dto);
+	};
+
+}
