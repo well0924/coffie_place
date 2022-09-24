@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,16 +21,13 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/page/admin/*")
+@RequestMapping("/api/admin/*")
 public class AdminApiController {
 
 	private final AdminService service;
 	
-	
 	@PutMapping(value="/memberupdate/{id}")
-	public Map<String,Object>memberUpdate(
-		@PathVariable("id")String userId,
-		@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
+	public Map<String,Object>memberUpdate(@PathVariable("id")String userId, @RequestBody LoginDto.LoginRequestDto dto)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();
 		

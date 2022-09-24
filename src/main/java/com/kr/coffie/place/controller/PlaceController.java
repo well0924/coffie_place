@@ -98,4 +98,27 @@ public class PlaceController {
 		
 		return mv;
 	}
+	
+	//가게 수정 페이지
+	@GetMapping("/placemodify/{id}")
+	public ModelAndView placemodify(@PathVariable("id")Integer placeId,PlaceDto.PlaceResponseDto dto)throws Exception{
+		
+		ModelAndView mv = new ModelAndView();
+		
+		PlaceDto.PlaceResponseDto detail = null;
+		List<FileDto.ImageResponseDto>imagelist = null;
+		
+		try {
+			detail = service.placeDetail(placeId);
+			imagelist = fileservice.imagelist(placeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		mv.addObject("detail", detail);
+		mv.addObject("imagelist", imagelist);
+		mv.setViewName("place/placemodify");
+		
+		return mv;
+	}
 }

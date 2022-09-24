@@ -115,6 +115,7 @@ public class LoginApiController {
 	
 	@PutMapping("/updatepw")
 	public Map<String,Object>updatepw(@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
+		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		int updateResult = 0;

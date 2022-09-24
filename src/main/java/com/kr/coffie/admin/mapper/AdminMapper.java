@@ -23,7 +23,7 @@ public interface AdminMapper {
 
 	public int memberdelete(String userId)throws Exception;
 
-	public void membercheckdelete(List<String> userId)throws Exception;
+	public void membercheckdelete(String string)throws Exception;
 
 	public int totalmember(Criteria cri)throws Exception;
 }

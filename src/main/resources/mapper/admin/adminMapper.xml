@@ -4,8 +4,18 @@
 	<!-- 회원가입(회원용) o.k-->
 	<insert id="memberjoin" parameterType="com.kr.coffie.login.vo.dto.LoginDto$LoginRequestDto">
 		insert into 
-			tbl_user(user_id,user_pw,user_name,user_age,user_gender,user_email,user_addr1,user_addr2,user_auth)
-		values(#{userId},#{userPw},#{userName},#{userAge},#{userGender},#{userEmail},#{userAddr1},#{userAddr2},'USER')
+			tbl_user(
+				user_id,
+				user_pw,
+				user_name,
+				user_age,
+				user_gender,
+				user_email,
+				user_phone,
+				user_addr1,
+				user_addr2,
+				user_auth)
+		values(#{userId},#{userPw},#{userName},#{userAge},#{userGender},#{userEmail},#{userPhone},#{userAddr1},#{userAddr2},'USER')
 	</insert>
 	
 	<!-- 회원 탈퇴(삭제)o.k -->
@@ -14,23 +24,22 @@
 	</delete>
 	
 	<!-- 회원 목록 출력 o.k-->
-	<select id="memberList" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">
+	<select id="memberlist" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">
 		select  
-	  	     	 u.user_id,
-	  	         u.user_name,
-	  	         u.user_gender,
-	  	         u.user_age,
-	  	         u.user_email,
-	  	         u.user_auth,
-	  	         a.create_at,
-	  	         u.update_at
-	  	     from 
-	  	     	tbl_user u
-	  	     inner join 
-	  	     	tbl_user_auth a 	
-	  	     on 
-	  	     	u.user_auth = a.auth_id
-	  	     <include refid="mapper.common.common_mapper.paging"/>		
+  	     	 u.user_id,
+  	         u.user_name,
+  	         u.user_gender,
+  	         u.user_age,
+  	         u.user_email,
+  	         u.user_auth,
+  	         u.created_at
+  	     from 
+  	     	tbl_user u
+  	     inner join 
+  	     	tbl_user_auth a 	
+  	     on 
+  	     	u.user_auth = a.auth_id
+  	     <include refid="mapper.common.common_mapper.paging"/>		
 	</select>
 	
 	<!-- 회원조회o.k -->
@@ -63,7 +72,19 @@
 	</select>
 	
 	<!-- 회원 탈퇴(선택삭제)o.k -->
-	<select id="membercheckdelete">
+	<delete id="membercheckdelete" parameterType="String">
 		delete from tbl_user where user_id = #{userId}
+	</delete>
+	
+	<!-- 회원 자동완성 o.k-->
+	<select id="memberautocomplete" parameterType="map" resultType="map">
+		select
+			user_id,
+			user_name
+		from
+			tbl_user
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			user_id like CONCAT('%',#{value},'%')
+		</trim>		
 	</select>
 </mapper>
