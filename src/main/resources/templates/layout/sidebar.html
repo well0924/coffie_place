@@ -13,17 +13,17 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     	<input type="hidden" id="user_id" th:value="${#authentication.name}">
 			<ul class="list-group">
 				<li class="list-group-item">
-			    	<a th:href="@{'/mypage/page/'+${#authentication.name}}">찜한 리스트</a>
+			    	<a th:href="@{'/page/mypage/page/'+${#authentication.name}}">찜한 리스트</a>
 			    </li>
 			    <li class="list-group-item">
-			      	<a th:href="@{'/admin/membermodify/'+${#authentication.name}}">회원정보 수정</a>
+			      	<a th:href="@{'/page/login/membermodify/'+${#authentication.name}}">회원정보 수정</a>
 			    </li>
 			    <li class="list-group-item">
-			      	<a th:href="@{'/mypage/myarticle/'+${#authentication.name}}">내가 쓴 글</a>
+			      	<a th:href="@{'/page/mypage/myarticle/'+${#authentication.name}}">내가 쓴 글</a>
 			    </li>
 			    <li class="list-group-item">
 			      	<a>
-			      	<button type="button" onclick="memberDelete()">
+			      	<button type="button" onclick="memberDelete()" sec:authorize="hasRole('ROLE_USER')">
 			      		회원 탈퇴
 			      	</button>
 			      	</a>

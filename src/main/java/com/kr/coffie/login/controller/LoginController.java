@@ -10,7 +10,9 @@ import com.kr.coffie.admin.service.AdminService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Controller
 @AllArgsConstructor
 @RequestMapping("/page/login/*")
@@ -43,8 +45,8 @@ public class LoginController {
 		LoginDto.LoginResponseDto detail = null;
 		
 		try {
-			detail = service.memeberdetail(userId);
-		
+			detail = service.memberdetail(userId);
+			log.info("??:"+detail);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

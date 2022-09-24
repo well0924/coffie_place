@@ -26,7 +26,7 @@ layout:decorate="~{layout/leafframe}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
 <!-- 게시판 목록 css -->
-<link rel="stylesheet" th:href="@{/css/board.css}">
+<!-- <link rel="stylesheet" th:href="@{/css/board.css}"> -->
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -57,7 +57,7 @@ layout:decorate="~{layout/leafframe}">
 									</div>
 								</div>
 								<p class="card-text">[[${list.reviewRate}]]</p>
-								<a th:href="@{'/place/placedetail/'+${list.placeId}}" class="btn btn-primary">상세보기</a>
+								<a th:href="@{'/page/place/placedetail/'+${list.placeId}}" class="btn btn-primary">상세보기</a>
 							</div>
 							  <button class="btn btn-danger" onclick="deleteWish()">위시리스트 삭제</button>
 						</div>
@@ -90,7 +90,7 @@ function deleteWish(){
 			data:null
 		}).done(function(resp){
 			alert('삭제되었습니다.');
-			location.href="/mypage/page/"+userid;
+			location.href="/page/mypage/page/"+userid;
 		});
 	}
 }
@@ -104,7 +104,7 @@ function memberDelete(){
 		data:null
 	}).done(function(resp){
 		alert('탈퇴했습니다.');
-		location.href='/main/mainpage';
+		location.href='/page/main/mainpage';
 	});
 	return false;
 }

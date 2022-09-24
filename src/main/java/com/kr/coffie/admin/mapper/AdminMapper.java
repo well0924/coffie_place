@@ -13,7 +13,7 @@ public interface AdminMapper {
 	
 	public List<LoginDto.LoginResponseDto>memberlist(Criteria cri)throws Exception;
 
-	public LoginDto.LoginResponseDto memeberdetail(String userId)throws Exception;
+	public LoginDto.LoginResponseDto memberdetail(String userId)throws Exception;
 	
 	public List<Map<String,Object>>memberautocomplete(Map<String,Object>result)throws Exception;
 	

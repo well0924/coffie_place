@@ -3,7 +3,6 @@ package com.kr.coffie.admin.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +24,8 @@ public class AdminService {
 		return mapper.memberlist(cri);
 	};
 
-	public LoginDto.LoginResponseDto memeberdetail(String userId)throws Exception{
-		return mapper.memeberdetail(userId);
+	public LoginDto.LoginResponseDto memberdetail(String userId)throws Exception{
+		return mapper.memberdetail(userId);
 	};
 	
 	public List<Map<String,Object>>memberautocomplete(Map<String,Object>result)throws Exception{
@@ -44,6 +43,11 @@ public class AdminService {
 	};
 
 	public int memberupdate(LoginDto.LoginRequestDto dto)throws Exception{
+		
+		String userpw = dto.getUserPw();
+		String encodepw = encoder.encode(userpw);
+		dto.setUserPw(encodepw);
+		
 		return mapper.memberupdate(dto);
 	};
 
@@ -52,6 +56,7 @@ public class AdminService {
 	};
 
 	public void membercheckdelete(List<String> userId)throws Exception{
+		
 		for(int i = 0; i<userId.size();i++) {
 			mapper.membercheckdelete(userId.get(i));
 		}
