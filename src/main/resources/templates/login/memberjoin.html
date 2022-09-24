@@ -235,8 +235,9 @@ function tmpemail(){
 	if(validemail()){
 		//ajax부분
 		$.ajax({
-			url:'/api/login/tempemail?userEmail='+useremail,
-			type:'get',
+			url:'/api/login/emailsend',
+			type:'post',
+			data: form,
 			dataType:'json',
 			contentType:'application/json; charset=utf-8',
 		}).done(
@@ -246,6 +247,11 @@ function tmpemail(){
 				checkbox.attr("disabled",false);
 				boxwrap.attr("id","mail_check_input_box_true");
 				code = resp;
+		}).fail(function(error){
+			console.log(error);
+			checkbox.attr("disabled",false);
+			boxwrap.attr("id","mail_check_input_box_true");
+			code = error;
 		});
 	}	
 

@@ -7,7 +7,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:fragment="headerfragment">
 <!-- 상단 메뉴 부분 -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top shadow-lg">
-	<a class="navbar-brand" th:href="@{/main/mainpage}">Coffies</a>
+	<a class="navbar-brand" th:href="@{/page/main/mainpage}">Coffies</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 	        data-target="#navMenu">
 		<span class="navbar-toggler-icon"></span>        
@@ -31,16 +31,16 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 				</a>
 			</li>
 			<li class="nav-item">
-				<a th:href="@{/login/loginpage}" class="nav-link">로그인</a>
+				<a th:href="@{/page/login/loginpage}" class="nav-link">로그인</a>
 			</li>
 			<li class="nav-item">
-				<a th:href="@{/login/memberjoin}" class="nav-link">회원가입</a>
+				<a th:href="@{/page/login/memberjoin}" class="nav-link">회원가입</a>
 			</li>
 			<li class="nav-item">
-				<a th:href="@{/admin/adminlist}" class="nav-link">관리자페이지</a>
+				<a th:href="@{/page/admin/adminlist}" class="nav-link">관리자페이지</a>
 			</li>
 			<li class="nav-item">
-				<a th:href="@{'/mypage/page/'}" class="nav-link">마이페이지</a>
+				<a th:href="@{/page/mypage/page/}" class="nav-link">마이페이지</a>
 			</li>
 			<li class="nav-item">
 				<a th:href="@{/logout}" class="nav-link">로그아웃</a>

@@ -16,5 +16,4 @@ public interface LoginMapper {
 
 	public int pwSearch(LoginDto.LoginRequestDto dto)throws Exception;
 
-	
 }

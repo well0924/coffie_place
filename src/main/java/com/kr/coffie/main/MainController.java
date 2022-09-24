@@ -17,7 +17,9 @@ import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Controller
 @AllArgsConstructor
 @RequestMapping("/page/main/*")
@@ -49,7 +51,10 @@ public class MainController {
 			
 			total = boardservice.totalarticle(cri);
 			total = noticeservice.noticetotalcount(cri);
-						
+			
+			log.info("게시판:"+board);
+			log.info("공지:"+notice);
+			log.info("이미지:"+placelist);
 			Paging paging = new Paging();
 			paging.setCri(cri);
 			paging.setTotalCount(total);
@@ -62,7 +67,7 @@ public class MainController {
 		mv.addObject("boardlist", board);
 		mv.addObject("noticelist", notice);
 	
-		mv.setViewName("/main/main");
+		mv.setViewName("main/main");
 		
 		return mv;
 	}

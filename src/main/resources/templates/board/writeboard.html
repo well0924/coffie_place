@@ -56,7 +56,8 @@ layout:decorate="~{layout/leafframe}">
 	</div>
 </div>
 <script type="text/javascript">
-//썸머노트 
+
+//썸머노트 o.k
 $(document).ready(function () { 
 	$('#board_Contents').summernote({
        placeholder: '내용을 작성하세요',
@@ -71,7 +72,7 @@ $(document).ready(function () {
        },
        focus: true,
        callbacks :{
-       	onImageUpload: function(files){
+       	sendImage: function(files){
        		console.log(files)
 					sendFile(file[0], this);
        	}
@@ -81,7 +82,7 @@ $(document).ready(function () {
 		console.log(filegroupid);
 });
 
-//에디터 이미지 업로드 기능
+//에디터 이미지 업로드 기능o.k
 function sendImage(file,el){
 	var formdate = new FormData();
 	formdate.append('file',file);
@@ -103,7 +104,7 @@ function sendImage(file,el){
 	});	
 }
 
-//유효성 검사.
+//유효성 검사.o.k
 function validation(){
 	
 	var title = $('#board_Title').val();
@@ -127,7 +128,7 @@ function validation(){
 	return true;
 }
 
-//글 작성 기능	
+//글 작성 기능	o.k
 function writeboard(){
 	
 	var title = $('#board_Title').val();

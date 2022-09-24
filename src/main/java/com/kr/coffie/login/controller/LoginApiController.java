@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kr.coffie.admin.service.AdminService;
-import com.kr.coffie.common.email.EmailSenderService;
+import com.kr.coffie.common.email.EmailService;
 import com.kr.coffie.login.service.LoginService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
@@ -26,8 +28,7 @@ public class LoginApiController {
 	
 	private final LoginService service;
 	private final AdminService adminservice;
-	
-	private final EmailSenderService emailservice;
+	private final EmailService emailservice;
 	
 	@GetMapping("/idcheck/{id}")
 	public Map<String,Object>idCheck(@PathVariable("id")String userId)throws Exception{
@@ -78,6 +79,7 @@ public class LoginApiController {
 			if(joinresult > 0) {
 				
 				result.put("join!", 200);
+				
 			}else if(joinresult < 0) {
 				
 				result.put("fail", 400);
@@ -89,11 +91,21 @@ public class LoginApiController {
 		}
 		return result;
 	}
+//////////////////////////////////////
 	
-	@GetMapping("/mailsender")
-	public String tmpemailsender(LoginDto.LoginRequestDto dto)throws Exception{
-		String mailresult = emailservice.mailSender(dto);
-		return mailresult;
+	@PostMapping("/emailsend")
+	public ResponseEntity<?>emailsender(@RequestBody String useremail)throws Exception{
+		ResponseEntity<String>entity = null;
+		
+		try {
+			 emailservice.sendSimpleMessage(useremail);
+			entity = new ResponseEntity<String>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return entity;
 	}
 	
 	@GetMapping("/tmppassword")

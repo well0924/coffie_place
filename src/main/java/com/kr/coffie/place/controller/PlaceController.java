@@ -17,9 +17,7 @@ import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 @Controller
 @AllArgsConstructor
 @RequestMapping("/page/place/*")
@@ -74,9 +72,11 @@ public class PlaceController {
 		List<FileDto.ImageResponseDto>imagelist = null;
 	
 		try {
+			
 			imagelist = fileservice.imagelist(placeId);
+			
 			place = service.placeDetail(placeId);
-			log.info(">???:"+imagelist);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
