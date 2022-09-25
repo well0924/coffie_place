@@ -53,10 +53,10 @@ layout:decorate="~{layout/leafframe}">
 							<tr th:each="list : ${mylist}">
 								<td class="text-center d-none d-md-table-cell">[[${list.id}]]</td>
 								<td>
-									<a th:if=" ${list.fileGroupId=='Y'} or ${list.fileGroupId =='N'}" th:href="@{'/notice/detail/'+${list.id}}">
+									<a th:if=" ${list.fileGroupId=='Y'} or ${list.fileGroupId =='N'}" th:href="@{'/page/notice/noticedetail/'+${list.id}}">
 										[[${list.title}]]
 									</a>
-									<a th:unless=" ${list.fileGroupId=='Y'} or ${list.fileGroupId =='N'}" th:href="@{'/board/detailpage/'+${list.id}}">
+									<a th:unless=" ${list.fileGroupId=='Y'} or ${list.fileGroupId =='N'}" th:href="@{'/page/board/detailpage/'+${list.id}}">
 										[[${list.title}]]
 									</a>
 								</td>

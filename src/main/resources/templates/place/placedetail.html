@@ -147,7 +147,7 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 			</th:block>
 		<hr>
 			<!-- placedetail -->
-<!-- 			<input type="hidden" id="userid" name="userId" th:value="${#authentication.name}"> -->
+			<input type="hidden" id="userid" name="userId" th:value="${#authentication.name}">
 			<input type="hidden" id ="placeaddr" name="placeAddr1" th:value="${detail.placeAddr1}">
 			<input type="hidden" id="placeid" name ="placeId" th:value="${detail.placeId}">
 			<input type="hidden" id="placelng" name ="placeLng" th:value="${detail.placeLng}"></input>
@@ -439,12 +439,13 @@ $(document).ready(function(){
 			dataType:'json',
 			data:JSON.stringify(dataform),
 			contentType:'application/json; charset= utf-8'
+			
 		}).done(function(resp){
 			console.log(resp);
 			if(resp > 0){
 				alert('이미 등록한 리스트 입니다.');
-			}else{				
-				addWish();
+			}else if(resp == 0){				
+				alert('위시리스트에 추가되었습니다.');
 			}
 		});
 		console.log(userid);
@@ -473,7 +474,7 @@ $(document).ready(function(){
 			contentType:'application/json; charset = utf-8'
 		}).done(function(resp){
 			alert('위시리스트에 추가되었습니다.');
-			location.href='/page/placelist/'+placeid;
+			location.href='/page/place/placedetail/'+placeid;
 		}).fail(function(error){
 			alert(error);
 		});

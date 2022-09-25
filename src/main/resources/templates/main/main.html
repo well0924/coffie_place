@@ -87,13 +87,6 @@
 						<div class="card-body" style="height: 500px;">
 							<h4 class="card-title">자유게시판</h4>
 							<table class="table table-hover">
-								<colgroup>
-									<col width="20%">
-									<col width="20%">
-									<col width="20%">
-									<col width="20%">
-									<col width="20%">
-								</colgroup>
 								<thead>
 									<tr>
 										<th>글번호</th>
@@ -129,12 +122,6 @@
 						<div class="card-body" style="height: 500px;">
 							<h4 class="card-title">공지 게시판</h4>
 							<table class="table table-hover">
-								<colgroup>
-									<col width="20%">
-									<col width="40%">
-									<col width="15%">
-									<col width="25%">
-								</colgroup>
 								<thead>
 									<tr>
 										<th>카테고리</th>
@@ -144,12 +131,6 @@
 									</tr>
 								</thead>
 								<tbody>
-								<colgroup>
-									<col width="20%">
-									<col width="40%">
-									<col width="15%">
-									<col width="25%">
-								</colgroup>
 								<tr th:if="${list.noticeFixed=='Y'}" th:each="list : ${noticelist}">
 									<td class="text-center d-none d-md-table-cell"
 										th:if="${list.noticeFixed=='Y'}"><strong>[[${list.noticeGroup}]]</strong></td>

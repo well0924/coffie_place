@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kr.coffie.login.mapper.LoginMapper">
-	<!-- 아이디중복체크 o.k-->
+	
 	<select id="userduplicate" parameterType="String" resultType="int">
 		select count(*) from tbl_user where user_id = #{userId}
 	</select>
 	
-	<!-- 아이디 찾기o.k -->
 	<select id="idSearch" parameterType="String" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">
 		select	
 			user_id,
@@ -27,7 +26,6 @@
 			user_id = #{userId}		
 	</update>
 	
-	<!-- 시큐리티 권한 인증 o.k-->
 	<select id="loginProc" parameterType="com.kr.coffie.login.vo.dto.LoginDto$LoginRequestDto" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">
 		select 
 			u.user_id,

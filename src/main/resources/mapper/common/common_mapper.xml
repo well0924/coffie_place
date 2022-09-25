@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.common.common_mapper">
-<!-- 검색기능 -->
+<!--자유게시판 검색기능 -->
 <sql id="search">
 	<trim prefix="WHERE" prefixOverrides="AND|OR">
 		<!-- 자유게시판 -->

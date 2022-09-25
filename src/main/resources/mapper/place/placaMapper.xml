@@ -39,7 +39,6 @@
 		 order by place_id asc		
 	</select>
 	
-	<!-- top5 o.k-->
 	<select id="Top5CafeList" resultType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceImageResponseDto">
 		select
 			p.place_id,
@@ -65,7 +64,6 @@
 		limit 5					
 	</select>
 	
-	<!-- 가게 등록o.k -->
 	<insert id="placeregister" parameterType="com.kr.coffie.place.vo.dto.PlaceDto$PlaceRequestDto" useGeneratedKeys="true" keyProperty="placeId">
 		insert into 
 			tbl_place

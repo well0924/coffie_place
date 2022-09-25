@@ -85,9 +85,10 @@ function deleteWish(){
 	if(isConfirm){
 		$.ajax({
 			url:'/api/mypage/delete/'+favoriteid+"/"+userid,
-			type:'delete',
+			type:'post',
 			dataType:'json',
-			data:null
+			data:JSON.stringify(formdate),
+			contentType:'application/json; charset = utf-8'
 		}).done(function(resp){
 			alert('삭제되었습니다.');
 			location.href="/page/mypage/page/"+userid;

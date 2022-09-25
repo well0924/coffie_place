@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kr.coffie.admin.mapper.AdminMapper">
-	<!-- 회원가입(회원용) o.k-->
+	
 	<insert id="memberjoin" parameterType="com.kr.coffie.login.vo.dto.LoginDto$LoginRequestDto">
 		insert into 
 			tbl_user(
@@ -14,16 +14,15 @@
 				user_phone,
 				user_addr1,
 				user_addr2,
-				user_auth)
+				user_auth
+			)
 		values(#{userId},#{userPw},#{userName},#{userAge},#{userGender},#{userEmail},#{userPhone},#{userAddr1},#{userAddr2},'USER')
 	</insert>
 	
-	<!-- 회원 탈퇴(삭제)o.k -->
 	<delete id="memberdelete" parameterType="String">
 		delete from tbl_user where user_id  = #{userId}
 	</delete>
 	
-	<!-- 회원 목록 출력 o.k-->
 	<select id="memberlist" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">
 		select  
   	     	 u.user_id,
@@ -42,12 +41,10 @@
   	     <include refid="mapper.common.common_mapper.paging"/>		
 	</select>
 	
-	<!-- 회원조회o.k -->
 	<select id="memberdetail" parameterType="String" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">
 		select * from tbl_user where user_id = #{userId}
 	</select>
 	
-	<!-- 회원 정보수정 o.k-->
 	<update id="memberupdate" parameterType="com.kr.coffie.login.vo.dto.LoginDto$LoginRequestDto">
 		update 
 			tbl_user u
@@ -66,17 +63,14 @@
 			u.user_id = #{userId}		
 	</update>
 	
-	<!-- 회원수 o.k-->
 	<select id="totalmember" resultType="int">
 		select count(*) from tbl_user
 	</select>
 	
-	<!-- 회원 탈퇴(선택삭제)o.k -->
 	<delete id="membercheckdelete" parameterType="String">
 		delete from tbl_user where user_id = #{userId}
 	</delete>
 	
-	<!-- 회원 자동완성 o.k-->
 	<select id="memberautocomplete" parameterType="map" resultType="map">
 		select
 			user_id,

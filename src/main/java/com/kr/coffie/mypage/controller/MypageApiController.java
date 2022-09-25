@@ -14,7 +14,9 @@ import com.kr.coffie.mypage.service.MypageService;
 import com.kr.coffie.mypage.vo.dto.MypageDto;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/mypage/*")
@@ -36,7 +38,7 @@ public class MypageApiController {
 			if(insertresult>0) {
 		
 				result.put("common o.k", 200);
-			
+				log.info("추가값:"+insertresult);
 			}else if(insertresult < 0) {
 			
 				result.put("fail",400);
@@ -51,29 +53,28 @@ public class MypageApiController {
 		return result;
 	}
 
-	@DeleteMapping("/delete/{fid}/{id}")
+	@PostMapping("/delete/{fid}/{id}")
 	public Map<String,Object>wishdelete(
 		@PathVariable(value="fid",required=true)Integer favoriteId ,
 		@PathVariable(value="id",required = true) String userId,
 		@RequestBody MypageDto.MypageResponseDto dto)throws Exception{
 				
 		Map<String,Object>result = new HashMap<String, Object>();
-		Map<String,Object>input = new HashMap<String, Object>();
 		
 		int deleteresult = 0;
 		
 		try {
 			
-			input.put("favoriteId", dto.getFavoriteId());
+			result.put("favoriteId", dto.getFavoriteId());
 
-			input.put("userId", dto.getUserId());
+			result.put("userId", dto.getUserId());
 			
 			deleteresult = service.wishdelete(favoriteId,userId);
 			
 			if(deleteresult > 0) {
 			
 				result.put("common o.k",200);
-			
+				log.info("삭제값:"+deleteresult);
 			}else if(deleteresult < 0) {
 			
 				result.put("fail", 400);
@@ -100,11 +101,9 @@ public class MypageApiController {
 		try {
 			
 			resultcheck = service.wishcheck(userId, placeId);
-						
+			log.info("중복여부:"+resultcheck);			
 			if(resultcheck == 0) {//처음으로 누른 경우
-
 				wishinsert(dto);
-			
 			}
 		} catch (Exception e) {
 		
