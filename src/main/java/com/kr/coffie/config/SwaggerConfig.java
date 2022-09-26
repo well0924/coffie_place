@@ -1,5 +1,6 @@
 package com.kr.coffie.config;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,6 +62,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport{
                 .apis(RequestHandlerSelectors.basePackage("com.kr.coffie"))
                 .paths(PathSelectors.ant("/api/**"))
                 .build()
+                .directModelSubstitute(LocalDateTime.class,Integer.class)
                 .useDefaultResponseMessages(false);
     }
 

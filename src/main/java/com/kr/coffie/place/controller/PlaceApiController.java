@@ -18,8 +18,14 @@ import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 
+@Api(tags = {"가게기능 api"},value="가게기능 api")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/place/*")
@@ -27,6 +33,12 @@ public class PlaceApiController {
 	
 	private final PlaceService service;
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게자동완성검색",notes = "가게목록페이지에서 가게 자동완성검색기능")
 	@PostMapping("/autocompetekeyword")
 	public Map<String,Object>autocompletekeyword(@RequestParam Map<String,Object>param)throws Exception{
 		
@@ -37,9 +49,17 @@ public class PlaceApiController {
 		return param;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게등록기능",notes = "가게등록페이지에서 가게등록기능")
 	@PostMapping("/placeregister")
 	public Map<String,Object>placeregister(
+		@ApiParam(name="가게 dto",required = true)	
 		@RequestBody PlaceDto.PlaceRequestDto dto,
+		@ApiParam(name="파일 dto",required = true)
 		@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
 		
 		Map<String,Object> result = new HashMap<String, Object>();
@@ -74,8 +94,15 @@ public class PlaceApiController {
 		return result;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게등록기능",notes = "가게등록페이지에서 가게등록기능")
 	@PutMapping("/placeupdate/{id}")
 	public Map<String,Object>placeupdate(
+			@ApiParam(value="id",name="가게 번호",required = true)
 			@PathVariable(value="id",required = true)Integer placeId,
 			@RequestBody PlaceDto.PlaceRequestDto dto,
 			@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
@@ -113,8 +140,16 @@ public class PlaceApiController {
 		return result;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게삭제기능",notes = "가게수정페이지에서 삭제기능")
 	@DeleteMapping("/placedelete/{id}")
-	public Map<String,Object>placedelete(@PathVariable("id")Integer placeId)throws Exception{
+	public Map<String,Object>placedelete(
+			@ApiParam(value="id",name="가게번호",required = true)
+			@PathVariable(value="id")Integer placeId)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();
 		

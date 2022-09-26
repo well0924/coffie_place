@@ -78,7 +78,7 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.csrf().disable()
 		.cors().disable()
 		.authorizeRequests()
-		.antMatchers("/**","/api/admin/selectdelete","/api/admin/autocompetekeyword","/api/notice/**","/api/board/**","/api/place/**").hasRole("ADMIN")
+		.antMatchers("/api/admin/selectdelete","/api/admin/autocompetekeyword","/api/notice/**","/api/board/**","/api/place/**","/api/mypage/**").hasRole("ADMIN")
 		.antMatchers("/page/board/detail/**","/page/board/modify/**","/page/notice/noticedetail/**","/page/place/placedetail/**","/page/mypage/**").hasRole("USER")
 		.antMatchers(PERMIT_URL_ARRAY).permitAll()
 		.antMatchers(

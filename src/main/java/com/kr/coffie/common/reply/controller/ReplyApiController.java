@@ -15,8 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kr.coffie.common.reply.service.ReplyService;
 import com.kr.coffie.common.reply.vo.dto.ReplyDto;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 
+@Api(tags = {"댓글 api"},value="마이페이지에 사용되는 기능 api")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/reply/*")
@@ -24,13 +30,22 @@ public class ReplyApiController {
 	
 	private final ReplyService service;
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "게시판 댓글 목록",notes = "자유게시판 목록에서 댓글 목록")
 	@GetMapping("/{id}")
-	public List<ReplyDto.ReplyResponseDto>replylist(@PathVariable("id")Integer boardId)throws Exception{
+	public List<ReplyDto.ReplyResponseDto>replylist(
+			@ApiParam(value = "게시글번호",required = true)
+			@PathVariable("id")Integer boardId)throws Exception{
 					
 		List<ReplyDto.ReplyResponseDto>replylist = null;
 		
 		try {	
 			replylist = service.replylist(boardId);	
+			
 		} catch (Exception e) {
 		
 			e.printStackTrace();
@@ -40,8 +55,18 @@ public class ReplyApiController {
 		return replylist;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "게시판 댓글 조회",notes = "자유게시판 목록에서 댓글 단일조회")
 	@GetMapping("/{id}/{re}")
-	public ReplyDto.ReplyResponseDto replydetail(@PathVariable("re") Integer replyId,@PathVariable("id")Integer boardId)throws Exception{
+	public ReplyDto.ReplyResponseDto replydetail(
+			@ApiParam(value="댓글번호",required = true)
+			@PathVariable("re") Integer replyId,
+			@ApiParam(value="게시글 번호",required = true)
+			@PathVariable("id")Integer boardId)throws Exception{
 		
 		ReplyDto.ReplyResponseDto detail = null;
 		
@@ -58,8 +83,16 @@ public class ReplyApiController {
 		return detail;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "게시판 댓글 작성",notes = "자유게시판 목록에서 댓글 작성")
 	@PostMapping(value="/write")
-	public Map<String,Object>replywrite(@RequestBody ReplyDto.ReplyRequestDto param)throws Exception{
+	public Map<String,Object>replywrite(
+			@ApiParam(name="댓글Dto",required = true)
+			@RequestBody ReplyDto.ReplyRequestDto param)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String,Object>();
 		
@@ -87,8 +120,16 @@ public class ReplyApiController {
 		return result;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "게시판 댓글 삭제",notes = "자유게시판 목록에서 댓글 삭제기능")
 	@DeleteMapping("/delete/{id}")
-	public Map<String,Object>replydelete(@PathVariable("id")Integer boardId)throws Exception{
+	public Map<String,Object>replydelete(
+			@ApiParam(value="id",name="게시글 번호",required = true)
+			@PathVariable(value="id")Integer boardId)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String,Object>();
 		
@@ -116,8 +157,16 @@ public class ReplyApiController {
 		return result;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글목록",notes = "가게조회페이지에서 댓글목록")
 	@GetMapping("/list/{id}")
-	public List<ReplyDto.PlaceReplyResponseDto>placereplylist(@PathVariable("id")Integer placeId)throws Exception{
+	public List<ReplyDto.PlaceReplyResponseDto>placereplylist(
+			@ApiParam(value="id",name="가게번호",required = true)
+			@PathVariable("id")Integer placeId)throws Exception{
 				
 		List<ReplyDto.PlaceReplyResponseDto>replylist = null;
 		
@@ -133,8 +182,18 @@ public class ReplyApiController {
 		return replylist;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글 단일조회",notes = "가게조회페이지에서 댓글 단일조회")
 	@GetMapping("/list/{id}/{re}")
-	public ReplyDto.PlaceReplyResponseDto placereplydetail(@PathVariable(value="id",required = true)Integer boardId, @PathVariable(value="re",required = true)Integer replyId)throws Exception{
+	public ReplyDto.PlaceReplyResponseDto placereplydetail(
+			@ApiParam(value="id",name="가게번호",required = true)
+			@PathVariable(value="id",required = true)Integer placeId, 
+			@ApiParam(value="re",name="댓글번호",required = true)
+			@PathVariable(value="re",required = true)Integer replyId)throws Exception{
 
 		ReplyDto.PlaceReplyResponseDto detail = null;
 	
@@ -151,8 +210,16 @@ public class ReplyApiController {
 		return detail;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글 작성",notes = "가게조회페이지에서 댓글작성")
 	@PostMapping("/placewrite")
-	public Map<String,Object>placereplywrite(@RequestBody ReplyDto.ReplyRequestDto param )throws Exception{
+	public Map<String,Object>placereplywrite(
+			@ApiParam(name="가게댓글Dto",required = true)
+			@RequestBody ReplyDto.ReplyRequestDto param)throws Exception{
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
@@ -183,8 +250,16 @@ public class ReplyApiController {
 		return result;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글 삭제",notes = "가게조회페이지에서 댓글삭제")
 	@DeleteMapping("/placedelete/{id}")
-	public Map<String,Object>placereplydelete(@PathVariable(value="id",required = true)Integer replyId)throws Exception{
+	public Map<String,Object>placereplydelete(
+			@ApiParam(value="id",name="가게댓글번호",required = true)
+			@PathVariable(value="id",required = true)Integer replyId)throws Exception{
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		
@@ -219,8 +294,16 @@ public class ReplyApiController {
 		return result;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글좋아요 중복체크",notes = "가게조회페이지에서 댓글좋아요 중복체크")
 	@PostMapping("/likecheck/{id}")
-	public int likeCheck(@PathVariable(value="id",required = true)Integer replyId)throws Exception{
+	public int likeCheck(
+			@ApiParam(value="id",name="가게댓글번호",required = true)
+			@PathVariable(value="id",required = true)Integer replyId)throws Exception{
 
 		int CheckResult = 0;
 		
@@ -242,9 +325,17 @@ public class ReplyApiController {
 		}
 		return CheckResult;
 	}
-	
+
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글좋아요 +1",notes = "가게조회페이지에서 댓글좋아요 증가기능")
 	@PostMapping("/likeup/{id}")
-	public int likeUp(@PathVariable(value="id",required = true)Integer replyId)throws Exception{
+	public int likeUp(
+			@ApiParam(value="id",name="가게댓글번호",required = true)
+			@PathVariable(value="id",required = true)Integer replyId)throws Exception{
 		int likeResult = 0;
 		
 		try {
@@ -258,8 +349,16 @@ public class ReplyApiController {
 		return likeResult;
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게댓글좋아요 -1",notes = "가게조회페이지에서 댓글좋아요 감소기능")
 	@PostMapping("/likedown/{id}")
-	public int likedown(@PathVariable(value="id",required = true)Integer replyId)throws Exception{
+	public int likedown(
+			@ApiParam(value="id",name="가게댓글번호",required = true)
+			@PathVariable(value="id",required = true)Integer replyId)throws Exception{
 		int likeResult = 0;
 		
 		try {

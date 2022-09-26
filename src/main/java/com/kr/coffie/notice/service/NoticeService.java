@@ -34,6 +34,7 @@ public class NoticeService {
 	};
 
 	public int noticeinsert(NoticeDto.NoticeRequestDto dto,FileDto.FileRequestDto fvo)throws Exception{
+
 		int result = mapper.noticeinsert(dto);
 		
 		List<FileDto.FileResponseDto>filelist = new ArrayList<>();
@@ -90,7 +91,9 @@ public class NoticeService {
 	};
 
 	public int noticeupdate(NoticeDto.NoticeRequestDto dto,FileDto.FileRequestDto fvo)throws Exception{
+		
 		int result = mapper.noticeupdate(dto);
+		
 		List<FileDto.FileResponseDto>filelists = filemapper.noticeFileList(dto.getNoticeId());
 		
 		if(result >0) {
@@ -114,9 +117,11 @@ public class NoticeService {
 				int attachresult = filemapper.noticeFileInsert(fileVO);
 			}	
 		}
+		
 		if(filelists == null || filelists.size() == 0) {
 			return result;
 		}
+		
 		return result;
 	};
 

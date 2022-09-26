@@ -26,8 +26,14 @@ import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 
+@Api(tags = {"다운로드 api"},value="파일다운로드관련 api")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/file/*")
@@ -37,8 +43,16 @@ public class FileController {
 	
 	private final PlaceService placeservice;
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "게시판 다운로드",notes = "자유게시판 조회페이지에서 파일 다운로드기능")
 	@GetMapping("/boarddownload")
-	public ResponseEntity<Resource>boardfiledownload(@RequestParam Integer boardId)throws Exception{
+	public ResponseEntity<Resource>boardfiledownload(
+			@ApiParam(required = true,value="boardId",name="게시글 번호")
+			@RequestParam Integer boardId)throws Exception{
 		
 		HttpHeaders header = new HttpHeaders();
 	
@@ -85,9 +99,16 @@ public class FileController {
 	}
 
 	//공지게시판 다운로드
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "공지게시판 다운로드",notes = "공지게시판 조회페이지에서 파일 다운로드기능")
 	@GetMapping("/noticedownload")
 	public ResponseEntity<Resource>noticefiledownload(
-		@RequestParam Integer noticeId)throws Exception{
+			@ApiParam(value="noticeId",name="공지게시판 번호",required = true)
+			@RequestParam Integer noticeId)throws Exception{
 		
 		HttpHeaders header = new HttpHeaders();
 
@@ -138,6 +159,12 @@ public class FileController {
 		return new ResponseEntity<Resource>(res,header,HttpStatus.OK);
 	}
 	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "엑섹다운로드기능",notes = "가게목록페이지에서 어드민으로 로그인을 했을경우 엑셀목록으로 받는 기능")
 	@GetMapping("/exceldown")
 	public void placeExcelDown(HttpServletRequest req, HttpServletResponse res) {
 		try {
