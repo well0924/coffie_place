@@ -143,7 +143,7 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 		<h2>가게조회</h2>
 			<!--placeimage(main)-->
 			<th:block th:each="list:${imagelist}">
-				<img th:if="${list.isTitle}"th:src="${list.thumbFileImagePath}"></img>
+				<img th:if="${list.isTitle}"th:src="${list.thumbFileImagePath}" onclick="fnImgPop(this.src)"></img>
 			</th:block>
 		<hr>
 			<!-- placedetail -->
@@ -185,7 +185,7 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 					<textarea class="col-auto form-control" type="text" id="reviewContents" name="replyContents" placeholder="댓글을 남겨주세요."></textarea>
 				</div>
 			</form>
-			<button class="btn btn-primary" onclick="replyPost()">글 작성</button>							
+			<button class="btn btn-primary" onclick="replyPost()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">글 작성</button>							
 			<!--댓글부분 끝-->
 			<hr>
 			<!--댓글 출력부분-->
@@ -484,16 +484,10 @@ $(document).ready(function(){
 	function fnImgPop(url){
 		var img = new Image();
 		img.src =url;
-		
-		var img_width=img.width;
-		var win_width=img.width+300;
-		
-		var img_height=img.height;
-		
-		var win=img.height;
-		
-		var OpenWindow=window.open('','_blank', 'width='+img_width+', height='+img_height+', menubars=no, scrollbars=auto');
-		  OpenWindow.document.write("<style>body{margin:0px;}</style><img src='"+url+"' width='"+win_width+"'>");
+		var name = "image popup";
+
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);  
 	}
 </script>	
 </th:block>

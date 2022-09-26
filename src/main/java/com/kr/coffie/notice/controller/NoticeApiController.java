@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.common.page.Criteria;
+import com.kr.coffie.common.page.Paging;
 import com.kr.coffie.notice.service.NoticeService;
 import com.kr.coffie.notice.vo.dto.NoticeDto;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/notice/*")
@@ -33,21 +33,27 @@ public class NoticeApiController {
 		Map<String,Object>result = new HashMap<String,Object>();
 		
 		List<NoticeDto.NoticeResponseDto>list = null;
+		int totallist = 0;
 		
 		try {
-			list = service.noticelist(cri);
 			
-			log.info("목록:"+list);
-			
+			list = service.noticelist(cri);			
+			totallist = service.noticetotalcount(cri);
 			result.put("list", list);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		Paging paging = new Paging();
+		paging.setCri(cri);
+		paging.setTotalCount(totallist);
+		
 		return result;
 	}
 	
 	@PostMapping("/write")
-	public Map<String,Object>articleinsert(@RequestBody NoticeDto.NoticeRequestDto dto)throws Exception{
+	public Map<String,Object>articleinsert(NoticeDto.NoticeRequestDto dto,FileDto.FileRequestDto fvo)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String,Object>();
 		
@@ -55,7 +61,7 @@ public class NoticeApiController {
 		
 		try {
 			
-			insertresult = service.noticeinsert(dto);
+			insertresult = service.noticeinsert(dto,fvo);
 			
 			if(insertresult >0) {
 				result.put("Common o.k", 200);
@@ -70,14 +76,14 @@ public class NoticeApiController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public Map<String,Object>articleupdate(@PathVariable("id")Integer boardId,@RequestBody NoticeDto.NoticeRequestDto dto)throws Exception{
+	public Map<String,Object>articleupdate(@PathVariable("id")Integer boardId,NoticeDto.NoticeRequestDto dto,FileDto.FileRequestDto fvo)throws Exception{
 		
 		Map<String,Object> result = new HashMap<>();
 		
 		int updateresult = 0;
 		
 		try {
-			updateresult = service.noticeupdate(dto);
+			updateresult = service.noticeupdate(dto,fvo);
 			
 			if(updateresult > 0) {
 				result.put("common o.k", 200);

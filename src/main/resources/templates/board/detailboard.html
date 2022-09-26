@@ -78,7 +78,7 @@ layout:decorate="~{layout/leafframe}">
 						    <li class="list-group-item">
 								<input type="text" class="form-control ml-2" id="writer" name="replyAuthor">
 								<textarea class="form-control" id="contents" name ="replyContents" rows="3"></textarea>
-								<button type="button" class="btn btn-dark mt-3" onClick="replyWrite();">댓글 작성</button>
+								<button type="button" class="btn btn-dark mt-3" onClick="replyWrite();" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">댓글 작성</button>
 						    </li>
 						</ul>
 					</div>

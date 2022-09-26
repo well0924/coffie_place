@@ -57,6 +57,20 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/images/**", "/JS/**", "/font", "/webfonts/**", "/main/**", "/swagger-ui/**", "/v2/**");
 	}
 
+	private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
@@ -64,7 +78,17 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.csrf().disable()
 		.cors().disable()
 		.authorizeRequests()
-		.antMatchers("/**").permitAll()
+		.antMatchers("/**","/api/admin/selectdelete","/api/admin/autocompetekeyword","/api/notice/**","/api/board/**","/api/place/**").hasRole("ADMIN")
+		.antMatchers("/page/board/detail/**","/page/board/modify/**","/page/notice/noticedetail/**","/page/place/placedetail/**","/page/mypage/**").hasRole("USER")
+		.antMatchers(PERMIT_URL_ARRAY).permitAll()
+		.antMatchers(
+			"/page/main/mainpage",
+			"/page/place/list",
+			"/page/login/loginpage",
+			"/page/login/memberjoin",
+			"/api/board/list",
+			"/api/notice/list",
+			"/istatic/images/**").permitAll()
 		.and()
 		.formLogin()
 		.loginPage("/page/login/loginpage")
@@ -81,6 +105,5 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.maximumSessions(1)
 		.maxSessionsPreventsLogin(true);
 	}
-	
 	
 }

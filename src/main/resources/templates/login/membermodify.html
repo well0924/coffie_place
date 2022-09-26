@@ -79,8 +79,8 @@ layout:decorate="~{layout/leafframe}">
 						</div>
 					<div class="form-group">
 						<div class="text-right">
-							<button type="button" class="btn btn-primary" onclick="memberupdate()">정보수정</button>
-							<button type="button" class="btn btn-primary" onclick="memberdelete()">정보삭제</button>
+							<button type="button" class="btn btn-primary" onclick="memberupdate()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">정보수정</button>
+							<button type="button" class="btn btn-primary" onclick="memberdelete()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">정보삭제</button>
 							<button type="button" class="btn btn-primary" onclick="adminlist()">취소</button>
 						</div>
 					</div>

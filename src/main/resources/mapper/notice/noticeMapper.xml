@@ -21,22 +21,22 @@
 			notice_id = #{noticeId}
 	</select>
 	
-	<insert id="noticeinsert" parameterType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeRequestDto">
+	<insert id="noticeinsert" parameterType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeRequestDto" useGeneratedKeys="true" keyProperty="noticeId">
 		insert into tbl_notice_board
 		(
 			notice_group,
 			notice_title,
 			notice_contents,
 			notice_fixed,
-			created_by,
+			notice_author,
 			created_at)
 		values
 		(
 			#{noticeGroup},
 			#{noticeTitle},
 			#{noticeContents},
-			#{isFixed},
-			#{createdBy},
+			#{noticeFixed},
+			#{noticeAuthor},
 			now()
 		)
 	</insert>
@@ -48,13 +48,13 @@
 			notice_id = #{noticeId}
 	</delete>
 	
-	<update id="noticeupdate" parameterType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeRequestDto">
+	<update id="noticeupdate" parameterType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeRequestDto" useGeneratedKeys="true" keyProperty="noticeId">
 		update 
 			tbl_notice_board 
 		set 
 			notice_title = #{noticeTitle},
 			notice_contents = #{noticeContents}, 
-			notice_fixed = #{isFixed},
+			notice_fixed = #{noticeFixed},
 			notice_group = #{noticeGroup},
 			updated_at = now()
 		where 

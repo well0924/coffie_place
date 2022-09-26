@@ -16,7 +16,7 @@ public class BoardVO {
 	private String boardContents;
 	private String boardAuthor;
 	private Integer readCount;
-	private String passWd;
+	private Integer passWd;
 	private String fileGroupId;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime createdAt;

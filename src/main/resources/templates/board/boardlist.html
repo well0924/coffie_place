@@ -64,7 +64,7 @@ layout:decorate="~{layout/leafframe}">
 			<!--paging end-->
 			
 			<div class="text-right">
-				<a th:href="@{/page/board/boardwrite}" class="btn btn-primary">글쓰기</a>
+				<a th:href="@{/page/board/boardwrite}" class="btn btn-primary" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">글쓰기</a>
 			</div>
 			
 			<!-- search start -->

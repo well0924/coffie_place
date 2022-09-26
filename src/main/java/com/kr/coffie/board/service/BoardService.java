@@ -3,6 +3,7 @@ package com.kr.coffie.board.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class BoardService {
 		List<FileDto.FileResponseDto> filelist = new ArrayList<>();
 		
 		if(result>0) {	
+			
 			//글작성이 되면 파일 업로드 기능이 실행.
 			filelist = utile.fileupload(fvo);
 			
@@ -54,11 +56,11 @@ public class BoardService {
 					int attachresult = filemapper.boardFileInsert(fileVO);	
 				}
 			}
-			
-			//첨부 파일이 없는 경우
-			if(filelist == null || filelist.size() == 0){
-				result = mapper.boardwrite(dto);
-			}
+		}
+		
+		//첨부 파일이 없는 경우
+		if(filelist == null || filelist.size() == 0){
+			return result;
 		}
 		
 		return result;
@@ -150,7 +152,8 @@ public class BoardService {
 		return mapper.totalarticle(cri);
 	};
 	
-	public BoardDto.BoardResponseDto passwordcheck(@Param("passWd")Integer passWd, @Param("boardId") Integer boardId)throws Exception{
+	public BoardDto.BoardResponseDto passwordcheck(@Param("passWd")Integer passWd, 
+			@Param("boardId") Integer boardId)throws Exception{
 		return mapper.passwordcheck(passWd, boardId);
 	};
 }

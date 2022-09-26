@@ -58,8 +58,8 @@ layout:decorate="~{layout/leafframe}">
 					<div class="form-group">
 						<div class="text-right">
 							<a href="/page/board/list" class="btn btn-primary">목록</a>
-							<button type="button" class="btn btn-primary" onclick="updateboard()">수정하기</button>
-							<button type="button" class="btn btn-primary" onclick="deleteboard()">삭제하기</button>
+							<button type="button" class="btn btn-primary" onclick="updateboard()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">수정하기</button>
+							<button type="button" class="btn btn-primary" onclick="deleteboard()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">삭제하기</button>
 						</div>
 					</div>
 				</div>
