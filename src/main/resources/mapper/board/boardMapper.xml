@@ -22,8 +22,7 @@
 		read_count,
 		passwd,
 		file_group_id,
-		created_at,
-		updated_at 
+		created_at
 	from 
 		tbl_board 
 	where 
@@ -42,7 +41,7 @@
 		board_title = #{boardTitle},
 		board_contents = #{boardContents},
 		passwd = #{passWd},
-		updated_at = now()
+		created_at = now()
 	where 
 		board_id = #{boardId}
 </update>

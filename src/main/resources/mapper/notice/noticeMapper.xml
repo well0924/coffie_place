@@ -56,7 +56,7 @@
 			notice_contents = #{noticeContents}, 
 			notice_fixed = #{noticeFixed},
 			notice_group = #{noticeGroup},
-			updated_at = now()
+			created_at = now()
 		where 
 			notice_id = #{noticeId}	
 	</update>

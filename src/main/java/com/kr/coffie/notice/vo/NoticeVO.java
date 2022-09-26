@@ -20,7 +20,4 @@ public class NoticeVO {
 	private String fileGroupId;
 	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
 	private LocalDateTime createdAt;
-	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
-	private LocalDateTime updatedAt;
-	
 }

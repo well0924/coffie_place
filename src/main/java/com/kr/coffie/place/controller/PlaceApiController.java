@@ -58,7 +58,7 @@ public class PlaceApiController {
 	@PostMapping("/placeregister")
 	public Map<String,Object>placeregister(
 		@ApiParam(name="가게 dto",required = true)	
-		@RequestBody PlaceDto.PlaceRequestDto dto,
+		@ModelAttribute PlaceDto.PlaceRequestDto dto,
 		@ApiParam(name="파일 dto",required = true)
 		@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
 		
@@ -104,7 +104,7 @@ public class PlaceApiController {
 	public Map<String,Object>placeupdate(
 			@ApiParam(value="id",name="가게 번호",required = true)
 			@PathVariable(value="id",required = true)Integer placeId,
-			@RequestBody PlaceDto.PlaceRequestDto dto,
+			@ModelAttribute PlaceDto.PlaceRequestDto dto,
 			@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();

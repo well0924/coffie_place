@@ -36,10 +36,6 @@ layout:decorate="~{layout/leafframe}">
 						<input type="text" id="board_date" name="createdAt" class="form-control" th:value="${detail.createdAt}" disabled="disabled"/>
 					</div>                                           
 					<div class="form-group">
-						<label for="board_date">수정일자</label>
-						<input type="text" id="board_date" name="updatedAt" class="form-control" th:value="${detail.updatedAt}" disabled="disabled"/>
-					</div>
-					<div class="form-group">
 						<label for="board_content">내용</label>
 						<p th:utext="${detail.boardContents}"></p>
 					</div>

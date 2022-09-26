@@ -67,9 +67,6 @@ public class NoticeDto {
 		@ApiModelProperty(value="글 등록일",example="2022-09-17 12:34",required = true)
 		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
 		private LocalDateTime createdAt;
-		@ApiModelProperty(value="글 수정일",example="2022-09-19 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm",shape = Shape.STRING)
-		private LocalDateTime updatedAt;
 	
 	}
 }
