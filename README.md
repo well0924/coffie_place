@@ -55,30 +55,6 @@ Deployment:Cafe24
  
 ### [주요기능] 
 
-로그인
-
-<img src='https://user-images.githubusercontent.com/89343159/189049604-f248376a-d32d-4371-9720-948e6ba114f2.png'></img>
-
-회원가입
-
-<img src='https://user-images.githubusercontent.com/89343159/189049695-92d7e32a-5137-4d83-a83b-f13ca1279f9a.png'></img>
-
-ADMIN
-
-<img src='https://user-images.githubusercontent.com/89343159/189052505-9e4c4ce4-a2fe-423f-bfed-81dedb3cedaa.png'></img>
-
-USER
-
-<img src='https://user-images.githubusercontent.com/89343159/189052390-0094cf8c-fdf1-4a73-9e90-7f7cdf34fcfe.png'></img>
-
-카페 상세조회
-
-<img src='https://user-images.githubusercontent.com/89343159/189052729-3d128727-6765-4929-a015-1cd507036acf.png'></img>
-
-어드민 페이지
-
-<img src='https://user-images.githubusercontent.com/89343159/189052917-203884fd-f518-4aab-b3f8-601c33a1cc8c.png'></img>
-
 ### 회고
 
 처음 프로젝트 주제선정부터 배포까지의 전과정을 통해서 전반적인 개발
