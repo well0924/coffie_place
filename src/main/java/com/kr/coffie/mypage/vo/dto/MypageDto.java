@@ -34,7 +34,7 @@ public class MypageDto {
 		@ApiModelProperty(value="위시리스트 번호",example="place_f43gk5",required = true)
 		private String fileGroupId;
 		@ApiModelProperty(value="등록일",example="2022-09-28 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm",shape = Shape.STRING)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 		private LocalDateTime createdAt;
 	
 	}
@@ -68,8 +68,8 @@ public class MypageDto {
 		private Double reviewRate;
 		@ApiModelProperty(value="위시리스트 번호",example = "가게이름",required = true)
 		private String placeName;		
-		@ApiModelProperty(value="등록일",example="2022-09-29 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="등록일",example="2022-09-29 12:34:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	
 	}
@@ -93,8 +93,8 @@ public class MypageDto {
 		private String author;
 		@ApiModelProperty(value="파일그룹아이디",example="place_f43gk5")
 		private String fileGroupId;
-		@ApiModelProperty(value="등록일",example="2022-09-30 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="등록일",example="2022-09-30 12:34:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	
 	}

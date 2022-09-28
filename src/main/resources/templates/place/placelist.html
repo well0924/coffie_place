@@ -152,7 +152,7 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 					<option th:value="CA">주소</option> 		
 				</select>
 				<input class="form-control" type="text" id="autocomplete" name="keyword" placeholder="검색어를 입력하세요"/>
-				<button id="searchBtn" class="btn btn-primary">Search</button>
+				<button id="btnSearch"  class="btn btn-primary">Search</button>
 			</div>
 			<!--search end-->
 			<a th:href="@{/api/file/exceldown}" class="btn btn-primary" style="margin-bottom: 5px;" sec:authorize="hasRole('ROLE_ADMIN')">가게목록출력</a>
@@ -217,19 +217,21 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 <script type="text/javascript">
 $(document).on('click', '#btnSearch', function(e){
 	/*<![CDATA[*/
-	var url ="/place/placelist?"+"page="+[[${paging.cri.page}]]+"&perPageNum="+[[${paging.cri.perPageNum}]]+"&searchType="+$('#searchType').val()+"&keyword="+$('#autocomplete').val();
+	var url ="/page/place/placelist?"+"page="+[[${paging.cri.page}]]+"&perPageNum="+[[${paging.cri.perPageNum}]]+"&searchType="+$('#searchType').val()+"&keyword="+$('#autocomplete').val();
 	location.href = url;
 	/*]]>*/
 });
-
+//가게 자동완성기능
 $('#autocomplete').autocomplete({
 	 source : function(request, response) {
 		 $.ajax({
-			 url:'/api/place/autocompetekeyword',
+			 url:'/api/place/autocompletekeyword',
 			 type:'post',
 			 dataType:'json',
 			 data:{value: request.term}
 		 }).done(function(data){
+			 console.log(data);
+			 console.log(data.value);
 			 response(
 					$.map(data.resultList,function(item){
 						return{
@@ -240,7 +242,8 @@ $('#autocomplete').autocomplete({
 					}) 
 			);//response end
 		}).fail(function(error){
-			alert("오류가 발생했습니다.");
+			console.log("오류가 발생했습니다.");
+			console.log(error);
 		});
 	 }
 	 
@@ -254,6 +257,10 @@ $('#autocomplete').autocomplete({
 		 console.log(ui.item.idx);
 	 }
 });
+
+function placeregister(){
+	location.href='/page/place/placeregister';
+}
 </script>
 </th:block>
 </body>

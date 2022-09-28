@@ -56,7 +56,8 @@ public class NoticeController {
 		paging.setCri(cri);
 		paging.setTotalCount(articlesum);
 		paging.setKeyword(keyword);
-	
+		paging.setSearchType(searchType);
+		
 		mv.addObject("paging", paging);
 		mv.addObject("noticeList", list);
 		mv.addObject("totalCount", articlesum);

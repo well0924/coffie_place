@@ -29,19 +29,19 @@
 <sql id="adminsearch">
 	<trim prefix="WHERE" prefixOverrides="AND|OR">
 		<!-- 어드민 페이지 검색 -->
-		<if test="searchType=='MALL'.toString() and keyword != null and keyword != '' ">
+		<if test="searchType=='all'.toString() and keyword != null and keyword != '' ">
 			AND (user_id like CONCAT('%', #{keyword}, '%')
 			or user_id like CONCAT('%', #{keyword}, '%')
 			or user_name like CONCAT('%', #{keyword}, '%')
 			or user_email like CONCAT('%', #{keyword}, '%'))
 		</if>
-		<if test="searchType=='MI'.toString() and keyword != null and keyword != '' ">
+		<if test="searchType=='I'.toString() and keyword != null and keyword != '' ">
 			AND user_id like CONCAT('%', #{keyword}, '%')
 		</if>
-		<if test="searchType=='MN'.toString() and keyword != null and keyword != '' ">
+		<if test="searchType=='N'.toString() and keyword != null and keyword != '' ">
 			AND user_name like CONCAT('%', #{keyword}, '%')
 		</if>
-		<if test="searchType=='ME'.toString() and keyword != null and keyword != '' ">
+		<if test="searchType=='E'.toString() and keyword != null and keyword != '' ">
 			AND user_email like CONCAT('%', #{keyword}, '%')
 		</if>
 	</trim>
@@ -98,8 +98,7 @@
 	file_group_id,
 	read_count,
 	passwd,
-	created_at,
-	updated_at
+	created_at
 </sql>
 
 <!-- 공지게시판 컬럼 -->
@@ -110,8 +109,7 @@
 	notice_contents,
 	notice_fixed,
 	notice_group,
-	created_at,
-	updated_at
+	created_at
 </sql>
 
 <!-- 첨부파일 컬럼 -->

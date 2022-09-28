@@ -1,4 +1,4 @@
-package com.kr.coffie.config;
+package com.kr.coffie.config.security;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.kr.coffie.config.handler.LoginFaileHandler;
-import com.kr.coffie.config.handler.LoginSuccessHandler;
+import com.kr.coffie.config.security.handler.LoginFaileHandler;
+import com.kr.coffie.config.security.handler.LoginSuccessHandler;
 import com.kr.coffie.login.service.UserDetailService;
 
 import lombok.AllArgsConstructor;
@@ -78,9 +78,20 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.csrf().disable()
 		.cors().disable()
 		.authorizeRequests()
-		.antMatchers("/api/admin/selectdelete","/api/admin/autocompetekeyword","/api/notice/**","/api/board/**","/api/place/**","/page/mypage/**").hasRole("ADMIN")
-		.antMatchers("/page/mypage/**").hasRole("USER")
+		.antMatchers("/api/admin/selectdelete",
+					 "/api/admin/autocompetekeyword",
+					 "/api/notice/**",
+					 "/api/board/**",
+					 "/api/place/**",
+					 "/page/mypage/page/**",
+					 "/api/mypage/wishlist").hasRole("ADMIN")
+		
+		.antMatchers("/page/mypage/**",
+				     "/api/mypage/**",
+				     "/api/place/**").hasRole("USER")
+		
 		.antMatchers(PERMIT_URL_ARRAY).permitAll()
+		
 		.antMatchers(
 			"/**",	
 			"/page/main/mainpage",

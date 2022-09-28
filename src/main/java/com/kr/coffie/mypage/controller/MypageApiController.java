@@ -74,7 +74,7 @@ public class MypageApiController {
 	@ApiOperation(value = "위시리스트 추가 API",notes="위시리스트를 추가하는 api입니다.")
 	@PostMapping("/wishinsert")
 	public Map<String,Object>wishinsert(
-			@ApiParam
+			@ApiParam(required = true)
 			@RequestBody MypageDto.MypageRequestDto dto)throws Exception{
 		
 		Map<String,Object> result = new HashMap<String, Object>();
@@ -111,7 +111,7 @@ public class MypageApiController {
 	@ApiOperation(value = "위시리스트 삭제 API",notes="위시리스트를 삭제합니다.")
 	@PostMapping("/delete/{fid}/{id}")
 	public Map<String,Object>wishdelete(
-		@ApiParam(value="fid",name="위시리스트 번호",required = true)	
+		@ApiParam(value="fid",name="위시리스트 번호",required = true,example="1")	
 		@PathVariable(value="fid",required=true)Integer favoriteId,
 		@ApiParam(value="id",name="회원아이디",required = true)
 		@PathVariable(value="id",required = true) String userId,
@@ -158,7 +158,7 @@ public class MypageApiController {
 	public Map<String,Object> wishcheck(
 		@ApiParam(name="회원아이디",required = true)	
 		@PathVariable(value="id",required = true)String userId,
-		@ApiParam(name="가게번호",required = true)
+		@ApiParam(name="가게번호",required = true,example="1")
 		@PathVariable(value="fid",required = true)Integer placeId,
 		@ApiIgnore
 		@RequestBody MypageDto.MypageRequestDto dto)throws Exception{

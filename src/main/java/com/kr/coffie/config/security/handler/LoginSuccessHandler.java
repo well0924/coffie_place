@@ -1,4 +1,4 @@
-package com.kr.coffie.config.handler;
+package com.kr.coffie.config.security.handler;
 
 import java.io.IOException;
 import java.util.Set;

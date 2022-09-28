@@ -38,7 +38,8 @@
   	     	tbl_user_auth a 	
   	     on 
   	     	u.user_auth = a.auth_id
-  	     <include refid="mapper.common.common_mapper.paging"/>		
+  	     <include refid="mapper.common.common_mapper.adminsearch"/>	
+  	     <include refid="mapper.common.common_mapper.paging"/>	
 	</select>
 	
 	<select id="memberdetail" parameterType="String" resultType="com.kr.coffie.login.vo.dto.LoginDto$LoginResponseDto">

@@ -51,7 +51,7 @@ public class FileController {
 	@ApiOperation(value = "게시판 다운로드",notes = "자유게시판 조회페이지에서 파일 다운로드기능")
 	@GetMapping("/boarddownload")
 	public ResponseEntity<Resource>boardfiledownload(
-			@ApiParam(required = true,value="boardId",name="게시글 번호")
+			@ApiParam(required = true,value="boardId",name="게시글 번호",example="1")
 			@RequestParam Integer boardId)throws Exception{
 		
 		HttpHeaders header = new HttpHeaders();
@@ -107,7 +107,7 @@ public class FileController {
 	@ApiOperation(value = "공지게시판 다운로드",notes = "공지게시판 조회페이지에서 파일 다운로드기능")
 	@GetMapping("/noticedownload")
 	public ResponseEntity<Resource>noticefiledownload(
-			@ApiParam(value="noticeId",name="공지게시판 번호",required = true)
+			@ApiParam(value="noticeId",name="공지게시판 번호",required = true,example="1")
 			@RequestParam Integer noticeId)throws Exception{
 		
 		HttpHeaders header = new HttpHeaders();

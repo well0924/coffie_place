@@ -37,8 +37,8 @@ public class NoticeDto {
 		private String noticeFixed;
 		@ApiModelProperty(value="공지게시글 파일그룹아이디",example="notice_g4s35x",required = true)
 		private String fileGroupId;
-		@ApiModelProperty(value="공지글 등록일",example="2022-10-11 22:20",required = false)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="공지게시글 등록일",example="2022-09-17T12:34:00",required = true)
+		@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	
 	}
@@ -64,8 +64,8 @@ public class NoticeDto {
 		private String noticeFixed;
 		@ApiModelProperty(value="공지게시글 파일그룹아이디",example="notice_g4s35x",required = true)
 		private String fileGroupId;
-		@ApiModelProperty(value="글 등록일",example="2022-09-17 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+		@ApiModelProperty(value="글 등록일",example="2022-09-17T12:34:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	
 	}

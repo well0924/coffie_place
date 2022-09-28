@@ -45,8 +45,8 @@ public class LoginDto {
 		private String userAddr2;
 		@ApiModelProperty(value="회원권한",example="ADMIN")
 		private String userAuth;
-		@ApiModelProperty(value="회원등록일",example="2022-09-26 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="회원등록일",example="2022-09-26T12:34:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	}
 	
@@ -79,8 +79,8 @@ public class LoginDto {
 		private String userAddr2;
 		@ApiModelProperty(value="회원권한",example="ADMIN")
 		private String userAuth;
-		@ApiModelProperty(value="회원등록일",example="2022-09-27 12:34",required = true)
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="회원등록일",example="2022-09-27T12:34:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 		
 	}

@@ -64,22 +64,8 @@ layout:decorate="~{layout/leafframe}">
 							<label for="user_email">이메일</label>
 							<div class="input-group">
 								<input type="text" id="user_email" name="userEmail" class="form-control"/>
-							<div class="input-group-append">
-								<button type="button" class="btn btn-primary" onclick="tmpemail()">인증번호</button>
-							</div>
 							</div>
 						</div>
-						<!-- 이메일 인증부분 -->
-						<div class="mail_check_wrap" style=display:inline;>
-							<!-- 인증번호 입력 박스 -->
-							<div class="form-group" id="mail_check_input_box_false">
-								<!-- 인증번호 입력칸 -->
-								<input id="mail_check_input" placeholder="인증번호" class="form-control" disabled="disabled">
-							</div>
-							<div class="claerify"></div>
-							<span id="mail_check_input_box_warn"></span>
-						</div>
-						<!-- 인증 end -->
 						<div class="form-group">
 							<label for="user_phone">전화번호</label>
 							<input type="text" id="user_phone" name="userPhone" class="form-control"/>
@@ -139,10 +125,10 @@ function validation(){
 		alert('성별을 체크해주세요.');
 		return false;
 	}
-// 	if(email.trim().length == 0){
-// 		alert('이메일을 입력해주세요.');
-// 		return false;
-// 	}
+	if(email.trim().length == 0){
+		alert('이메일을 입력해주세요.');
+		return false;
+	}
 	if(phone.trim().length == 0){
 		alert('전화번호를 입력해주세요.');
 		return false;
@@ -219,59 +205,6 @@ function validemail(){
 	}
 	return true;
 }
-var code = '';
-
-//임시번호 전송(이메일)
-function tmpemail(){
-	
-	var useremail = $('#user_email').val();
-	var form ={userEmail : useremail};
-	//인증번호 입력란
-	var checkbox = $('#mail_check_input');
-	//인증번호 입력 박스
-	var boxwrap = $('.mail_check_input_box');
-	console.log(useremail);
-	
-	if(validemail()){
-		//ajax부분
-		$.ajax({
-			url:'/api/login/emailsend',
-			type:'post',
-			data: form,
-			dataType:'json',
-			contentType:'application/json; charset=utf-8',
-		}).done(
-			function(resp){
-				alert('인증번호가 보내졌습니다.');
-				console.log(resp);
-				checkbox.attr("disabled",false);
-				boxwrap.attr("id","mail_check_input_box_true");
-				code = resp;
-		}).fail(function(error){
-			console.log(error);
-			checkbox.attr("disabled",false);
-			boxwrap.attr("id","mail_check_input_box_true");
-			code = error;
-		});
-	}	
-
-}
-
-//인증번호 비교o.k
-$("#mail_check_input").blur(function(){
-	
-	var inputCode = $("#mail_check_input").val();
-	var checkResult = $("#mail_check_input_box_warn");
-	
-	if(inputCode == code){
-		checkResult.html("인증번호가 일치합니다.");
-		checkResult.attr("class","correct");
-	}else{
-		checkResult.html("인증번호를 다시 확인해주세요.");
-		checkResult.attr("class","incorrect");
-	}
-	
-});
 
 //주소api기능o.k
 function AddressCode(){
@@ -314,6 +247,7 @@ function AddressCode(){
        }
    }).open();	
 }
+
 //회원가입 기능o.k
 function memberjoin(){
 	

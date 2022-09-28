@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kr.coffie.common.file.vo.dto.FileDto;
+import com.kr.coffie.common.page.Criteria;
+import com.kr.coffie.common.page.Paging;
 import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
@@ -33,14 +36,84 @@ public class PlaceApiController {
 	
 	private final PlaceService service;
 	
+	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게목록",notes = "가게목록페이지에서 가게목록 보여주기.")
+	@GetMapping(value="/placelist")
+	public Map<String,Object>placelist(Criteria cri)throws Exception{
+		
+		Map<String,Object>result = new HashMap<String,Object>();
+		
+		List<PlaceDto.PlaceResponseDto>placelist =null;
+		
+		int totalplace = 0;
+		
+		try {
+			placelist = service.placelist(cri);
+			totalplace = service.placetotal(cri);
+			
+			if(placelist != null) {
+			
+				result.put("placelist", placelist);
+				result.put("totalplace",totalplace);
+			}else {
+			
+				result.put("bad request", 400);
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put(e.getMessage(), 500);
+		}
+		
+		Paging paging = new Paging();
+		paging.setCri(cri);
+		paging.setTotalCount(totalplace);
+		
+		return result;
+	}
+	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "가게단일 조회",notes = "가게목록페이지에서 가게상세조회하기.")
+	@GetMapping("/placedetail/{id}")
+	public Map<String,Object>placedetail(
+			@PathVariable(value="id")Integer placeId,
+			
+			PlaceDto.PlaceResponseDto dto)throws Exception{
+		Map<String,Object>result = new HashMap<String, Object>();
+		
+		try {
+			dto = service.placeDetail(placeId);
+			if(dto != null) {
+				result.put("placeDetail", dto);
+			}else {
+				result.put("bad request", 400);
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			result.put(e.getMessage(), 500);
+		}
+		return result;
+	}
+	
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게자동완성검색",notes = "가게목록페이지에서 가게 자동완성검색기능")
-	@PostMapping("/autocompetekeyword")
-	public Map<String,Object>autocompletekeyword(@RequestParam Map<String,Object>param)throws Exception{
+	@PostMapping("/autocompletekeyword")
+	public Map<String,Object>placeautocompletekeyword(@RequestParam Map<String,Object>param)throws Exception{
 		
 		List<Map<String,Object>>list = service.placeautocomplete(param);
 		
@@ -58,6 +131,7 @@ public class PlaceApiController {
 	@PostMapping("/placeregister")
 	public Map<String,Object>placeregister(
 		@ApiParam(name="가게 dto",required = true)	
+		@RequestBody
 		@ModelAttribute PlaceDto.PlaceRequestDto dto,
 		@ApiParam(name="파일 dto",required = true)
 		@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{

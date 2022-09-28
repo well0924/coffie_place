@@ -61,7 +61,7 @@ layout:decorate="~{layout/leafframe}">
 							<input type="text" id="find_email" name="userEmail" class="form-control"/>
 						</div>
 						<div class="form-group text-right">
-							<button type="button" class="btn btn-primary" onclick="temporaryEmail()">임시비밀번호 발급</button>
+							<button type="button" class="btn btn-primary" onclick="changepwd()">비밀번호 변경</button>
 						</div>
 					</form>
 				</div>
@@ -142,19 +142,8 @@ function findId(){
 		
 }
 
-//비밀번호 임시번호 발급
-function temporaryEmail(){
-	//이메일 값
-	var email  = document.getElementById('find_email').value;	
-	
-	
-	$.ajax({
-		url:'/api/login/temppwd/'+email,
-		type:'get'
-	}).done(function(resp){
-		alert('임시번호를 발송했습니다.');
-		location.href="/login/pwd-update";
-	});	
+function changepwd(){
+	location.href='/page/login/pwdchange';
 }
 </script>
 </th:block>

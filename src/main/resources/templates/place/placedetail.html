@@ -168,6 +168,7 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 		</br>
 		</br>
 			<button class="btn btn-primary" onclick="WishCheck()">카페찜하기</button>
+			<button class="btn btn-primary" onclick="placemodify()" sec:authorize="hasRole('ROLE_ADMIN')">가게수정</button>
 			<a th:href="@{/page/place/placelist}" class="btn btn-primary">목록</a>
 		<hr>
 			<!--댓글 부분-->
@@ -231,7 +232,7 @@ $(document).ready(function(){
 	var container = document.getElementById('map');
 	
 	//지도의 중심좌표
-	var options = {
+	const options = {
 		 //입력을 받은 위경도를 넣는다.->가게 위경도
 	     center: new kakao.maps.LatLng(placeLat, placeLang),
 	     level: 1//지도의 확대레벨
@@ -488,6 +489,12 @@ $(document).ready(function(){
 
 	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
 	    window.open(url, name, option);  
+	}
+	//가게 수정 페이지 이동
+	function placemodify(){
+		let placeid = $('#placeid').val();
+		
+		location.href='/page/place/placemodify/'+placeid;
 	}
 </script>	
 </th:block>

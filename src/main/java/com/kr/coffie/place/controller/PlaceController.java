@@ -29,7 +29,7 @@ public class PlaceController {
 	
 	@GetMapping("/placelist")
 	public ModelAndView placelist( Criteria cri,
-			@RequestParam(required = false, defaultValue = "T") String searchType,
+			@RequestParam(required = false, defaultValue = "CN") String searchType,
 			@RequestParam(required = false) String keyword)throws Exception{
 		
 		ModelAndView mv = new ModelAndView();

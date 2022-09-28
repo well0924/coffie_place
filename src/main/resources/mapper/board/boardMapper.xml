@@ -4,9 +4,21 @@
 
 <select id="boardlist" resultType="com.kr.coffie.board.vo.dto.BoardDto$BoardResponseDto">
 	select 
-		*
+		a.board_id,
+		a.board_title,
+		a.board_contents,
+		a.board_author,
+		a.read_count,
+		a.passwd,
+		a.file_group_id,
+		a.created_at,
+		m.user_id as board_author
 	from 
-		tbl_board
+		tbl_board a
+	left join
+	    tbl_user m
+	on
+	  a.board_author = m.user_id    	
 	<include refid="mapper.common.common_mapper.search"/>	
 	order by 
 		board_id desc
@@ -15,23 +27,28 @@
 
 <select id="boarddetail" parameterType="Integer" resultType="com.kr.coffie.board.vo.dto.BoardDto$BoardResponseDto">
 	select 
-		board_id,
-		board_title,
-		board_contents,
-		board_author,
-		read_count,
-		passwd,
-		file_group_id,
-		created_at
+		a.board_id,
+		a.board_title,
+		a.board_contents,
+		a.board_author,
+		a.read_count,
+		a.passwd,
+		a.file_group_id,
+		a.created_at,
+		m.user_id as board_author
 	from 
-		tbl_board 
+		tbl_board a
+	left join
+	    tbl_user m
+	on
+	  a.board_author = m.user_id    	
 	where 
 		board_id = #{boardId}
 </select>
 
 <insert id="boardwrite" parameterType="com.kr.coffie.board.vo.dto.BoardDto$BoardRequestDto" useGeneratedKeys="true" keyProperty="boardId">
-	insert into tbl_board( board_title, board_contents, board_author,read_count, passwd,file_group_id,created_at)
-		values( #{boardTitle},#{boardContents},#{boardAuthor}, 0,#{passWd}, #{fileGroupId},now() )
+	insert into tbl_board(board_id,board_title, board_contents, board_author,read_count, passwd,file_group_id,created_at)
+		values(#{boardId},#{boardTitle},#{boardContents},#{boardAuthor}, 0,#{passWd}, #{fileGroupId},now() )
 </insert>
 
 <update id="boardupdate" parameterType="com.kr.coffie.board.vo.dto.BoardDto$BoardRequestDto" useGeneratedKeys="true" keyProperty="boardId">

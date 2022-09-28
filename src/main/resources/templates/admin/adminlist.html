@@ -92,7 +92,7 @@ layout:decorate="~{layout/leafframe}">
 
 //검색 기능o.k
 $(document).on('click', '#btnSearch', function(e){
-	var url ="/page/admin/listpage?"+"page="+[[${paging.cri.page}]]+"&perPageNum="+[[${paging.cri.perPageNum}]]+"&searchType="+$('#searchType').val()+"&keyword="+$('input[name=keyword]').val();
+	var url ="/page/admin/adminlist?"+"page="+[[${paging.cri.page}]]+"&perPageNum="+[[${paging.cri.perPageNum}]]+"&searchType="+$('#searchType').val()+"&keyword="+$('input[name=keyword]').val();
 	location.href = url;
 });
 

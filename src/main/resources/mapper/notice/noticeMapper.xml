@@ -3,9 +3,21 @@
 <mapper namespace="com.kr.coffie.notice.mapper.NoticeMapper">
 	<select id="noticelist" resultType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeResponseDto">
 		SELECT 
-			*
+			n.notice_id,
+			n.notice_group,
+			n.notice_fixed,
+			n.file_group_id,
+			n.notice_title,
+			n.notice_contents,
+			n.notice_author,
+			n.created_at,
+			m.user_id as notice_author
 		FROM 
-			tbl_notice_board 
+			tbl_notice_board n
+		left join
+		    tbl_user m
+		on 
+		  n.notice_author = m.user_id    	 
 		<include refid="mapper.common.common_mapper.noticesearch"/>	
 		order by 
 			notice_fixed DESC, notice_id desc 
@@ -14,9 +26,21 @@
 	
 	<select id="noticedetail" parameterType="Integer" resultType="com.kr.coffie.notice.vo.dto.NoticeDto$NoticeResponseDto">
 		select 
-			* 
+			n.notice_id,
+			n.notice_group,
+			n.notice_fixed,
+			n.file_group_id,
+			n.notice_title,
+			n.notice_contents,
+			n.notice_author,
+			n.created_at,
+			m.user_id as notice_author
 		from 
-			tbl_notice_board 
+			tbl_notice_board n
+		left join
+		    tbl_user m
+		on 
+		  n.notice_author = m.user_id    	
 		where 
 			notice_id = #{noticeId}
 	</select>

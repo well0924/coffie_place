@@ -3,6 +3,7 @@ package com.kr.coffie.common.reply.vo.dto;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,8 +39,8 @@ public class ReplyDto {
 		private String replyContents;
 		@ApiModelProperty(value="댓글작성자",example="well",required = true)
 		private String replyWriter;
-		@ApiModelProperty(value="댓글작성일",example="2022-09-24 11:11",required = true)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+		@ApiModelProperty(value="댓글작성일",example="2022-09-24T11:11:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	}
 	
@@ -65,8 +66,8 @@ public class ReplyDto {
 		private String replyContents;
 		@ApiModelProperty(value="댓글작성자",example="well",required = true)
 		private String replyWriter;
-		@ApiModelProperty(value="댓글작성일",example="2022-4-13 22:00",required = true)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+		@ApiModelProperty(value="댓글작성일",example="2022-04-13T22:00:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	}
 	
@@ -91,8 +92,8 @@ public class ReplyDto {
 		private String replyContents;
 		@ApiModelProperty(value="댓글작성자",example="well",required = true)
 		private String replyWriter;
-		@ApiModelProperty(value="댓글작성일",example="2022-10-23 22:00",required = true)
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+		@ApiModelProperty(value="댓글작성일",example="2022-10-23T22:00:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	}
 }

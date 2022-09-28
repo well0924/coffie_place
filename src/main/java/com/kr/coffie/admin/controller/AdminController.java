@@ -26,7 +26,7 @@ public class AdminController {
 	
 	@GetMapping("/adminlist")
 	public ModelAndView aminlist(Criteria cri,
-			@RequestParam(required = false, defaultValue = "T") String searchType,
+			@RequestParam(required = false, defaultValue = "I") String searchType,
 			@RequestParam(required = false) String keyword)throws Exception{
 		
 		ModelAndView mv = new ModelAndView();
@@ -47,6 +47,8 @@ public class AdminController {
 		Paging paging = new Paging();
 		paging.setCri(cri);
 		paging.setTotalCount(totalmember);
+		paging.setKeyword(keyword);
+		paging.setSearchType(searchType);
 		
 		mv.addObject("paging", paging);
 		mv.addObject("memberlist", list);

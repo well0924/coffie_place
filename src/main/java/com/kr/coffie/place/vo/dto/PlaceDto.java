@@ -49,8 +49,8 @@ public class PlaceDto {
 		private String placeAuthor;
 		@ApiModelProperty(value="가게파일그룹아이디",example="place_g2ww23",required = true)
 		private String fileGroupId;
-		@ApiModelProperty(value="가게등록일",example="2022-09-19 19:00",required = true)
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="가게등록일",example="2022-09-19T19:00:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 	}
 	
@@ -96,8 +96,8 @@ public class PlaceDto {
 		private String placeAuthor;
 		@ApiModelProperty(value="파일그룹아이디",example="place_d2f5fe",required = true)
 		private String fileGroupId;
-		@ApiModelProperty(value="가게등록일",example="2022-04-31 10:00",required = true)
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
+		@ApiModelProperty(value="가게등록일",example="2022-04-31T10:00:00",required = true)
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 		
 	}

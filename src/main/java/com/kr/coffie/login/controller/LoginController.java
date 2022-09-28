@@ -67,7 +67,7 @@ public class LoginController {
 		return mv;
 	}
 	
-	@GetMapping("/tmppw")
+	@GetMapping("/pwdchange")
 	public ModelAndView findpw()throws Exception{
 	
 		ModelAndView mv = new ModelAndView();

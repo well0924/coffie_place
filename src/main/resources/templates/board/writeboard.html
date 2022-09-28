@@ -8,8 +8,6 @@ layout:decorate="~{layout/leafframe}">
 <head>
 <meta charset="UTF-8">
 <title>자유게시판 글작성</title>
-<!-- 게시판 목록 css -->
-<!-- <link rel="stylesheet" th:href="@{/css/board.css}"> -->
 </head>
 <body>
 <th:block layout:fragment="content"> 
@@ -20,14 +18,11 @@ layout:decorate="~{layout/leafframe}">
 			<div class="card shadow">
 				<div class="card-body">
 					<form action=""  id="boardform" enctype="multipart/form-data">
+					<input type="hidden" id="board_Author" name="boardAuthor" th:value="${#authentication.name}">
 					<input type="hidden" id="fileGroupId" name="fileGroupId" th:value="${fileGroupId}">
 					<div class="form-group">
 						<label for="board_Title">제목</label>
 						<input type="text" id="board_Title" name="boardTitle" class="form-control"/>
-					</div>
-					<div class="form-group">
-						<label for="board_Author">작성자</label>
-						<input type="text" id="board_Author" name="boardAuthor" class="form-control"/>
 					</div>
 					<div class="row">
 						<div class="col">
@@ -113,11 +108,6 @@ function validation(){
 		
 	if(title.trim().length==0){
 		alert('제목을 입력해주세요.');
-		return false;
-	}
-	
-	if(author.trim().length==0){
-		alert('작성자을 입력해주세요.');
 		return false;
 	}
 	

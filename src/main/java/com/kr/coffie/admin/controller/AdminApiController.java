@@ -79,8 +79,8 @@ public class AdminApiController {
 	@ApiOperation(value = "회원삭제 API",notes="회원조회페이지에서 회원을 삭제및 탈퇴하는 기능")
 	@DeleteMapping(value="/memberdelete/{id}")
 	public Map<String,Object>memberDelete( 
-			@ApiParam(value="id",name="회원아이디",required = true)
-			@PathVariable("id")String userId)throws Exception{
+			@ApiParam(value="id",name="회원아이디",example="tester1",required = true)
+			@PathVariable(value="id")String userId)throws Exception{
 		
 		Map<String,Object> result = new HashMap<String, Object>();
 		
@@ -135,8 +135,8 @@ public class AdminApiController {
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "회원자동완성검색 API",notes="어드민페이지에서 검색시 회원을 자동검색하는 기능")
-	@PostMapping("/autocompetekeyword")
-	public Map<String,Object>autocompletekeyword( @RequestParam Map<String,Object>param)throws Exception{
+	@PostMapping(value="/autocompetekeyword")
+	public Map<String,Object>autocompletekeyword(@RequestParam Map<String,Object>param)throws Exception{
 		
 		List<Map<String,Object>>list = service.memberautocomplete(param);
 		

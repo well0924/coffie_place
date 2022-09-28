@@ -19,7 +19,7 @@ layout:decorate="~{layout/leafframe}">
 			<div class="card shadow">
 				<div class="card-body">
 					<form action=""  id="boardform" enctype="multipart/form-data">
-<!-- 						<input type="hidden" id="noticeAuthor" name="noticeAuthor" class="form-control" th:value="${#authentication.name}"/> -->
+						<input type="hidden" id="noticeAuthor" name="noticeAuthor" class="form-control" th:value="${#authentication.name}"/>
 						<input type="hidden" id="fileGroupId" name="fileGroupId" th:value="${file_group_id}">
 						<div class="row">
 							<div class="col">
@@ -42,10 +42,6 @@ layout:decorate="~{layout/leafframe}">
 						<div class="form-group">
 							<label for="noticeTitle">제목</label>
 							<input type="text" id="noticeTitle" name="noticeTitle" class="form-control"/>
-						</div>
-						<div class="form-group">
-							<label for="noticeTitle">작성자</label>
-							<input type="text" id="noticeAuthor" name="noticeAuthor" class="form-control"/>
 						</div>
 						<div class="form-group">
 							<label for="noticeContent">내용</label>
@@ -119,7 +115,6 @@ function sendImage(file,el){
 function validation(){
 	
 	let title=$('#noticeTitle').val();
-	let author=$('#noticeAuthor').val();
 	let contents=$('#noticeContent').val();
 	let category=$('#noticeGroup').val();
 	let fixed=$('#isFixed').val();	
@@ -133,12 +128,7 @@ function validation(){
 		alert('고정여부를 선택해주세요.');
 		return false;
 	}
-	
-	if(author.trim().length==0){
-		alert('작성자를 입력해주세요.');
-		return false;
-	}
-	
+
 	if(title.trim().length==0){
 		alert('제목을 입력해주세요.');
 		return false;

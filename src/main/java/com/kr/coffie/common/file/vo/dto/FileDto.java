@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class FileDto {
         private String fileType;
 		private String storedName;
 		private String originName;
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 
 	}
@@ -49,7 +50,7 @@ public class FileDto {
 		private String filePath;
 		private String storedName;
 		private String originName;
-		@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 
 	}	
@@ -76,7 +77,7 @@ public class FileDto {
 		private String imgUploader;
 		@Builder.Default
 		private String isTitle="N";
-		@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
 
 	}
