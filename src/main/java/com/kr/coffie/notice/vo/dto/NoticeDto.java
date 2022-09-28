@@ -2,6 +2,8 @@ package com.kr.coffie.notice.vo.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
@@ -26,14 +28,18 @@ public class NoticeDto {
 		@ApiModelProperty(value="공지게시글 번호",example="1",required = true)
 		private Integer noticeId;
 		@ApiModelProperty(value="공지게시글 카테고리",example="자유게시판",required = true)
+		@NotBlank(message = "공지그룹을 선택해주세요.")
 		private String noticeGroup;
 		@ApiModelProperty(value="공지게시글 제목",example="제목",required = true)
+		@NotBlank(message = "제목을 입력해주세요.")
 		private String noticeTitle;
 		@ApiModelProperty(value="공지게시글 내용",example="내용",required = true)
+		@NotBlank(message = "내용을 입력해주세요.")
 		private String noticeContents;
 		@ApiModelProperty(value="공지게시글 작성자",example="작성자",required = true)
 		private String noticeAuthor;
 		@ApiModelProperty(value="공지게시글 고정유무",example="Y",required = true)
+		@NotBlank(message = "고정여부를 골라주세요.")
 		private String noticeFixed;
 		@ApiModelProperty(value="공지게시글 파일그룹아이디",example="notice_g4s35x",required = true)
 		private String fileGroupId;

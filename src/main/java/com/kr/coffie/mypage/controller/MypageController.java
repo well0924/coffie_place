@@ -13,7 +13,9 @@ import com.kr.coffie.mypage.service.MypageService;
 import com.kr.coffie.mypage.vo.dto.MypageDto;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Controller
 @AllArgsConstructor
 @RequestMapping("/page/mypage/*")
@@ -31,7 +33,7 @@ public class MypageController {
 		try {
 		
 			wishlist = service.wishlist(userId);
-		
+			log.info(wishlist);
 		} catch (Exception e) {
 		
 			e.printStackTrace();

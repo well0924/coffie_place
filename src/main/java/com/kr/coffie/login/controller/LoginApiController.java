@@ -17,6 +17,8 @@ import com.kr.coffie.login.service.LoginService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -36,12 +38,17 @@ public class LoginApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "아이디 중복체크 API",notes="아이디 중복체크에 필요한 api입니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",dataType = "String",paramType = "path")
+	})
 	@GetMapping("/idcheck/{id}")
 	public Map<String,Object>idCheck(
-			@ApiParam(value="userId",name="회원아이디",required = true)
 			@PathVariable(value="id",required = true)String userId)throws Exception{
 		
 		Map<String,Object>result = new HashedMap<String,Object>();
@@ -66,15 +73,18 @@ public class LoginApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "아이디 찾기 API",notes="아이디 찾기에 필요한 api입니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="userName",value="회원이름",example="tester1",dataType = "String",paramType = "path"),
+		@ApiImplicitParam(required = true,name="userEmail",value="회원이메일",example="well414965@gmail.com",dataType = "String",paramType = "path")
+	})
 	@GetMapping("/idsearch/{userName}/{userEmail}")
-	public LoginDto.LoginResponseDto idsearch(
-			@ApiParam(value="userName",name="회원이름",required = true)
-			@PathVariable(value="userName")@RequestBody String userName,
-			@ApiParam(value="userEmail",name="회원이메일",required = true)
-			@PathVariable(value="userEmail")@RequestBody String userEmail)throws Exception{
+	public LoginDto.LoginResponseDto idsearch(@PathVariable(value="userName") String userName, @PathVariable(value="userEmail") String userEmail)throws Exception{
 		
 		LoginDto.LoginResponseDto dto = null;
 		
@@ -92,13 +102,28 @@ public class LoginApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
-	})
+	})	
 	@ApiOperation(value = "회원가입 API",notes="회원가입에 필요한 api입니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required =true,name="userId",value="회원아이디",example="well4149",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userPw",value="회원비밀번호",example="1234",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userName",value="회원이름",example="tester",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userAge",value="회원나이",example="12",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userGender",value="회원성별",example="남성",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userPhone",value="회원전화번호",example="010-3485-3453",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userEmail",value="회원이메일",example="well41495@gmail.com",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userAddr1",value="회원주소",example="서울시 강북구 수유2동",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(name="userAddr2",value="회원상세주소",example="7동806호",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(required = true,name="userAuth",value="회원권한",example="USER",dataType = "String",paramType = "query")
+	})
 	@PostMapping(value="/memberjoin")
 	public Map<String,Object>memberJoin(
-			@ApiParam(name="회원 dto",required = true)
-			@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
+			@RequestBody 
+			LoginDto.LoginRequestDto dto)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();
 		
@@ -125,10 +150,12 @@ public class LoginApiController {
 	}
 	
 	
-	
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "비밀번호수정 API",notes="회원가입 페이지에서 비밀번호수정에 필요한 api입니다.")

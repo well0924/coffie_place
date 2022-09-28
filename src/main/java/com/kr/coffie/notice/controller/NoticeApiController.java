@@ -21,6 +21,8 @@ import com.kr.coffie.notice.service.NoticeService;
 import com.kr.coffie.notice.vo.dto.NoticeDto;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -38,13 +40,20 @@ public class NoticeApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "문서 전체 조회 API",notes="공지게시판에서 글목록을 조회합니다. 회원,어드민 둘 다 사용 가능합니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="keyword",value="검색어",example="test",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(name="page",value="페이지",example="1",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(name="perPageNum",value="페이지번호",example="5",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(name="searchType",value="검색타입",example="T",dataType = "String",paramType = "query")
+	})
 	@GetMapping(value="/list")
-	public Map<String,Object>noticearticelist(
-			@ApiParam(name="페이징 및 검색 객체",required = true)
-			Criteria cri)throws Exception{
+	public Map<String,Object>noticearticelist(Criteria cri)throws Exception{
 	
 		Map<String,Object>result = new HashMap<String,Object>();
 		
@@ -73,6 +82,9 @@ public class NoticeApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "공지게시판 작성 API",notes="공지게시판에서 글을 작성합니다. 사용은 어드민으로 로그인을 해야 사용할 수 있습니다.")
@@ -119,13 +131,19 @@ public class NoticeApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "공지게시판 수정 API",notes="공지게시판에서 글을 수정합니다. 수정은 어드민으로 로그인이 되었을때 사용을 할 수 있습니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="게시판 번호",example="1",dataType = "Integer",paramType = "path")
+	})
 	@PutMapping(value="/update/{id}")
 	public Map<String,Object>noticearticleupdate(
-			@ApiParam(name="게시물 번호",required = true,example="1")
 			@PathVariable(value="id",required = true)Integer boardId,
+			@ApiParam(name="공지게시판dto",required = true)
 			@RequestBody
 			@ModelAttribute 
 			NoticeDto.NoticeRequestDto dto,
@@ -164,12 +182,17 @@ public class NoticeApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "공지게시판 삭제 API",notes="공지게시판에서 글을 삭제합니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="공지게시글 번호",example="1",dataType = "Intger",paramType = "path")
+	})
 	@DeleteMapping(value="/delete/{id}")
 	public Map<String,Object>noticearticledelete(
-			@ApiParam(name="게시물 번호",example="1",required = true)
 			@PathVariable(value="id",required = true)Integer boardId)throws Exception{
 		
 		Map<String,Object> result = new HashMap<>();

@@ -22,11 +22,12 @@ repositories {
 
 dependencies {
 	
-	//security 
-	implementation 'org.springframework.boot:spring-boot-starter-security'	
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	//security 
+	implementation 'org.springframework.boot:spring-boot-starter-security'	
+	
 	
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
@@ -53,9 +54,12 @@ dependencies {
 	//java mail senders
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
+	//swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
     
+    //validataion
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

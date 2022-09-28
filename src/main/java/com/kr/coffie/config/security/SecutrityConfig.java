@@ -80,16 +80,10 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.authorizeRequests()
 		.antMatchers("/api/admin/selectdelete",
 					 "/api/admin/autocompetekeyword",
-					 "/api/notice/**",
-					 "/api/board/**",
-					 "/api/place/**",
-					 "/page/mypage/page/**",
-					 "/api/mypage/wishlist").hasRole("ADMIN")
+					 "/api/notice/**").hasRole("ADMIN")
 		
-		.antMatchers("/page/mypage/**",
-				     "/api/mypage/**",
-				     "/api/place/**").hasRole("USER")
-		
+		.antMatchers("/page/mypage/**").hasRole("USER")
+		.antMatchers("/api/board/**","/api/place/**","/api/mypage/**","/page/mypage/**").hasAnyRole("USER","ADMIN")
 		.antMatchers(PERMIT_URL_ARRAY).permitAll()
 		
 		.antMatchers(

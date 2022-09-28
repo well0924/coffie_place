@@ -22,6 +22,8 @@ import com.kr.coffie.common.page.Criteria;
 import com.kr.coffie.common.page.Paging;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -40,13 +42,21 @@ public class BoardApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
-	@ApiOperation(value = "문서 전체 조회 API",notes="자유게시판에서 글목록을 조회합니다.")
+	@ApiOperation(value = "게시글 전체 조회 API",notes="자유게시판에서 글목록을 조회합니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="keyword",value="검색어",example="test",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(name="page",value="페이지",example="1",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(name="perPageNum",value="페이지번호",example="5",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(name="searchType",value="검색타입",example="T",dataType = "String",paramType = "query")
+	})
 	@GetMapping(value="/list")
-	public Map<String,Object>articelist(
-			@ApiParam(name="페이징 검색 객체",required = true)
-			Criteria cri)throws Exception{
+	public Map<String,Object>articelist(Criteria cri)throws Exception{
+		
 		Map<String,Object>result = new HashMap<String,Object>();
 		
 		List<BoardDto.BoardResponseDto>list = null;
@@ -75,6 +85,43 @@ public class BoardApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "자유게시판 글단일조회 API",notes="자유게시글에서 글을 조회하는 기능입니다. 기능은 로그인이 필요합니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="id",required = true,value="게시글 번호",example="1",dataType = "Integer",paramType = "path")
+	})
+	@GetMapping("/boarddetai/{id}")
+	public Map<String,Object>boarddetail(@PathVariable(value="id",required = true)Integer boardId)throws Exception{
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+		
+		BoardDto.BoardResponseDto dto = null;
+		
+		try {
+			dto = service.boarddetail(boardId);
+			
+			if(dto != null) {
+				result.put("boarddetail", dto);
+			}else if(dto == null) {
+				result.put("Bad Request", 400);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put(e.getMessage(), 500);
+		}
+		return result;
+	}
+	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "자유게시판 글작성 API",notes="자유게시글에서 글을 작성하는 기능입니다. 작성기능은 로그인이 필요합니다.")
@@ -91,6 +138,7 @@ public class BoardApiController {
 		int insertresult = 0;
 		
 		try {
+
 			fvo.setImgGroup("freeBoard");
 			fvo.setFileType("Board");
 			
@@ -120,13 +168,18 @@ public class BoardApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "자유게시판 글수정 API",notes="자유게시글에서 글을 수정하는 기능입니다.")
 	@PutMapping(value="/modify/{id}", produces = MediaType.ALL_VALUE)
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="게시물 번호",example="1",dataType = "Integer",paramType = "path")
+	})
 	public Map<String,Object>articleupdate(
-			@ApiParam(name="게시물 번호",example="1",required = true)
-			@PathVariable(value="id")Integer boardId,
+			@PathVariable(value="id",required = true)Integer boardId,
 			@ApiParam(name="게시물 dto",required = true)
 			@RequestBody
 			@ModelAttribute 
@@ -168,13 +221,17 @@ public class BoardApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "자유게시판 글삭제 API",notes="자유게시글에서 글을 삭제하는 기능입니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="id",value="자유게시판 번호",example="1",dataType = "Integer",paramType = "path",required = true)
+	})
 	@DeleteMapping(value="/delete/{id}")
-	public Map<String,Object>articledelete(
-			@ApiParam(name = "자유게시판번호", required = true, example = "1")
-			@PathVariable(value="id",required = true)Integer boardId)throws Exception{
+	public Map<String,Object>articledelete( @PathVariable(value="id",required = true)Integer boardId)throws Exception{
 		
 		Map<String,Object> result = new HashMap<>();
 		
@@ -207,15 +264,20 @@ public class BoardApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
+	})
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="boardId",value="게시물 번호",example = "5003",paramType = "path",type="Integer"),
+		@ApiImplicitParam(name="pwd",value="비밀번호",example = "1111",paramType = "path",type="Integer")
 	})
 	@ApiOperation(value = "자유게시판 비밀번호확인 API",notes="자유게시글에서 글수정시 비밀번호 확인 기능입니다.")
 	@GetMapping(value="/pwcheck/{boardId}/{pwd}")
 	public BoardDto.BoardResponseDto passwordCheck(
-			@ApiParam(name = "자유게시판번호",required = true, example = "5003")
-			@PathVariable(value="boardId")@RequestBody Integer boardId,
-			@ApiParam(name = "열람시 사용되는 비밀번호",required = true, example = "1111")
-			@PathVariable(value="pwd")@RequestBody Integer passWd)throws Exception{
+			@PathVariable(value="boardId",required = true)Integer boardId,
+			@PathVariable(value="pwd",required = true)Integer passWd)throws Exception{
 		
 		BoardDto.BoardResponseDto dto = null;
 		

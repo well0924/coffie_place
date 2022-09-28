@@ -2,6 +2,8 @@ package com.kr.coffie.place.vo.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.kr.coffie.common.ecxcel.ExcelColumn;
@@ -30,22 +32,30 @@ public class PlaceDto {
 		@ApiModelProperty(value="가게번호",example="1",required = true)
 		private Integer placeId;
 		@ApiModelProperty(value="가게경도",example="134.34343",required = true)
+		@NotBlank(message = "가게경도를 입력해주세요.")
 		private Double placeLng;
 		@ApiModelProperty(value="가게위도",example="13.4343",required = true)
+		@NotBlank(message = "가게위도를 입력해주세요.")
 		private Double placeLat;
 		@ApiModelProperty(value="가게이름",example="well",required = true)
+		@NotBlank(message = "가게이름을 입력해주세요.")
 		private String placeName;
 		@ApiModelProperty(value="가게주소1",example="well",required = true)
+		@NotBlank(message = "가게주소를 입력해주세요.")
 		private String placeAddr1;
 		@ApiModelProperty(value="가게주소2",example="well")
 		private String placeAddr2;
 		@ApiModelProperty(value="가게번호",example="02-999-3242",required = true)
+		@NotBlank(message = "가게 전화번호를 입력해주세요.")
 		private String placePhone;
 		@ApiModelProperty(value="가게시작시간",example="10:00",required = true)
+		@NotBlank(message = "가게 시작시간을 입력해주세요.")
 		private String placeStart;
 		@ApiModelProperty(value="가게종료시간",example="18:00",required = true)
+		@NotBlank(message = "가게 종료시간을 입력해주세요.")
 		private String placeClose;
 		@ApiModelProperty(value="가게등록인",example="well",required = true)
+		@NotBlank(message = "작성자를 입력해주세요.")
 		private String placeAuthor;
 		@ApiModelProperty(value="가게파일그룹아이디",example="place_g2ww23",required = true)
 		private String fileGroupId;

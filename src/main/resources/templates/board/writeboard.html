@@ -41,7 +41,7 @@ layout:decorate="~{layout/leafframe}">
 					<div class="form-group">
 						<div class="text-right">
 							<a th:href="@{/board/listpage}" class="btn btn-primary">목록</a>
-							<button type="button" class="btn btn-primary" onclick="writeboard()">작성하기</button>
+							<button type="button" class="btn btn-primary" onclick="writeboard()" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">작성하기</button>
 						</div>
 					</div>
 					</form>

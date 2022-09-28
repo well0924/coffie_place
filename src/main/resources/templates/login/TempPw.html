@@ -46,9 +46,10 @@
 	</div>
 </div>			
 <script type="text/javascript">
-//유효성검사
+//유효성검사o.k
 function validation(){
-	let tmpw = document.getElementById('temp_pw').value;
+	
+	let tmpw = document.getElementById('user_pwcheck').value;
 	let pw = document.getElementById('user_pw').value;
 	
 	if(tmpw.trim().length == 0){
@@ -63,7 +64,7 @@ function validation(){
 	return true;
 }
 
-//비밀번호 확인
+//비밀번호 확인o.k
 function pwdcheck(){
 	let pw = document.getElementById('user_pw').value;
 	let pwcheck = document.getElementById('user_pwcheck').value;
@@ -79,7 +80,8 @@ function pwdcheck(){
 		document.getElementById('pwdcheck').style.color='red';
 	}
 }
-//비밀번호 재수정기능
+
+//비밀번호 재수정기능o.k
 function temporarynumber(){
 	//유효성검사후 비밀번호 수정재 수정.
 	if(validation()){
@@ -92,16 +94,16 @@ function temporarynumber(){
 			userId : id
 		}
 		
-			$.ajax({
-				url:'/api/login/updatepw',
-				type:'put',
-				dataType:'json',
-				data:JSON.stringify(date),
-				contentType:'application/json; charset=UTF-8'
-			}).done(function(data){
-				alert('비밀번호가 수정이 되었습니다.');
-				location.href='/main/mainpage';
-			});
+		$.ajax({
+			url:'/api/login/updatepw',
+			type:'put',
+			dataType:'json',
+			data:JSON.stringify(date),
+			contentType:'application/json; charset=UTF-8'
+		}).done(function(data){
+			alert('비밀번호가 수정이 되었습니다.');
+			location.href='/page/main/mainpage';
+		});
 	}	
 }
 </script>

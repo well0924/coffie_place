@@ -22,11 +22,14 @@ import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = {"가게기능 api"},value="가게기능 api")
 @RestController
@@ -36,15 +39,25 @@ public class PlaceApiController {
 	
 	private final PlaceService service;
 	
-	
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게목록",notes = "가게목록페이지에서 가게목록 보여주기.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="keyword",value="검색어",example="test",dataType = "String",paramType = "query"),
+		@ApiImplicitParam(name="page",value="페이지",example="1",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(name="perPageNum",value="페이지번호",example="5",dataType = "Integer",paramType = "query"),
+		@ApiImplicitParam(name="searchType",value="검색타입",example="T",dataType = "String",paramType = "query")
+	})
 	@GetMapping(value="/placelist")
-	public Map<String,Object>placelist(Criteria cri)throws Exception{
+	public Map<String,Object>placelist(
+			@ApiParam(name="페이징 및 검색 객체",required = true)
+			Criteria cri)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String,Object>();
 		
@@ -80,18 +93,26 @@ public class PlaceApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게단일 조회",notes = "가게목록페이지에서 가게상세조회하기.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="가게번호",example="1",dataType = "Integer",paramType = "path")
+	})
 	@GetMapping("/placedetail/{id}")
-	public Map<String,Object>placedetail(
-			@PathVariable(value="id")Integer placeId,
-			
+	public Map<String,Object>placedetail(@PathVariable(value="id")Integer placeId,
+			@ApiIgnore
 			PlaceDto.PlaceResponseDto dto)throws Exception{
+		
 		Map<String,Object>result = new HashMap<String, Object>();
 		
 		try {
+			
 			dto = service.placeDetail(placeId);
+			
 			if(dto != null) {
 				result.put("placeDetail", dto);
 			}else {
@@ -109,6 +130,9 @@ public class PlaceApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게자동완성검색",notes = "가게목록페이지에서 가게 자동완성검색기능")
@@ -125,6 +149,9 @@ public class PlaceApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게등록기능",notes = "가게등록페이지에서 가게등록기능")
@@ -171,14 +198,20 @@ public class PlaceApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게등록기능",notes = "가게등록페이지에서 가게등록기능")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="가게번호",example="1",dataType = "Integer",paramType = "path")
+	})
 	@PutMapping("/placeupdate/{id}")
-	public Map<String,Object>placeupdate(
-			@ApiParam(value="id",name="가게 번호",required = true)
-			@PathVariable(value="id",required = true)Integer placeId,
+	public Map<String,Object>placeupdate(@PathVariable(value="id",required = true)Integer placeId,
+			@ApiParam(name="가게 dto",required = true)
 			@ModelAttribute PlaceDto.PlaceRequestDto dto,
+			@ApiIgnore
 			@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();
@@ -217,13 +250,17 @@ public class PlaceApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "가게삭제기능",notes = "가게수정페이지에서 삭제기능")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="가게번호",example="10",dataType = "Integer",paramType = "path")
+	})
 	@DeleteMapping("/placedelete/{id}")
-	public Map<String,Object>placedelete(
-			@ApiParam(value="id",name="가게번호",required = true)
-			@PathVariable(value="id")Integer placeId)throws Exception{
+	public Map<String,Object>placedelete(@PathVariable(value="id",required = true)Integer placeId)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();
 		
