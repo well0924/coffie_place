@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kr.coffie.admin.service.AdminService;
+import com.kr.coffie.config.email.MailService;
 import com.kr.coffie.login.service.LoginService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
@@ -34,6 +36,8 @@ public class LoginApiController {
 	private final LoginService service;
 	
 	private final AdminService adminservice;	
+	
+	private final MailService mailservice;
 	
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
@@ -182,5 +186,20 @@ public class LoginApiController {
 		}
 		
 		return result;
+	}
+	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "회원가입 이메일 인증 API",notes="회원가입 페이지에서 이메일인증에 필요한 api입니다.")
+	@GetMapping("/emailsend")
+	public String sendEmail(@RequestParam(required = true) String userEmail)throws Exception{
+		
+		return mailservice.joinConfirmEmail(userEmail);
 	}
 }

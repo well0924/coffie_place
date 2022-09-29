@@ -66,6 +66,21 @@ layout:decorate="~{layout/leafframe}">
 								<input type="text" id="user_email" name="userEmail" class="form-control"/>
 							</div>
 						</div>
+						<!-- 이메일 인증부분 -->
+						<div class="mail_check_wrap" style=display:inline;>
+							<!-- 인증번호 입력 박스 -->
+							<div class="form-group" id="mail_check_input_box_false">
+								<!-- 인증번호 입력칸 -->
+								<input class="mail_check_input" placeholder="인증번호"  disabled="disabled">
+								<button type="button" class="btn btn-default" id="mail_check_button">인증번호</button>
+							</div>
+							<div class="btn btn-default" id="mail_check_button">
+<!-- 								<span>인증번호</span> -->
+							</div>
+							<div class="claerify"></div>
+							<span id="mail_check_input_box_warn"></span>
+						</div>
+						<!-- 인증 end -->
 						<div class="form-group">
 							<label for="user_phone">전화번호</label>
 							<input type="text" id="user_phone" name="userPhone" class="form-control"/>
@@ -205,6 +220,42 @@ function validemail(){
 	}
 	return true;
 }
+var code = '';
+$("#mail_check_button").click(function(){
+	//이메일 값
+	var email = $('#user_email').val();
+	//인증번호 입력란
+	var checkbox = $('.mail_check_input');
+	//인증번호 입력 박스
+	var boxwrap = $('.mail_check_input_box');
+	
+	$.ajax({
+		
+		type:"GET",
+		url:"/api/login/emailsend?userEmail=" + email
+	}).done(function(data){
+		console.log(data);
+		checkbox.attr("disabled",false);
+		boxwrap.attr("id","mail_check_input_box_true");
+		code = data;
+	});
+	alert("인증번호를 보냈습니다.");
+});
+
+//인증번호 비교
+$(".mail_check_input").blur(function(){
+	
+	var inputCode = $(".mail_check_input").val();
+	var checkResult = $("#mail_check_input_box_warn");
+	
+	if(inputCode == code){
+		checkResult.html("인증번호가 일치합니다.");
+		checkResult.attr("class","correct");
+	}else{
+		checkResult.html("인증번호를 다시 확인해주세요.");
+		checkResult.attr("class","incorrect");
+	}
+});
 
 //주소api기능o.k
 function AddressCode(){
@@ -247,7 +298,6 @@ function AddressCode(){
        }
    }).open();	
 }
-
 //회원가입 기능o.k
 function memberjoin(){
 	

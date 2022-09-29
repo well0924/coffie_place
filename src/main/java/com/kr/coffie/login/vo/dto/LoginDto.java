@@ -42,12 +42,12 @@ public class LoginDto {
 		@Pattern(regexp = "")
 		private String userName;
 		@ApiModelProperty(value="회원나이",example="19",required = true)
-		@NotBlank(message = "전화번호를 입력해주세요.")
-		@Pattern(regexp = "^[0-9]")
+		@NotBlank(message = "나이를 입력해주세요.")
+		@Pattern(regexp = "^[0-9]{1,2}")
 		private String userAge;
 		@ApiModelProperty(value="회원전화번호",example="010-4148-2353",required = true)
-		@NotBlank(message = "")
-		@Pattern(regexp = "")
+		@NotBlank(message = "전화번호를 입력해주세요.")
+		@Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$")
 		private String userPhone;
 		@ApiModelProperty(value="회원성별",example="남",required = true)
 		@NotBlank(message = "성별을  입력해주세요.")
@@ -57,14 +57,11 @@ public class LoginDto {
 		@Email
 		private String userEmail;
 		@ApiModelProperty(value="회원주소",example="well4149",required = true)
-		@NotBlank(message = "")
-		@Pattern(regexp = "")
+		@NotBlank(message = "주소를 입력해주세요.")
 		private String userAddr1;
 		@ApiModelProperty(value="회원주소2",example="well4149")
 		private String userAddr2;
 		@ApiModelProperty(value="회원권한",example="ADMIN")
-		@NotBlank(message = "")
-		@Pattern(regexp = "")
 		private String userAuth;
 		@ApiModelProperty(value="회원등록일",example="2022-09-26T12:34:00",required = true)
 		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)

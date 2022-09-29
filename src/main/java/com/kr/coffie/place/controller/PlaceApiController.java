@@ -209,7 +209,7 @@ public class PlaceApiController {
 	})
 	@PutMapping("/placeupdate/{id}")
 	public Map<String,Object>placeupdate(@PathVariable(value="id",required = true)Integer placeId,
-			@ApiParam(name="가게 dto",required = true)
+			@ApiParam(name="가게 dto")
 			@ModelAttribute PlaceDto.PlaceRequestDto dto,
 			@ApiIgnore
 			@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
