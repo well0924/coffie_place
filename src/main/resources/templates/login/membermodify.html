@@ -81,7 +81,8 @@ layout:decorate="~{layout/leafframe}">
 						<div class="text-right">
 							<button type="button" class="btn btn-primary" onclick="memberupdate()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">정보수정</button>
 							<button type="button" class="btn btn-primary" onclick="memberdelete()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">정보삭제</button>
-							<button type="button" class="btn btn-primary" onclick="adminlist()">취소</button>
+							<button type="button" class="btn btn-primary" onclick="adminlist()" sec:authorize="hasAnyRole('ROLE_ADMIN')">취소</button>
+							<button type="button" class="btn btn-primary" onclick="mylist()" sec:authorize="hasAnyRole('ROLE_USER')">취소</button>
 						</div>
 					</div>
 					</form>
@@ -95,6 +96,11 @@ layout:decorate="~{layout/leafframe}">
 //관리자 페이지로 이동 o.k
 function adminlist(){
 	location.href="/page/admin/adminlist";
+}
+//마이페이지 이동 
+function mylist(){
+	var id = $('#user_id').val();
+	location.href="/page/mypage/page/"+id;	
 }
 //유효성 검사o.k
 function validation(){

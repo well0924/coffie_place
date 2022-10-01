@@ -112,23 +112,4 @@
 	where 
 		file_group_id = #{fileGroupId}
 </delete>
-
-<insert id="uploadeditor" parameterType="com.kr.coffie.common.file.vo.dto.FileDto$ImageRequestDto">
-	insert into 
-		tbl_place_images
-		(
-			file_group_id,
-			img_path,
-			stored_name,
-			origin_name,
-			created_at
-		)
-	values(
-			#{fileGroupId},
-			#{imgPath},
-			#{storedName},
-			#{originName},
-			now()
-		)
-</insert>
 </mapper>

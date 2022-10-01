@@ -31,20 +31,19 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		
+		clearAuthenticationAttributes(request);
 		try {
 			redirectStrategy(request, response, authentication);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		clearAuthenticationAttributes(request);
 	}
 	
 	private void clearAuthenticationAttributes(HttpServletRequest request) {
 		
 		HttpSession session = request.getSession(false);
 		
-		if(session !=null) {
+		if(session != null) {
 	
 			session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 		
@@ -69,10 +68,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 			
 			}else if(roles.contains("ROLE_USER")) {
 				
-				redirectStratgy.sendRedirect(request, response,DEFAULT_URL);
-			
-			}else {
-			
 				redirectStratgy.sendRedirect(request, response,DEFAULT_URL);
 			
 			}

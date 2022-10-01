@@ -11,6 +11,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Component
 public class LoginFaileHandler implements AuthenticationFailureHandler{
 
@@ -21,7 +24,7 @@ public class LoginFaileHandler implements AuthenticationFailureHandler{
 		response.setCharacterEncoding("UTF-8");
 		
 		PrintWriter writer = response.getWriter();
-		
+		log.info("결과:"+exception);
 		writer.println("<!DOCTYPE html>");
 		writer.println("<html>");
 		writer.println("	<body>");

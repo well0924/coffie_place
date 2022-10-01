@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,7 +97,7 @@ public class MypageApiController {
 			
 			insertresult = service.wishinsert(dto);
 			
-			if(insertresult>0) {
+			if(insertresult > 0) {
 		
 				result.put("common o.k", 200);
 
@@ -127,11 +128,14 @@ public class MypageApiController {
 		@ApiImplicitParam(required = true,name="fid",value="위시리스트 번호",example="1",paramType = "path"),
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",paramType = "path")
 	})
-	@PostMapping("/delete/{fid}/{id}")
-	public Map<String,Object>wishdelete(@PathVariable(value="fid",required=true)Integer favoriteId,@PathVariable(value="id",required = true) String userId,
-		@ApiIgnore
-		@RequestBody 
-		MypageDto.MypageResponseDto dto)throws Exception{
+	@DeleteMapping("/delete/{fid}/{id}")
+	public Map<String,Object>wishdelete(
+	@PathVariable(value="fid",required=true)
+	@RequestBody
+	Integer favoriteId,
+	@PathVariable(value="id",required = true) 
+	@RequestBody 
+	String userId)throws Exception{
 				
 		Map<String,Object>result = new HashMap<String, Object>();
 		
@@ -139,9 +143,9 @@ public class MypageApiController {
 		
 		try {
 			
-			result.put("favoriteId", dto.getFavoriteId());
+			result.put("favoriteId", favoriteId);
 
-			result.put("userId", dto.getUserId());
+			result.put("userId", userId);
 			
 			deleteresult = service.wishdelete(favoriteId,userId);
 			
@@ -194,6 +198,8 @@ public class MypageApiController {
 			if(resultcheck == 0) {//처음으로 누른 경우
 				result.put("checkresult", resultcheck);
 				wishinsert(dto);
+			}else if(resultcheck == 1){
+				result.put("checkresult", resultcheck);
 			}
 		} catch (Exception e) {
 		

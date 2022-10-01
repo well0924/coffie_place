@@ -75,7 +75,6 @@ layout:decorate="~{layout/leafframe}">
 								<button type="button" class="btn btn-default" id="mail_check_button">인증번호</button>
 							</div>
 							<div class="btn btn-default" id="mail_check_button">
-<!-- 								<span>인증번호</span> -->
 							</div>
 							<div class="claerify"></div>
 							<span id="mail_check_input_box_warn"></span>
@@ -332,6 +331,7 @@ function memberjoin(){
 		contentType:'application/json; charset=utf-8'
 	}).done(function(resp){
 		alert('회원가입이 되었습니다.');
+		
 		location.href='/page/main/mainpage';
 	});
 }

@@ -102,14 +102,16 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.successHandler(new LoginSuccessHandler())
 		.failureHandler(new LoginFaileHandler())
 		.and()
-		.logout()
+		.logout().permitAll()
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+		.logoutSuccessUrl("/page/main/mainpage")
 		.invalidateHttpSession(true)
+		.deleteCookies("JESSIONID")
 		.clearAuthentication(true)
 		.and()
 		.sessionManagement()
 		.maximumSessions(1)
-		.maxSessionsPreventsLogin(true);
+		.maxSessionsPreventsLogin(false);
 	}
 	
 }

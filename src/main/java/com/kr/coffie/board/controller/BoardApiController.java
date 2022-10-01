@@ -174,7 +174,7 @@ public class BoardApiController {
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "자유게시판 글수정 API",notes="자유게시글에서 글을 수정하는 기능입니다.")
-	@PutMapping(value="/modify/{id}", produces = MediaType.ALL_VALUE)
+	@PutMapping(value="/modify/{id}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(required = true,name="id",value="게시물 번호",example="1",dataType = "Integer",paramType = "path")
 	})
@@ -185,7 +185,6 @@ public class BoardApiController {
 			@ModelAttribute 
 			BoardDto.BoardRequestDto dto,
 			@ApiIgnore
-			@ApiParam(name="파일dto",hidden = true)
 			@ModelAttribute 
 			FileDto.FileRequestDto fvo)throws Exception{
 		

@@ -25,8 +25,12 @@ layout:decorate="~{layout/leafframe}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
-<!-- 게시판 목록 css -->
-<!-- <link rel="stylesheet" th:href="@{/css/board.css}"> -->
+<style>
+	.inner-star::before{color: #FF9600;}
+	.outer-star {position: relative;display: inline-block;color: #CCCCCC;}
+	.inner-star {position: absolute;left: 0;top: 0;width: 0%;overflow: hidden;white-space: nowrap;}
+	.outer-star::before, .inner-star::before {content: '\f005';font-family: 'Font Awesome 5 free';font-weight: 900;color: #FF9600;}
+</style>
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -47,6 +51,7 @@ layout:decorate="~{layout/leafframe}">
 							<img th:if="${list.isTitle}" th:src="${list.thumbFileImagePath}"/>
 							</th:block>
 							<div class="card-body">
+							[[${list.favoriteId}]]
 								<h5 class="card-title">[[${list.placeName}]]</h5>
 								<p class="card-text">[[${list.placeAddr1}]]</p>
 								<div class='RatingStar'>
@@ -59,7 +64,7 @@ layout:decorate="~{layout/leafframe}">
 								<p class="card-text">[[${list.reviewRate}]]</p>
 								<a th:href="@{'/page/place/placedetail/'+${list.placeId}}" class="btn btn-primary">상세보기</a>
 							</div>
-							  <button class="btn btn-danger" onclick="deleteWish()">위시리스트 삭제</button>
+							<button class="btn btn-danger" onclick="deleteWish()">위시리스트 삭제</button>
 						</div>
 					</div>
 					<div th:unless="${not #lists.isEmpty(wishlist)}">
@@ -75,32 +80,38 @@ layout:decorate="~{layout/leafframe}">
 <script type="text/javascript">
 function deleteWish(){
 	var isConfirm = confirm("위시리스트를 삭제하시겠습니까?");
+	
 	var favoriteid = $('#favoriteid').val();
+	
 	var userid = $('#userid').val();
-	const formdate = {
-						favoriteId : favoriteid,
-						userId : userid
-					};
 	
 	if(isConfirm){
+		
 		$.ajax({
+			
 			url:'/api/mypage/delete/'+favoriteid+"/"+userid,
-			type:'post',
+			type:'delete',
 			dataType:'json',
-			data:JSON.stringify(formdate),
+			data:null,
 			contentType:'application/json; charset = utf-8'
+		
 		}).done(function(resp){
+			
 			alert('삭제되었습니다.');
+			
 			location.href="/page/mypage/page/"+userid;
+			
+			console.log(favoriteid);
+			console.log(userid);
 		});
 	}
 }
 //회원탈뢰 
 function memberDelete(){
 	var id = $('#user_id').val();
-	console.log("???");
+
 	$.ajax({
-		url:'/api/login/memberdelete/'+id,
+		url:'/api/admin/memberdelete/'+id,
 		type:'delete',
 		data:null
 	}).done(function(resp){

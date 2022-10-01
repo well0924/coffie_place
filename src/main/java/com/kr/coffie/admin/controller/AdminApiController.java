@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +20,8 @@ import com.kr.coffie.admin.service.AdminService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -34,13 +39,18 @@ public class AdminApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "회원수정 API",notes="회원수정페이지에서 회원수정기능")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",dataType ="String",paramType = "path")
+	})
 	@PutMapping(value="/memberupdate/{id}")
 	public Map<String,Object>memberUpdate(
-			@ApiParam(value="id",name="회원아이디",required = true)
-			@PathVariable("id")String userId, 
+			@PathVariable(value="id",required = true)String userId, 
 			@ApiParam(value="dto",name="로그인Dto",required = true)
 			@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
 		
@@ -74,13 +84,17 @@ public class AdminApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "회원삭제 API",notes="회원조회페이지에서 회원을 삭제및 탈퇴하는 기능")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="id",value="회원아이디",dataType = "String",paramType = "path")
+	})
 	@DeleteMapping(value="/memberdelete/{id}")
-	public Map<String,Object>memberDelete( 
-			@ApiParam(value="id",name="회원아이디",example="tester1",required = true)
-			@PathVariable(value="id")String userId)throws Exception{
+	public Map<String,Object>memberDelete(@PathVariable(value="id")String userId,HttpSession session)throws Exception{
 		
 		Map<String,Object> result = new HashMap<String, Object>();
 		
@@ -93,11 +107,14 @@ public class AdminApiController {
 			if(deleteresult>0) {
 			
 				result.put("o.k", 200);
-			
+				
+				SecurityContextHolder.clearContext();
+				session.invalidate();
+				
 			}else if(deleteresult<0) {
 			
 				result.put("fail", 400);
-			
+				
 			}
 		
 		} catch (Exception e) {
@@ -112,6 +129,9 @@ public class AdminApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "회원선택 체크삭제 API",notes="어드민 페이지에서 회원목록에서 체크박스 선택삭제기능")
@@ -132,6 +152,9 @@ public class AdminApiController {
 	@ApiResponses({
         @ApiResponse(code=200, message="common ok"),
         @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
 	@ApiOperation(value = "회원자동완성검색 API",notes="어드민페이지에서 검색시 회원을 자동검색하는 기능")

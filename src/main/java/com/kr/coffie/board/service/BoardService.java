@@ -155,4 +155,5 @@ public class BoardService {
 			@Param("boardId") Integer boardId)throws Exception{
 		return mapper.passwordcheck(passWd, boardId);
 	};
+
 }

@@ -26,4 +26,5 @@ public interface FileMapper {
 	public int placeimageinsert(FileDto.ImageResponseDto dto)throws Exception;
 
 	public int placeimagedelete(String fileGroupId)throws Exception;
+	
 }

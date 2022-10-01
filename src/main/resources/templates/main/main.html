@@ -167,6 +167,22 @@
 		</div>
 	</th:block>
 	<!-- contents end -->
+	<script type="text/javascript">
+	//회원탈뢰 
+	function memberDelete(){
+		var id = $('#user_id').val();
+		console.log("???");
+		$.ajax({
+			url:'/api/admin/memberdelete/'+id,
+			type:'delete',
+			data:null
+		}).done(function(resp){
+			alert('탈퇴했습니다.');
+			location.href='/page/main/mainpage';
+		});
+		return false;
+	}
+	</script>
 	<!--푸터부분-->
 	<th:block th:replace="layout/fragment/footer :: footerfragment"></th:block>	
 </body>

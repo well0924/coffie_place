@@ -443,10 +443,11 @@ $(document).ready(function(){
 			
 		}).done(function(resp){
 			console.log(resp);
-			if(resp > 0){
-				alert('이미 등록한 리스트 입니다.');
-			}else if(resp == 0){				
+			console.log(resp.checkresult);
+			if(resp.checkresult == 0){				
 				alert('위시리스트에 추가되었습니다.');
+			}else{
+				alert('이미 등록한 리스트 입니다.');
 			}
 		});
 		console.log(userid);

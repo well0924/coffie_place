@@ -50,4 +50,5 @@ public class FileService {
 	public int placeimagedelete(String fileGroupId)throws Exception{
 		return mapper.placeimagedelete(fileGroupId);
 	};
+	
 }

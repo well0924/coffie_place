@@ -51,6 +51,18 @@ layout:decorate="~{layout/leafframe}">
 							<textarea id="noticeContent" name="noticeContents" class="form-control" rows="10" style="resize:none"></textarea>
 						</div>
 						<div class="form-group">
+							<label for="addfile">첨부 파일</label>
+							<input type="file" id="addfile" name="file" class="form-control" multiple="multiple"/>
+						</div>
+						<div class="form-group">
+						<label for="addfile">첨부 파일</label>
+							<!-- 첨부파일 -->
+							<th:block th:each="attachfiles : ${files}">
+							</br>
+							[[${attachfiles.originName}]]
+							</th:block>
+						</div>
+						<div class="form-group">
 							<div class="text-right">
 								<a th:href="@{/page/notice/noticelist}" class="btn btn-primary">목록</a>
 								<button type="button" class="btn btn-primary" onclick="noticeupdate()">수정하기</button>
@@ -79,7 +91,7 @@ $(document).ready(function () {
        },
        focus: true,
        callbacks :{
-       	onImageUpload: function(files){
+       sendImage: function(files){
        		console.log(files)
 					sendFile(file[0], this);
        	}
@@ -88,6 +100,29 @@ $(document).ready(function () {
 		let filegroupid = $('#fileGroupId').val();
 		console.log(filegroupid);
 });
+
+//에디터 이미지 업로드 기능o.k
+function sendImage(file,el){
+	var formdate = new FormData();
+	formdate.append('file',file);
+	formdate.append('fileGroupId',$('#fileGroupId').val());
+	
+	$.ajax({
+		url:'api/board/el/upload',
+		type:'post',
+		data: formdate,
+		processData: false,
+		contentType : false,
+		cache:false,
+		enctype: 'multipart/form-data',	
+	}).done(function(resp){
+		console.log(resp);
+		$(el).summernote('insertImage',data.url,function($image){
+			$image.css('width',"25%")
+		});
+	});	
+}
+
 
 //공지게시글 수정o.k
 function noticeupdate(){
