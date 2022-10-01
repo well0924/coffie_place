@@ -13,55 +13,6 @@
 'ADMIN'은 관리자로 관라자 계정을 통해서 회원과 가게를 관리하는 
 역할을 합니다.
 
-# [목표]
+# 노션 주소
 
-혼자서 개발의 전 과정을 경험을 하는 것과 실시간으로 서버에 배포를
-하는것에 목표를 두었습니다. 배포는 Cafe24의 Hosting을 구매를 해서
-배포를 진행을 했습니다.
-
-# [고도화 계획]
-
-추가적으로 mybatis가 아닌 jpa로 컨버팅, CI/CD환경 구축 등의 계획을 갖고
-있습니다.
-
-
-### [제작기간] 
-	
-2022.04.13 ~ 2022.09.05
-    
-### [제작인원] 
-    
-1인
-    
-### [개발환경]
-
-Frontend:HTML,CSS,JS,JQuery,theymleaf
-
-Backend:Java,Spring Boot,Mybatis
-
-DB:MariaDB
-
-IDE&ETC: STS,Git,Swagger
-
-Deployment:Cafe24
-
-### [ERD]
-
-<img src='https://user-images.githubusercontent.com/89343159/189042839-ff89b74b-a68a-4e8b-bd1e-de3fce33640f.PNG'></img>
-
-### [WBS]
-
-<img src='https://user-images.githubusercontent.com/89343159/189044341-974fe351-b7e3-4867-b8c9-ece09cfeaa81.png'></img>
- 
-### [주요기능] 
-
-### 회고
-
-처음 프로젝트 주제선정부터 배포까지의 전과정을 통해서 전반적인 개발
-프로세스에 대한 이해도를 높일 수 있었던 프로젝트였습니다.특히 코드를 
-구현하면서 수 많은 에러상황을 해결하기 위해서 고민하고 디버깅을 사용하
-면서 해결했던 점이 기억에 많이 남았고 막연히 기능 구현에 의의를 두기 보다는
-기능을 모듈화해서 코드의 생산성을 높이는데 노력을 했었습니다. 구현을 하는데
-많은 시간이 걸렸지만 많은 경험을 할 수 있었던 프로젝트였고 나아가서 현업에서
-도 실서비스를 구현 및 운영해보면서 부족한 부분을 채워나가고 나아가 대규모
-트래픽을 처리할 수 있는 단계까지 나아가고 싶습니다.
+[Coffies](https://www.notion.so/Coffies-vol-02-2cf96dd037134d4e8055b3630effd883)
