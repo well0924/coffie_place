@@ -72,7 +72,7 @@ layout:decorate="~{layout/leafframe}">
 					<div class="card-body">
 						<ul class="list-group list-group-flush">
 						    <li class="list-group-item">
-								<input type="text" class="form-control ml-2" id="writer" name="replyAuthor">
+								<input type="hidden" class="form-control ml-2" id="writer" name="replyAuthor"  th:value="${#authentication.name}">
 								<textarea class="form-control" id="contents" name ="replyContents" rows="3"></textarea>
 								<button type="button" class="btn btn-dark mt-3" onClick="replyWrite();" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">댓글 작성</button>
 						    </li>

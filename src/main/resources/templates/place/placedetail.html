@@ -182,7 +182,7 @@ button#dropdownMenuButton.btn.btn-dark.dropdown-toggle.float-right{
 					<input type="radio" name="replyPoint" th:value="1" id="rate5"><label for="rate5">★</label>					
 				</fieldset>
 				<div>
-					<input class="col-auto form-control" type="hidden" id="reviewAuthor" name="replyWriter"></input>
+					<input class="col-auto form-control" type="hidden" id="reviewAuthor" name="replyWriter" th:value="${#authentication.name}"></input>
 					<textarea class="col-auto form-control" type="text" id="reviewContents" name="replyContents" placeholder="댓글을 남겨주세요."></textarea>
 				</div>
 			</form>

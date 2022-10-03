@@ -82,13 +82,47 @@ public class LoginApiController {
         @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
+	@ApiOperation(value = "아이디 중복체크 API",notes="아이디 중복체크에 필요한 api입니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(required = true,name="email",value="회원이메일",example="well4149@naver.com",dataType = "String",paramType = "path")
+	})
+	@GetMapping("/emailcheck/{email}")
+	public Map<String,Object>userEmailDuplicated(@PathVariable(value="email",required = true)String userEmail)throws Exception{
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+		
+		int checkresult = 0;
+		
+		try {
+			checkresult = service.useremailduplocated(userEmail);
+			
+			if(checkresult > 0) {
+				result.put("duplicate!", checkresult);
+			}else {
+				result.put("duplicate!", checkresult);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put(e.getMessage(), 500);
+		}
+		return result;
+	}
+	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
+        @ApiResponse(code=500, message="error")
+	})
 	@ApiOperation(value = "아이디 찾기 API",notes="아이디 찾기에 필요한 api입니다.")
 	@ApiImplicitParams({
 		@ApiImplicitParam(required = true,name="userName",value="회원이름",example="tester1",dataType = "String",paramType = "path"),
 		@ApiImplicitParam(required = true,name="userEmail",value="회원이메일",example="well414965@gmail.com",dataType = "String",paramType = "path")
 	})
 	@GetMapping("/idsearch/{userName}/{userEmail}")
-	public LoginDto.LoginResponseDto idsearch(@PathVariable(value="userName") String userName, @PathVariable(value="userEmail") String userEmail)throws Exception{
+	public LoginDto.LoginResponseDto idsearch(@PathVariable(value="userName",required = true)@RequestBody String userName, @PathVariable(value="userEmail",required = true)@RequestBody String userEmail)throws Exception{
 		
 		LoginDto.LoginResponseDto dto = null;
 		

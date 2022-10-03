@@ -86,8 +86,7 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/api/board/**","/api/place/**","/api/mypage/**","/page/mypage/**").hasAnyRole("USER","ADMIN")
 		.antMatchers(PERMIT_URL_ARRAY).permitAll()
 		
-		.antMatchers(
-			"/**",	
+		.antMatchers(	
 			"/page/main/mainpage",
 			"/page/place/list",
 			"/page/login/loginpage",
@@ -99,8 +98,8 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		.formLogin()
 		.loginPage("/page/login/loginpage")
 		.loginProcessingUrl("/loginProc").permitAll()
-		.successHandler(new LoginSuccessHandler())
 		.failureHandler(new LoginFaileHandler())
+		.successHandler(new LoginSuccessHandler())
 		.and()
 		.logout().permitAll()
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))

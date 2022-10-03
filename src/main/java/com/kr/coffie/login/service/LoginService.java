@@ -38,5 +38,9 @@ public class LoginService {
 		
 		return mapper.pwSearch(dto);
 	};
-
+	
+	
+	public int useremailduplocated(String userEmail)throws Exception{
+		return mapper.useremailduplocated(userEmail);
+	};
 }

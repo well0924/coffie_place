@@ -16,7 +16,6 @@
 			user_name  = #{userName} and user_email = #{userEmail}
 	</select>
 	
-	<!-- 비밀번호 재수정 o.k-->
 	<update id="pwSearch" parameterType="com.kr.coffie.login.vo.dto.LoginDto$LoginRequestDto">
 		update 
 			tbl_user
@@ -43,5 +42,9 @@
 			u.user_auth = a.auth_id
 		where
 			u.user_id = #{userId}
+	</select>
+	
+	<select id="useremailduplocated" parameterType="String" resultType="int">
+		select count(*) from tbl_user where user_email = #{userEmail}
 	</select>
 </mapper>

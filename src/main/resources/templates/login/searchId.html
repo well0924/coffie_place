@@ -119,12 +119,10 @@ function findId(){
 			userEmail : email		
 	}
 		$.ajax({
-			
 			url:'/api/login/idsearch/'+name+'/'+email,
 			type:'get',
 			dataType:'json',
 			contentType:'application/json; charset=UTF-8',
-			
 		}).done(function(resp){
 			console.log(resp);
 			console.log(resp.userId);
