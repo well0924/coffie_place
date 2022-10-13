@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.MediaType;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +23,7 @@ import com.kr.coffie.board.vo.dto.BoardDto;
 import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.common.page.Criteria;
 import com.kr.coffie.common.page.Paging;
+import com.kr.coffie.exception.ResponseDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -64,13 +68,9 @@ public class BoardApiController {
 		int totallist =0;
 		
 		try {
-			
 			list = service.boardlist(cri);
-			
 			totallist = service.totalarticle(cri);
-			
 			result.put("list", list);
-		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,8 +102,7 @@ public class BoardApiController {
 		BoardDto.BoardResponseDto dto = null;
 		
 		try {
-			dto = service.boarddetail(boardId);
-			
+			dto = service.boarddetail(boardId);		
 			if(dto != null) {
 				result.put("boarddetail", dto);
 			}else if(dto == null) {
@@ -126,43 +125,26 @@ public class BoardApiController {
 	})
 	@ApiOperation(value = "자유게시판 글작성 API",notes="자유게시글에서 글을 작성하는 기능입니다. 작성기능은 로그인이 필요합니다.")
 	@PostMapping(value="/write")
-	public Map<String,Object>articleinsert(
+	public ResponseDto<?>articleinsert(
+			@Valid
 			@ApiParam(value="게시글 객체",required = true)
 			@RequestBody
 			@ModelAttribute BoardDto.BoardRequestDto dto,
+			
+			BindingResult bindingresult,
+			
 			@ApiIgnore
+			@RequestBody
 			@ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+				
 		int insertresult = 0;
 		
-		try {
-
-			fvo.setImgGroup("freeBoard");
-			fvo.setFileType("Board");
-			
-			insertresult = service.boardwrite(dto, fvo);
-			
-			if(insertresult >0) {
-
-				result.put("Common o.k", 200);
-			
-			}else if(insertresult < 0) {
-			
-				result.put("bad request", 400);
-			
-			}
+		fvo.setImgGroup("freeBoard");
+		fvo.setFileType("Board");
 		
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			result.put(e.getMessage(), 500);
-		
-		}
-		
-		return result;
+		insertresult = service.boardwrite(dto, fvo);
+				
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -195,22 +177,14 @@ public class BoardApiController {
 		try {
 			fvo.setImgGroup("freeBoard");
 			fvo.setFileType("Board");
-			
-		    updateresult = service.boardupdate(dto, fvo);
-			
-			if(updateresult > 0) {
-		
+		    updateresult = service.boardupdate(dto, fvo);	
+			if(updateresult > 0) {	
 				result.put("common o.k", 200);
-			
 			}else if(updateresult < 0) {
-			
 				result.put("bad request", 400);
-			
 			}
 		} catch (Exception e) {
-			
 			e.printStackTrace();
-			
 			result.put(e.getMessage(), 500);
 		}
 		
@@ -274,18 +248,13 @@ public class BoardApiController {
 	})
 	@ApiOperation(value = "자유게시판 비밀번호확인 API",notes="자유게시글에서 글수정시 비밀번호 확인 기능입니다.")
 	@GetMapping(value="/pwcheck/{boardId}/{pwd}")
-	public BoardDto.BoardResponseDto passwordCheck(
-			@PathVariable(value="boardId",required = true)Integer boardId,
-			@PathVariable(value="pwd",required = true)Integer passWd)throws Exception{
+	public BoardDto.BoardResponseDto passwordCheck(@PathVariable(value="boardId",required = true)Integer boardId,@PathVariable(value="pwd",required = true)Integer passWd)throws Exception{
 		
 		BoardDto.BoardResponseDto dto = null;
 		
 		try {
-		
 			dto = service.passwordcheck(passWd, boardId);		
-		
-		} catch (Exception e) {
-			
+		} catch (Exception e) {			
 			e.printStackTrace();
 		}		
 		

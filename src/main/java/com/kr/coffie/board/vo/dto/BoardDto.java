@@ -2,8 +2,8 @@ package com.kr.coffie.board.vo.dto;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -54,7 +54,7 @@ public class BoardDto {
 		@ApiModelProperty(value="글 등록일",example="2022-09-21 12:34:00",required = true)
 		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
 		private LocalDateTime createdAt;
-		
+	
 	}
 	
 	@ApiModel(value = "게시판 응답 dto",description = "자유게시판 응답에 필요한 dto")

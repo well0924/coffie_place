@@ -2,6 +2,8 @@ package com.kr.coffie.common.file.vo.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,6 +27,7 @@ public class FileDto {
 		private Integer fileId;
 		private Integer boardId;
 		private Integer noticeId;
+		@NotEmpty(message = "파일을 첨부해주세요.")
 		private MultipartFile[]file;
 		private String filePath;
 		private String imgGroup;
@@ -33,7 +36,7 @@ public class FileDto {
 		private String originName;
 		@JsonFormat(pattern = "yyyy-MM-dd HH:mm",shape = Shape.STRING)
 		private LocalDateTime createdAt;
-
+		
 	}
 	
 	//첨부파일 조회에 사용되는 dto

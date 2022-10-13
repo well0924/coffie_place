@@ -52,16 +52,14 @@ public class LoginApiController {
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",dataType = "String",paramType = "path")
 	})
 	@GetMapping("/idcheck/{id}")
-	public Map<String,Object>idCheck(
-			@PathVariable(value="id",required = true)String userId)throws Exception{
+	public Map<String,Object>idCheck(@PathVariable(value="id",required = true)String userId)throws Exception{
 		
 		Map<String,Object>result = new HashedMap<String,Object>();
 		
 		int checkresult = 0;
 		
 		try {
-			checkresult = service.userduplicate(userId);
-			
+			checkresult = service.userduplicate(userId);		
 			if(checkresult > 0) {
 				result.put("userId",checkresult);
 			}else {
@@ -94,8 +92,7 @@ public class LoginApiController {
 		int checkresult = 0;
 		
 		try {
-			checkresult = service.useremailduplocated(userEmail);
-			
+			checkresult = service.useremailduplocated(userEmail);		
 			if(checkresult > 0) {
 				result.put("duplicate!", checkresult);
 			}else {
@@ -126,10 +123,8 @@ public class LoginApiController {
 		
 		LoginDto.LoginResponseDto dto = null;
 		
-		try {
-			
+		try {			
 			dto =service.idSearch(userName, userEmail);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -159,31 +154,24 @@ public class LoginApiController {
 		@ApiImplicitParam(required = true,name="userAuth",value="회원권한",example="USER",dataType = "String",paramType = "query")
 	})
 	@PostMapping(value="/memberjoin")
-	public Map<String,Object>memberJoin(
-			@RequestBody 
-			LoginDto.LoginRequestDto dto)throws Exception{
+	public Map<String,Object>memberJoin(@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
 		
 		Map<String,Object>result = new HashMap<String, Object>();
 		
 		int joinresult = 0;
 		
-		try {
-			
+		try {	
 			joinresult = adminservice.memberjoin(dto);
-			
 			if(joinresult > 0) {
-				
 				result.put("join!", 200);
-				
 			}else if(joinresult < 0) {
-				
 				result.put("fail", 400);
-			
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put(e.getMessage(), 500);
 		}
+		
 		return result;
 	}
 	
@@ -207,8 +195,7 @@ public class LoginApiController {
 		int updateResult = 0;
 		
 		try {
-			updateResult = service.pwSearch(dto);
-			
+			updateResult = service.pwSearch(dto);			
 			if(updateResult >0) {
 				result.put("resultCode", 200);
 			}else if(updateResult < 0) {

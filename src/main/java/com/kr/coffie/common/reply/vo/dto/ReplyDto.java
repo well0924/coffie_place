@@ -2,6 +2,8 @@ package com.kr.coffie.common.reply.vo.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
@@ -59,12 +61,15 @@ public class ReplyDto {
 		@ApiModelProperty(value="가게번호",example="22",required = true)
 		private Integer placeId;
 		@ApiModelProperty(value="댓글점수",example="3",required = true)
+		@NotBlank(message = "평점을 입력해주세요.")
 		private Integer replyPoint;
 		@ApiModelProperty(value="댓글좋아요",example="1",required = true)
 		private Integer replyLike;
 		@ApiModelProperty(value="댓글내용",example="well",required = true)
+		@NotBlank(message = "내용을 입력해주세요.")
 		private String replyContents;
 		@ApiModelProperty(value="댓글작성자",example="well",required = true)
+		@NotBlank(message = "작성자를 입력해주세요.")
 		private String replyWriter;
 		@ApiModelProperty(value="댓글작성일",example="2022-04-13T22:00:00",required = true)
 		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = Shape.STRING)
