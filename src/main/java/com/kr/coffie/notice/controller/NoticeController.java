@@ -32,25 +32,17 @@ public class NoticeController {
 	private final FileService fileservice;
 	
 	@GetMapping("/noticelist")
-	public ModelAndView NoticeList(Criteria cri,
-			@RequestParam(required = false, defaultValue = "T") String searchType,
-			@RequestParam(required = false) String keyword)throws Exception{
+	public ModelAndView NoticeList(Criteria cri, @RequestParam(required = false, defaultValue = "T") String searchType, @RequestParam(required = false) String keyword)throws Exception{
 
 		ModelAndView mv = new ModelAndView();
 
 		List<NoticeDto.NoticeResponseDto>list = null;
 
 		int articlesum = 0;
-		
-		try {
 
-			list = service.noticelist(cri);
-			articlesum = service.noticetotalcount(cri);
-			log.info(list);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+		list = service.noticelist(cri);
+		articlesum = service.noticetotalcount(cri);
+		log.info(list);
 		
 		Paging paging = new Paging();
 		paging.setCri(cri);
@@ -91,14 +83,9 @@ public class NoticeController {
 		//첨부파일 업로드
 		List<FileDto.FileResponseDto>fileList = null;
 		
-		try {
-			noticeBoard = service.noticedetail(noticeId);
-			fileList =fileservice.noticeFileList(noticeId);
+		noticeBoard = service.noticedetail(noticeId);
+		fileList =fileservice.noticeFileList(noticeId);
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 		mv.addObject("filelist", fileList);
 		mv.addObject("detail", noticeBoard);
 		
@@ -114,11 +101,7 @@ public class NoticeController {
 		
 		NoticeDto.NoticeResponseDto noticeBoard = null;
 		
-		try {
-			noticeBoard = service.noticedetail(noticeId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		noticeBoard = service.noticedetail(noticeId);
 		
 		mv.addObject("detail", noticeBoard);
 		mv.setViewName("notice/noticemodify");

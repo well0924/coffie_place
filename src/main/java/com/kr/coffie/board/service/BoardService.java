@@ -40,7 +40,12 @@ public class BoardService {
 		
 		List<FileDto.FileResponseDto> filelist = new ArrayList<>();
 		
-		if(result>0) {	
+		//첨부 파일이 없는 경우
+		if(filelist == null || filelist.size() == 0){
+			return result;
+		}
+		
+		if(result > 0) {	
 			
 			//글작성이 되면 파일 업로드 기능이 실행.
 			filelist = utile.fileupload(fvo);
@@ -55,11 +60,10 @@ public class BoardService {
 					int attachresult = filemapper.boardFileInsert(fileVO);	
 				}
 			}
-		}
-		
-		//첨부 파일이 없는 경우
-		if(filelist == null || filelist.size() == 0){
-			return result;
+			
+			if(filelist == null || filelist.size() == 0) {
+				return result;
+			}
 		}
 		
 		return result;

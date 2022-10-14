@@ -39,6 +39,10 @@ public class NoticeService {
 		
 		List<FileDto.FileResponseDto>filelist = new ArrayList<>();
 		
+		if(filelist == null || filelist.size() == 0) {
+			return result;
+		}
+		
 		if(result > 0) {
 			filelist = utile.fileupload(fvo);
 			
@@ -49,10 +53,10 @@ public class NoticeService {
 					int attachresult = filemapper.noticeFileInsert(fileVO);
 				}
 			}
-		}
-		
-		if(filelist == null || filelist.size() == 0) {
-			result = mapper.noticeinsert(dto);
+			
+			if(filelist == null || filelist.size() == 0) {
+				return result;
+			}
 		}
 		
 		return result;

@@ -1,9 +1,9 @@
 package com.kr.coffie.login.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
 
-import org.apache.commons.collections4.map.HashedMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kr.coffie.admin.service.AdminService;
 import com.kr.coffie.config.email.MailService;
+import com.kr.coffie.exception.ResponseDto;
 import com.kr.coffie.login.service.LoginService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
@@ -52,24 +53,13 @@ public class LoginApiController {
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",dataType = "String",paramType = "path")
 	})
 	@GetMapping("/idcheck/{id}")
-	public Map<String,Object>idCheck(@PathVariable(value="id",required = true)String userId)throws Exception{
-		
-		Map<String,Object>result = new HashedMap<String,Object>();
+	public ResponseDto<?>idCheck(@PathVariable(value="id",required = true)String userId)throws Exception{
 		
 		int checkresult = 0;
 		
-		try {
-			checkresult = service.userduplicate(userId);		
-			if(checkresult > 0) {
-				result.put("userId",checkresult);
-			}else {
-				result.put("userId",checkresult);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		return result;
+		checkresult = service.userduplicate(userId);		
+		
+		return new ResponseDto<>(HttpStatus.OK.value(),checkresult);
 	}
 	
 	@ApiResponses({
@@ -80,29 +70,18 @@ public class LoginApiController {
         @ApiResponse(code=404, message="not found"),
         @ApiResponse(code=500, message="error")
 	})
-	@ApiOperation(value = "아이디 중복체크 API",notes="아이디 중복체크에 필요한 api입니다.")
+	@ApiOperation(value = "이메일 중복체크 API",notes="이메일 중복체크에 필요한 api입니다.")
 	@ApiImplicitParams({
 		@ApiImplicitParam(required = true,name="email",value="회원이메일",example="well4149@naver.com",dataType = "String",paramType = "path")
 	})
 	@GetMapping("/emailcheck/{email}")
-	public Map<String,Object>userEmailDuplicated(@PathVariable(value="email",required = true)String userEmail)throws Exception{
-		
-		Map<String,Object> result = new HashMap<String, Object>();
-		
+	public ResponseDto<?>userEmailDuplicated(@PathVariable(value="email",required = true)String userEmail)throws Exception{
+				
 		int checkresult = 0;
 		
-		try {
-			checkresult = service.useremailduplocated(userEmail);		
-			if(checkresult > 0) {
-				result.put("duplicate!", checkresult);
-			}else {
-				result.put("duplicate!", checkresult);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		return result;
+		checkresult = service.useremailduplocated(userEmail);		
+		
+		return new ResponseDto<>(HttpStatus.OK.value(),checkresult);
 	}
 	
 	@ApiResponses({
@@ -119,17 +98,13 @@ public class LoginApiController {
 		@ApiImplicitParam(required = true,name="userEmail",value="회원이메일",example="well414965@gmail.com",dataType = "String",paramType = "path")
 	})
 	@GetMapping("/idsearch/{userName}/{userEmail}")
-	public LoginDto.LoginResponseDto idsearch(@PathVariable(value="userName",required = true)@RequestBody String userName, @PathVariable(value="userEmail",required = true)@RequestBody String userEmail)throws Exception{
+	public ResponseDto<LoginDto.LoginResponseDto> idsearch(@PathVariable(value="userName",required = true)@RequestBody String userName, @PathVariable(value="userEmail",required = true)@RequestBody String userEmail)throws Exception{
 		
 		LoginDto.LoginResponseDto dto = null;
 		
-		try {			
-			dto =service.idSearch(userName, userEmail);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		dto =service.idSearch(userName, userEmail);
 		
-		return dto;
+		return new ResponseDto<>(HttpStatus.OK.value(),dto);
 	}
 	
 	@ApiResponses({
@@ -154,25 +129,13 @@ public class LoginApiController {
 		@ApiImplicitParam(required = true,name="userAuth",value="회원권한",example="USER",dataType = "String",paramType = "query")
 	})
 	@PostMapping(value="/memberjoin")
-	public Map<String,Object>memberJoin(@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String, Object>();
+	public ResponseDto<?> memberJoin(@Valid @RequestBody LoginDto.LoginRequestDto dto, BindingResult bindingresult)throws Exception{
 		
 		int joinresult = 0;
 		
-		try {	
-			joinresult = adminservice.memberjoin(dto);
-			if(joinresult > 0) {
-				result.put("join!", 200);
-			}else if(joinresult < 0) {
-				result.put("fail", 400);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		joinresult = adminservice.memberjoin(dto);
+	
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	
@@ -186,27 +149,13 @@ public class LoginApiController {
 	})
 	@ApiOperation(value = "비밀번호수정 API",notes="회원가입 페이지에서 비밀번호수정에 필요한 api입니다.")
 	@PutMapping("/updatepw")
-	public Map<String,Object>updatepw(
-			@ApiParam(name="회원Dto",required = true)
-			@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
-		
-		Map<String,Object> result = new HashMap<String,Object>();
-		
+	public ResponseDto<?> updatepw( @ApiParam(name="회원Dto",required = true) @RequestBody LoginDto.LoginRequestDto dto)throws Exception{
+			
 		int updateResult = 0;
 		
-		try {
-			updateResult = service.pwSearch(dto);			
-			if(updateResult >0) {
-				result.put("resultCode", 200);
-			}else if(updateResult < 0) {
-				result.put("resultCode", 400);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("resultCode", 500);
-		}
+		updateResult = service.pwSearch(dto);			
 		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({

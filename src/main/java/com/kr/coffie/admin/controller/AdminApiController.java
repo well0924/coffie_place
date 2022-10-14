@@ -1,11 +1,11 @@
 package com.kr.coffie.admin.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kr.coffie.admin.service.AdminService;
+import com.kr.coffie.exception.ResponseDto;
 import com.kr.coffie.login.vo.dto.LoginDto;
 
 import io.swagger.annotations.Api;
@@ -49,36 +50,13 @@ public class AdminApiController {
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",dataType ="String",paramType = "path")
 	})
 	@PutMapping(value="/memberupdate/{id}")
-	public Map<String,Object>memberUpdate(
-			@PathVariable(value="id",required = true)String userId, 
-			@ApiParam(value="dto",name="로그인Dto",required = true)
-			@RequestBody LoginDto.LoginRequestDto dto)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> memberUpdate(@PathVariable(value="id",required = true)String userId, @ApiParam(value="dto",name="로그인Dto",required = true) @RequestBody LoginDto.LoginRequestDto dto)throws Exception{
+			
 		int updateresult =0;
 		
-		try {
-			
-			updateresult = service.memberupdate(dto);
-			
-			if(updateresult>0) {
-			
-				result.put("o.k", 200);
-			
-			}else if(updateresult < 0) {
-				
-				result.put("fail", 400);
-			
-			}
+		updateresult = service.memberupdate(dto);
 		
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -94,36 +72,16 @@ public class AdminApiController {
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",dataType = "String",paramType = "path")
 	})
 	@DeleteMapping(value="/memberdelete/{id}")
-	public Map<String,Object>memberDelete(@PathVariable(value="id")String userId,HttpSession session)throws Exception{
-		
-		Map<String,Object> result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> memberDelete(@PathVariable(value="id")String userId,HttpSession session)throws Exception{
+				
 		int deleteresult = 0;
-		
-		try {
-		
-			deleteresult = service.memberdelete(userId);
-			
-			if(deleteresult>0) {
-			
-				result.put("o.k", 200);
 				
-				SecurityContextHolder.clearContext();
-				session.invalidate();
-				
-			}else if(deleteresult<0) {
+		deleteresult = service.memberdelete(userId);
 			
-				result.put("fail", 400);
-				
-			}
+		SecurityContextHolder.clearContext();
+		session.invalidate();
 		
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({

@@ -167,6 +167,7 @@ public class FileController {
 	@ApiOperation(value = "엑섹다운로드기능",notes = "가게목록페이지에서 어드민으로 로그인을 했을경우 엑셀목록으로 받는 기능")
 	@GetMapping("/exceldown")
 	public void placeExcelDown(HttpServletRequest req, HttpServletResponse res) {
+		
 		try {
 		
 			List<PlaceDto.PlaceResponseDto>placelist = placeservice.excellist();

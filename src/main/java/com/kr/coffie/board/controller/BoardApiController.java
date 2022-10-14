@@ -1,8 +1,6 @@
 package com.kr.coffie.board.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -59,27 +57,20 @@ public class BoardApiController {
 		@ApiImplicitParam(name="searchType",value="검색타입",example="T",dataType = "String",paramType = "query")
 	})
 	@GetMapping(value="/list")
-	public Map<String,Object>articelist(Criteria cri)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
+	public ResponseDto<List<BoardDto.BoardResponseDto>> articelist(Criteria cri)throws Exception{
 		
 		List<BoardDto.BoardResponseDto>list = null;
 		
 		int totallist =0;
 		
-		try {
-			list = service.boardlist(cri);
-			totallist = service.totalarticle(cri);
-			result.put("list", list);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		list = service.boardlist(cri);
+		totallist = service.totalarticle(cri);
 		
 		Paging paging = new Paging();
 		paging.setCri(cri);
 		paging.setTotalCount(totallist);
 		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),list);
 	}
 	
 	@ApiResponses({
@@ -95,24 +86,13 @@ public class BoardApiController {
 		@ApiImplicitParam(name="id",required = true,value="게시글 번호",example="1",dataType = "Integer",paramType = "path")
 	})
 	@GetMapping("/boarddetai/{id}")
-	public Map<String,Object>boarddetail(@PathVariable(value="id",required = true)Integer boardId)throws Exception{
-		
-		Map<String,Object> result = new HashMap<String, Object>();
-		
+	public ResponseDto<BoardDto.BoardResponseDto> boarddetail(@PathVariable(value="id",required = true)Integer boardId)throws Exception{
+			
 		BoardDto.BoardResponseDto dto = null;
 		
-		try {
-			dto = service.boarddetail(boardId);		
-			if(dto != null) {
-				result.put("boarddetail", dto);
-			}else if(dto == null) {
-				result.put("Bad Request", 400);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		return result;
+		dto = service.boarddetail(boardId);		
+		
+		return new ResponseDto<>(HttpStatus.OK.value(),dto);
 	}
 	
 	@ApiResponses({
@@ -126,16 +106,9 @@ public class BoardApiController {
 	@ApiOperation(value = "자유게시판 글작성 API",notes="자유게시글에서 글을 작성하는 기능입니다. 작성기능은 로그인이 필요합니다.")
 	@PostMapping(value="/write")
 	public ResponseDto<?>articleinsert(
-			@Valid
-			@ApiParam(value="게시글 객체",required = true)
-			@RequestBody
-			@ModelAttribute BoardDto.BoardRequestDto dto,
-			
+			@Valid @ApiParam(value="게시글 객체",required = true) @RequestBody @ModelAttribute BoardDto.BoardRequestDto dto, 
 			BindingResult bindingresult,
-			
-			@ApiIgnore
-			@RequestBody
-			@ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
+			@ApiIgnore @RequestBody @ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
 				
 		int insertresult = 0;
 		
@@ -160,35 +133,19 @@ public class BoardApiController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(required = true,name="id",value="게시물 번호",example="1",dataType = "Integer",paramType = "path")
 	})
-	public Map<String,Object>articleupdate(
+	public ResponseDto<?>articleupdate(
 			@PathVariable(value="id",required = true)Integer boardId,
-			@ApiParam(name="게시물 dto",required = true)
-			@RequestBody
-			@ModelAttribute 
-			BoardDto.BoardRequestDto dto,
-			@ApiIgnore
-			@ModelAttribute 
-			FileDto.FileRequestDto fvo)throws Exception{
-		
-		Map<String,Object> result = new HashMap<>();
+			@ApiParam(name="게시물 dto",required = true) @RequestBody @ModelAttribute BoardDto.BoardRequestDto dto,
+			@ApiIgnore @ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
 		
 		int updateresult = 0;
 		
-		try {
-			fvo.setImgGroup("freeBoard");
-			fvo.setFileType("Board");
-		    updateresult = service.boardupdate(dto, fvo);	
-			if(updateresult > 0) {	
-				result.put("common o.k", 200);
-			}else if(updateresult < 0) {
-				result.put("bad request", 400);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
+		fvo.setImgGroup("freeBoard");
+		fvo.setFileType("Board");
 		
-		return result;
+		updateresult = service.boardupdate(dto, fvo);	
+		
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -204,34 +161,13 @@ public class BoardApiController {
 		@ApiImplicitParam(name="id",value="자유게시판 번호",example="1",dataType = "Integer",paramType = "path",required = true)
 	})
 	@DeleteMapping(value="/delete/{id}")
-	public Map<String,Object>articledelete( @PathVariable(value="id",required = true)Integer boardId)throws Exception{
-		
-		Map<String,Object> result = new HashMap<>();
+	public ResponseDto<?>articledelete(@PathVariable(value="id",required = true)Integer boardId)throws Exception{
 		
 		int deleteresult = 0;
 		
-		try {
+		deleteresult = service.boarddelete(boardId);
 	
-			deleteresult = service.boarddelete(boardId);
-			
-			if(deleteresult > 0) {
-			
-				result.put("common o.k", 200);
-			
-			}else if(deleteresult < 0) {
-			
-				result.put("bad request", 400);
-			
-			}
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -248,16 +184,13 @@ public class BoardApiController {
 	})
 	@ApiOperation(value = "자유게시판 비밀번호확인 API",notes="자유게시글에서 글수정시 비밀번호 확인 기능입니다.")
 	@GetMapping(value="/pwcheck/{boardId}/{pwd}")
-	public BoardDto.BoardResponseDto passwordCheck(@PathVariable(value="boardId",required = true)Integer boardId,@PathVariable(value="pwd",required = true)Integer passWd)throws Exception{
-		
+	public ResponseDto<BoardDto.BoardResponseDto> passwordCheck(
+			@PathVariable(value="boardId",required = true)Integer boardId,
+			@PathVariable(value="pwd",required = true)Integer passWd)throws Exception{
 		BoardDto.BoardResponseDto dto = null;
 		
-		try {
-			dto = service.passwordcheck(passWd, boardId);		
-		} catch (Exception e) {			
-			e.printStackTrace();
-		}		
+		dto = service.passwordcheck(passWd, boardId);		
 		
-		return dto;
+		return new ResponseDto<>(HttpStatus.OK.value(),dto);
 	}
 }

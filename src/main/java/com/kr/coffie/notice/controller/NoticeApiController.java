@@ -1,9 +1,11 @@
 package com.kr.coffie.notice.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.common.page.Criteria;
 import com.kr.coffie.common.page.Paging;
+import com.kr.coffie.exception.ResponseDto;
 import com.kr.coffie.notice.service.NoticeService;
 import com.kr.coffie.notice.vo.dto.NoticeDto;
 
@@ -53,30 +56,42 @@ public class NoticeApiController {
 		@ApiImplicitParam(name="searchType",value="검색타입",example="T",dataType = "String",paramType = "query")
 	})
 	@GetMapping(value="/list")
-	public Map<String,Object>noticearticelist(Criteria cri)throws Exception{
-	
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+	public ResponseDto<?>noticearticelist(Criteria cri)throws Exception{
+			
 		List<NoticeDto.NoticeResponseDto>list = null;
 	
 		int totallist = 0;
-		
-		try {
 			
-			list = service.noticelist(cri);			
-			totallist = service.noticetotalcount(cri);
-	
-			result.put("list", list);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		list = service.noticelist(cri);			
+		totallist = service.noticetotalcount(cri);
 		
 		Paging paging = new Paging();
 		paging.setCri(cri);
 		paging.setTotalCount(totallist);
 		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),list);
+	}
+	
+	@ApiResponses({
+        @ApiResponse(code=200, message="common ok"),
+        @ApiResponse(code=400, message="bad request"),
+        @ApiResponse(code=401, message="unauthorize"),
+        @ApiResponse(code=403, message="fobidden"),
+        @ApiResponse(code=404, message="not found"),
+        @ApiResponse(code=500, message="error")
+	})
+	@ApiOperation(value = "자유게시판 글단일조회 API",notes="자유게시글에서 글을 조회하는 기능입니다. 기능은 로그인이 필요합니다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="id",required = true,value="게시글 번호",example="1",dataType = "Integer",paramType = "path")
+	})
+	@GetMapping("/boarddetai/{id}")
+	public ResponseDto<NoticeDto.NoticeResponseDto> boarddetail(@PathVariable(value="id",required = true)Integer noticeId)throws Exception{
+			
+		NoticeDto.NoticeResponseDto dto = null;
+		
+		dto = service.noticedetail(noticeId);		
+		
+		return new ResponseDto<>(HttpStatus.OK.value(),dto);
 	}
 	
 	@ApiResponses({
@@ -89,43 +104,19 @@ public class NoticeApiController {
 	})
 	@ApiOperation(value = "공지게시판 작성 API",notes="공지게시판에서 글을 작성합니다. 사용은 어드민으로 로그인을 해야 사용할 수 있습니다.")
 	@PostMapping(value="/write")
-	public Map<String,Object>noticearticleinsert(
-			@ApiParam(name="공지게시판에 사용되는 dto",required = true)
-			@RequestBody
-			@ModelAttribute 
-			NoticeDto.NoticeRequestDto dto,
-			@ApiParam(hidden = true)
-			@ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+	public ResponseDto<?> noticearticleinsert(
+			@ApiParam(name="공지게시판에 사용되는 dto",required = true) @Valid @RequestBody @ModelAttribute NoticeDto.NoticeRequestDto dto,
+			BindingResult bindingresult,
+			@ApiParam(hidden = true) @RequestBody @ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
+			
 		int insertresult = 0;
 		
-		try {
-			fvo.setImgGroup("noticeBoard");
-			fvo.setFileType("Board");
+		fvo.setImgGroup("noticeBoard");
+		fvo.setFileType("Board");
 			
-			insertresult = service.noticeinsert(dto,fvo);
+		insertresult = service.noticeinsert(dto,fvo);	
 			
-			if(insertresult >0) {
-	
-				result.put("Common o.k", 200);
-	
-			}else if(insertresult < 0) {
-	
-				result.put("bad request", 400);
-	
-			}
-	
-		} catch (Exception e) {
-	
-			e.printStackTrace();
-	
-			result.put(e.getMessage(), 500);
-	
-		}
-	
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -141,42 +132,19 @@ public class NoticeApiController {
 		@ApiImplicitParam(required = true,name="id",value="게시판 번호",example="1",dataType = "Integer",paramType = "path")
 	})
 	@PutMapping(value="/update/{id}")
-	public Map<String,Object>noticearticleupdate(
+	public ResponseDto<?> noticearticleupdate(
 			@PathVariable(value="id",required = true)Integer boardId,
-			@ApiParam(name="공지게시판dto",required = true)
-			@RequestBody
-			@ModelAttribute 
-			NoticeDto.NoticeRequestDto dto,
-			@ModelAttribute 
-			FileDto.FileRequestDto fvo)throws Exception{
-		
-		Map<String,Object> result = new HashMap<>();
-		
+			@ApiParam(name="공지게시판dto",required = true) @Valid @RequestBody @ModelAttribute NoticeDto.NoticeRequestDto dto,
+			@ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
+				
 		int updateresult = 0;
 		
-		try {
-			fvo.setImgGroup("noticeBoard");
-			fvo.setFileType("Board");
+		fvo.setImgGroup("noticeBoard");
+		fvo.setFileType("Board");
 			
-			updateresult = service.noticeupdate(dto,fvo);
+		updateresult = service.noticeupdate(dto,fvo);
 			
-			if(updateresult > 0) {
-				
-				result.put("common o.k", 200);
-			
-			}else if(updateresult < 0) {
-				
-				result.put("bad request", 400);
-			
-			}
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -192,35 +160,13 @@ public class NoticeApiController {
 		@ApiImplicitParam(required = true,name="id",value="공지게시글 번호",example="1",dataType = "Intger",paramType = "path")
 	})
 	@DeleteMapping(value="/delete/{id}")
-	public Map<String,Object>noticearticledelete(
-			@PathVariable(value="id",required = true)Integer boardId)throws Exception{
-		
-		Map<String,Object> result = new HashMap<>();
-		
+	public ResponseDto<?> noticearticledelete(@PathVariable(value="id",required = true)Integer boardId)throws Exception{
+				
 		int deleteresult = 0;
 		
-		try {
-			
-			deleteresult = service.noticedelete(boardId);
-			
-			if(deleteresult > 0) {
-				
-				result.put("common o.k", 200);
-			
-			}else if(deleteresult < 0) {
-			
-				result.put("bad request", 400);
-			
-			}
-			
-		} catch (Exception e) {
+		deleteresult = service.noticedelete(boardId);
 		
-			e.printStackTrace();
-		
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 
 }

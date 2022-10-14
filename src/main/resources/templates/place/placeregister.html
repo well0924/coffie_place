@@ -37,18 +37,21 @@
 						<label for="place_name">가게명</label>
 						<input type="text" id="place_name" name="placeName" class="form-control"/>
 					</div>
+					<div id="valid_placeName"></div>
 					<div class="row">
 						<div class="col">
 							<label for="place_lat">경도</label>
 							<input type="text" id="place_lat" name="placeLat" class="form-control"/>
 						</div>
+						<div id="valid_placeLat"></div>
 						<div class="col">
 							<label for="place_lng">위도</label>
 							<input type="text" id="place_lng" name="placeLng" class="form-control"/>
 						</div>
+						<div id="valid_placeLng"></div>
 					</div>
 					<div class="form-group">
-						<label style="display: block;" >주소</label>
+						<label style="display: block;">주소</label>
 						<input class="form-control" style="width: 70%; display: inline;" placeholder="도로명 주소" name="placeAddr1" id="place_addr1" type="text" readonly="readonly">
 						<button type="button" class="btn btn-default" onclick="AddressCode();">
 						<i class="fa fa-search"></i> 주소찾기</button>
@@ -56,16 +59,20 @@
 					<div class="form-group">
 							<input class="form-control" style="top: 5px;" placeholder="상세 주소" name="placeAddr2" id="place_addr2" type="text" required="required"/>
 					</div>
+					<div id="valid_placeAddr1"></div>
 					<div class="form-group">
 						<label for="place_phone">가게 전화번호</label>
 						<input type="text" id="place_phone" name="placePhone" class="form-control"/>
 					</div>
+					<div id="valid_placePhone"></div>
 					<div class="form-group">
 						<label for="place_start">영업 시작시간</label>
 						<input type="text" id="place_start" name="placeStart" class="form-control" placeholder="운영시작시간"/>
 						<label for="place_close">영업 종료시간</label>
 						<input type="text" id="place_close" name="placeClose" class="form-control" placeholder="운영종료시간"/>
 					</div>
+					<div id="valid_placeStart"></div>
+					<div id="valid_placeClose"></div>
 					<div class="form-group">
 						<label for="btnAtt">첨부 이미지</label>
 						<div id='image_preview'>
@@ -73,6 +80,7 @@
 						    <div id='att_zone'></div>
 						</div>
 					</div>
+					<div id="valid_file"></div>
 					<div class="form-group">
 						<div class="text-right">
 							<a href="/page/place/placelist" class="btn btn-primary">목록</a>
@@ -88,46 +96,7 @@
 <script type="text/javascript">
 var file = document.getElementById('fileGroupId').value;
 console.log(file);
-//등록 유효성o.k
-function validation(){
-	let placename = document.getElementById('place_name').value;
-	let placelat = document.getElementById('place_lat').value;
-	let placelng = document.getElementById('place_lng').value;
-	let placeaddr = document.getElementById('place_addr1').value;
-	let placephone = document.getElementById('place_phone').value;
-	let placestart = document.getElementById('place_start').value;
-	let placeclose = document.getElementById('place_close').value;
-	
-	if(placename.trim().length == 0){
-		alert('가게명을 입력해주세요.');
-		return false;
-	}
-	if(placelat.trim().length ==0){
-		alert('가게 위도를 입력해주세요.');
-		return false;
-	}
-	if(placelng.trim().length ==0){
-		alert('가게 경도를 입력해주세요.');
-		return false;
-	}
-	if(placeaddr.trim().length ==0){
-		alert('가게 주소를 입력해주세요.');
-		return false;
-	}
-	if(placephone.trim().length ==0){
-		alert('전화번호를 입력해주세요.');
-		return false;
-	}
-	if(placestart.trim().length ==0){
-		alert('가게 영업시간을 입력해주세요.');
-		return false;
-	}
-	if(placeclose.trim().length ==0){
-		alert('가게 영업시간을 입력해주세요.');
-		return false;
-	}
-	return true;
-}
+
 //주소찾기o.k
 function AddressCode(){
 	new daum.Postcode({
@@ -172,6 +141,7 @@ function AddressCode(){
 
 //가게 등록기능.
 function placeRegister(){
+	
 	let placename = document.getElementById('place_name').value;
 	let placelat = document.getElementById('place_lat').value;
 	let placelng = document.getElementById('place_lng').value;
@@ -182,44 +152,83 @@ function placeRegister(){
 	let placeclose = document.getElementById('place_close').value;
 	let filegroupid = document.getElementById('fileGroupId').value;
 	
-	if(validation()){
+	var formdate = new FormData();
+	//폼데이터
+	formdate.append("placeName",placename);
+	formdate.append("placeLat",placelat);
+	formdate.append("placeLng",placelng);
+	formdate.append("placeAddr1",placeaddr);
+	formdate.append("placeAddr2",placeaddr2);
+	formdate.append("placePhone",placephone);
+	formdate.append("placeStart",placestart);
+	formdate.append("placeClose",placeclose);
+	formdate.append("fileGroupId",filegroupid);
+	//이미지.
+	var images = $("input[type='file']");
+	
+	var files = images[0].files;
+	
+	for(var i = 0;i<files.length;i++){
+		console.log(files[i]);
+		formdate.append("file",files[i]);
+	}
+	
+	//가게 등록 기능o.k
+	$.ajax({
+		url:'/api/place/placeregister',
+		type:'post',
+		dataType:'json',
+		data: formdate,
+		processData: false,
+		contentType : false,
+		cache:false,
+		enctype: 'multipart/form-data',
+	}).done(function(data){
 		
-		var formdate = new FormData();
-		//폼데이터
-		formdate.append("placeName",placename);
-		formdate.append("placeLat",placelat);
-		formdate.append("placeLng",placelng);
-		formdate.append("placeAddr1",placeaddr);
-		formdate.append("placeAddr2",placeaddr2);
-		formdate.append("placePhone",placephone);
-		formdate.append("placeStart",placestart);
-		formdate.append("placeClose",placeclose);
-		formdate.append("fileGroupId",filegroupid);
-		//이미지.
-		var images = $("input[type='file']");
-		
-		var files = images[0].files;
-		
-		for(var i = 0;i<files.length;i++){
-			console.log(files[i]);
-			formdate.append("file",files[i]);
+		if(data.status == 200){
+			alert("가게가 등록이 되었습니다.");
+			location.href="/page/admin/adminlist";	
 		}
 		
-		//가게 등록 기능o.km
-		$.ajax({
-			url:'/api/place/placeregister',
-			type:'post',
-			dataType:'json',
-			data: formdate,
-			processData: false,
-			contentType : false,
-			cache:false,
-			enctype: 'multipart/form-data',
-		}).done(function(data){
-			alert("가게가 등록이 되었습니다.");
- 			location.href="/page/admin/adminlist";
-		});
-	}
+		if(data.status == 400){
+			if(resp.data.hasOwnProperty('valid_placeName')){
+				$('#valid_placeName').text(resp.data.valid_placeName);
+				$('#valid_placeName').css('color','red');
+			}else{
+				$('#valid_placeName').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_placeLat')){
+				$('#valid_placeLat').text(resp.data.valid_placeLat);
+				$('#valid_placeLat').css('color','red');
+			}else{
+				$('#valid_placeLat').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_placeLng')){
+				$('#valid_placeLng').text(resp.data.valid_placeLng);
+				$('#valid_placeLng').css('color','red');
+			}else{
+				$('#valid_placeLng').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_placeAddr1')){
+				$('#valid_placeAddr1').text(resp.data.valid_placeAddr1);
+				$('#valid_placeAddr1').css('color','red');
+			}else{
+				$('#valid_placeAddr1').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_placeStart')){
+				$('#valid_placeStart').text(resp.data.valid_placeStart);
+				$('#valid_placeStart').css('color','red');
+			}else{
+				$('#valid_placeStart').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_placeClose')){
+				$('#valid_placeClose').text(resp.data.valid_placeClose);
+				$('#valid_placeClose').css('color','red');
+			}else{
+				$('#valid_placeClose').text('');
+			}
+		}
+	});
 }
 
 ( /* att_zone : 이미지들이 들어갈 위치 id, btn : file tag id */

@@ -42,15 +42,12 @@ public class BoardController {
 		
 		int totallist = 0;
 		
-		try {
+		list = service.boardlist(cri);
+		totallist =service.totalarticle(cri);
 		
-			list = service.boardlist(cri);
-			totallist =service.totalarticle(cri);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
 		Paging paging = new Paging();
+		
 		paging.setCri(cri);
 		paging.setTotalCount(totallist);
 		paging.setKeyword(keyword);
@@ -75,18 +72,15 @@ public class BoardController {
 		//첨부파일 업로드
 		List<FileDto.FileResponseDto>fileList = null;
 		
-		try {
-			detail = service.boarddetail(boardId);
-			log.info(detail);
-			fileList = fileservice.boardFileList(boardId);
-			log.info(fileList);
-			Imagelist = fileservice.imagelist(boardId);
-			//조회수 증가
-			service.readcountup(boardId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	
+		detail = service.boarddetail(boardId);
+		log.info(detail);
+		fileList = fileservice.boardFileList(boardId);
+		log.info(fileList);
+		Imagelist = fileservice.imagelist(boardId);
+		
+		//조회수 증가
+		service.readcountup(boardId);
+		
 		mv.addObject("detail", detail);
 		mv.addObject("List", Imagelist);
 		mv.addObject("file", fileList);
@@ -123,14 +117,10 @@ public class BoardController {
 		//첨부파일 업로드
 		List<FileDto.FileResponseDto>fileList = null;
 		
-		try {
-			modify = service.boarddetail(boardId);
-			Imagelist = fileservice.imagelist(boardId);
-			fileList = fileservice.boardFileList(boardId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		modify = service.boarddetail(boardId);
+		Imagelist = fileservice.imagelist(boardId);
+		fileList = fileservice.boardFileList(boardId);
+	
 		mv.addObject("detail", modify);
 		mv.addObject("List", Imagelist);
 		mv.addObject("file", fileList);
@@ -147,15 +137,11 @@ public class BoardController {
 		
 		BoardDto.BoardResponseDto pwd = null;
 		
-		try {
-			pwd = service.boarddetail(boardId);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		pwd = service.boarddetail(boardId);
 		
 		mv.addObject("pwd", pwd);
 		mv.setViewName("board/passwordcheck");
+		
 		return mv;
 	}
 }

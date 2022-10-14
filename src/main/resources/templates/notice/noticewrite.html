@@ -29,6 +29,7 @@ layout:decorate="~{layout/leafframe}">
 									<option th:value="공지게시판">공지게시판</option>
 									<option th:value="자유게시판">자유게시판</option>
 								</select>
+								<div id="valid_noticeGroup"></div>
 							</div>
 							<div class="col">
 								<label for="isFixed">고정글 여부</label>
@@ -37,16 +38,19 @@ layout:decorate="~{layout/leafframe}">
 									<option th:value="Y">Y</option>
 									<option th:value="N">N</option>
 								</select>
+								<div id="valid_noticeFixed"></div>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="noticeTitle">제목</label>
 							<input type="text" id="noticeTitle" name="noticeTitle" class="form-control"/>
 						</div>
+						<div id="valid_noticeTitle"></div>
 						<div class="form-group">
 							<label for="noticeContent">내용</label>
 							<textarea id="noticeContent" name="noticeContents" class="form-control" rows="10" style="resize:none"></textarea>
 						</div>
+						<div id="valid_noticeContents"></div>
 						<div class="form-group">
 							<label for="addfile">첨부 파일</label>
 							<input type="file" id="addfile" name="file" class="form-control" multiple="multiple"/>
@@ -57,6 +61,7 @@ layout:decorate="~{layout/leafframe}">
 								<button type="button" class="btn btn-primary" onclick="noticewrite()">작성하기</button>
 							</div>
 						</div>
+						<div id="valid_file"></div>
 					</form>
 				</div>
 			</div>
@@ -111,37 +116,29 @@ function sendImage(file,el){
 	});	
 }
 
-//유효성 검사
-function validation(){
+function fileCheck(){
 	
-	let title=$('#noticeTitle').val();
-	let contents=$('#noticeContent').val();
-	let category=$('#noticeGroup').val();
-	let fixed=$('#isFixed').val();	
+	var filecount =6;
+	var inputFiles = $("input[name='file']");
+	var files = inputFiles[0].files;
 	
-	if(category.trim().length==0){
-		alert('카테고리를 선택해주세요.');
-		return false;
-	}
-	
-	if(fixed.trim().length==0){
-		alert('고정여부를 선택해주세요.');
+	if(files.length > filecount){
+		$('#valid_file').text('파일은 6개까지입니다.');
+		$('#valid_file').css('color','red');
 		return false;
 	}
 
-	if(title.trim().length==0){
-		alert('제목을 입력해주세요.');
-		return false;
+	if(inputFiles != null){
+		for(var i =0; i<files.length; i++){
+			console.log(files[i]);
+			formdate.append("file",files[i]);
+		}	
 	}
 	
-	if(contents.trim().length==0){
-		alert('내용을 입력해주세요.');
-		return false;
+	if(inputFiles == null){
+		noticewrite();
 	}
-	
-	return true;
 }
-
 //공지게시글 작성
 function noticewrite(){
 	
@@ -151,28 +148,17 @@ function noticewrite(){
 	let category=$('#noticeGroup').val();
 	let fixed=$('#isFixed').val();
 	let fileid=$('#fileGroupId').val();
+		
+	var formdate = new FormData();
+		
+	formdate.append("noticeGroup",category);
+	formdate.append("noticeFixed",fixed);
+	formdate.append("noticeTitle",title);
+	formdate.append("noticeAuthor",author);
+	formdate.append("noticeContents",contents);
+	formdate.append("fileGroupId",fileid);
 	
-	if(validation()){
-	
-		var formdate = new FormData();
-		
-		formdate.append("noticeGroup",category);
-		formdate.append("noticeFixed",fixed);
-		formdate.append("noticeTitle",title);
-		formdate.append("noticeAuthor",author);
-		formdate.append("noticeContents",contents);
-		formdate.append("fileGroupId",fileid);
-		
-		var inputFiles = $("input[name='file']");
-		var files = inputFiles[0].files;
-		
-		if(inputFiles != null){
-			for(var i =0; i<files.length; i++){
-				console.log(files[i]);
-				formdate.append("file",files[i]);
-			}	
-		}
-		
+	if(fileCheck()){
 		$.ajax({
 			url:'/api/notice/write',
 			type:'post',
@@ -182,11 +168,39 @@ function noticewrite(){
 			cache:false,
 			enctype: 'multipart/form-data',
 		}).done(function(resp){
-			console.log(resp);
-			alert('글이 작성 되었습니다.');
-			location.href='/page/notice/noticelist';
-		});
-	}		
+			if(resp.status==200){
+				console.log(resp);
+				alert('글이 작성 되었습니다.');
+				location.href='/page/notice/noticelist';	
+			}
+			if(resp.status==400){
+				if(resp.data.hasOwnProperty('valid_noticeGroup')){
+					$('#valid_noticeGroup').text(resp.data.valid_noticeGroup);
+					$('#valid_noticeGroup').css('color','red');
+				}else{
+					$('#valid_noticeGroup').text('');
+				}
+				if(resp.data.hasOwnProperty('valid_noticeFixed')){
+					$('#valid_noticeFixed').text(resp.data.valid_noticeFixed);
+					$('#valid_noticeFixed').css('color','red');
+				}else{
+					$('#valid_noticeFixed').text('');
+				}
+				if(resp.data.hasOwnProperty('valid_noticeTitle')){
+					$('#valid_noticeTitle').text(resp.data.valid_noticeTitle);
+					$('#valid_noticeTitle').css('color','red');
+				}else{
+					$('#valid_noticeTitle').text('');
+				}
+				if(resp.data.hasOwnProperty('valid_noticeContents')){
+					$('#valid_noticeContents').text(resp.data.valid_noticeContents);
+					$('#valid_noticeContents').css('color','red');
+				}else{
+					$('#valid_noticeContents').text('');
+				}
+			}
+		});				
+	}	
 }
 </script>
 </th:block>

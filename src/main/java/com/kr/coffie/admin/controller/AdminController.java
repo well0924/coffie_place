@@ -33,16 +33,9 @@ public class AdminController {
 		
 		List<LoginDto.LoginResponseDto>list =null;
 		int totalmember = 0;
-		try {
-			
-			list = service.memberlist(cri);
-			totalmember = service.totalmember(cri);
-			
-			log.info(list);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		list = service.memberlist(cri);
+		totalmember = service.totalmember(cri);
 		
 		Paging paging = new Paging();
 		paging.setCri(cri);

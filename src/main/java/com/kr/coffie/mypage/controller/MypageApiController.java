@@ -1,9 +1,8 @@
 package com.kr.coffie.mypage.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kr.coffie.exception.ResponseDto;
 import com.kr.coffie.mypage.service.MypageService;
 import com.kr.coffie.mypage.vo.dto.MypageDto;
 
@@ -24,10 +24,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import springfox.documentation.annotations.ApiIgnore;
 
-@Log4j2
 @Api(tags = {"마이페이지 Api"} ,value ="마이페이지에 사용되는 기능 api")
 @RestController
 @AllArgsConstructor
@@ -49,29 +47,13 @@ public class MypageApiController {
 	})
 	@ApiOperation(value = "위시리스트 목록 API",notes="위시리스트의 목록을 조회합니다.")
 	@GetMapping("/mylist/{id}")
-	public Map<String,Object> mywishlist(@PathVariable(value="id")String userId,
-			@ApiIgnore
-			@ModelAttribute
-			@RequestBody
-			MypageDto.MypageResponseDto dto)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+	public ResponseDto<?> mywishlist(@PathVariable(value="id")String userId, @ApiIgnore @ModelAttribute @RequestBody MypageDto.MypageResponseDto dto)throws Exception{
+				
 		List<MypageDto.MypageResponseDto> article =null;
 		
-		try {
-			article = service.wishlist(userId);
+		article = service.wishlist(userId);
 			
-			log.info("내가쓴 글:"+article);
-			result.put("mylist", article);
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			result.put(e.getMessage(),500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),article);
 	}
 	
 	@ApiResponses({
@@ -84,35 +66,12 @@ public class MypageApiController {
 	})
 	@ApiOperation(value = "위시리스트 추가 API",notes="위시리스트를 추가하는 api입니다.")
 	@PostMapping("/wishinsert")
-	public Map<String,Object>wishinsert(
-			@ApiParam(value="마이리스트 dto",required = true)
-			@RequestBody 
-			MypageDto.MypageRequestDto dto)throws Exception{
-		
-		Map<String,Object> result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> wishinsert(@ApiParam(value="마이리스트 dto",required = true) @RequestBody MypageDto.MypageRequestDto dto)throws Exception{		
 		int insertresult = 0;
 		
-		try {
-			
-			insertresult = service.wishinsert(dto);
-			
-			if(insertresult > 0) {
+		insertresult = service.wishinsert(dto);	
 		
-				result.put("common o.k", 200);
-
-			}else if(insertresult < 0) {
-			
-				result.put("fail",400);
-			}
-			
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-			result.put(e.getMessage(),500);
-		}
-	
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -129,43 +88,13 @@ public class MypageApiController {
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",paramType = "path")
 	})
 	@DeleteMapping("/delete/{fid}/{id}")
-	public Map<String,Object>wishdelete(
-	@PathVariable(value="fid",required=true)
-	@RequestBody
-	Integer favoriteId,
-	@PathVariable(value="id",required = true) 
-	@RequestBody 
-	String userId)throws Exception{
-				
-		Map<String,Object>result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> wishdelete( @PathVariable(value="fid",required=true) @RequestBody Integer favoriteId,@PathVariable(value="id",required = true)@RequestBody String userId)throws Exception{
+						
 		int deleteresult = 0;
+					
+		deleteresult = service.wishdelete(favoriteId,userId);
 		
-		try {
-			
-			result.put("favoriteId", favoriteId);
-
-			result.put("userId", userId);
-			
-			deleteresult = service.wishdelete(favoriteId,userId);
-			
-			if(deleteresult > 0) {
-			
-				result.put("common o.k",200);
-
-			}else if(deleteresult < 0) {
-			
-				result.put("fail", 400);
-			
-			}
-		
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-			result.put(e.getMessage(),500);
-		}
-	
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 		
 	@ApiResponses({
@@ -182,32 +111,16 @@ public class MypageApiController {
 		@ApiImplicitParam(required = true,example="1",name="fid",value="가게번호",dataType = "Integer",paramType = "path")
 	})
 	@PostMapping("/wishcheck/{fid}/{id}")
-	public Map<String,Object> wishcheck(@PathVariable(value="id",required = true)String userId,@PathVariable(value="fid",required = true)Integer placeId,
+	public ResponseDto<?> wishcheck(@PathVariable(value="id",required = true)String userId,@PathVariable(value="fid",required = true)Integer placeId,
 		@ApiIgnore
 		@RequestBody 
 		MypageDto.MypageRequestDto dto)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+	
 		int resultcheck = 0;
 		
-		try {
-			
-			resultcheck = service.wishcheck(userId, placeId);
+		resultcheck = service.wishcheck(userId, placeId);
 
-			if(resultcheck == 0) {//처음으로 누른 경우
-				result.put("checkresult", resultcheck);
-				wishinsert(dto);
-			}else if(resultcheck == 1){
-				result.put("checkresult", resultcheck);
-			}
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-			result.put(e.getMessage(), e);
-		}
-
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),resultcheck);
 	}
 	
 	@ApiResponses({
@@ -223,32 +136,12 @@ public class MypageApiController {
 		@ApiImplicitParam(required = true,name="id",value="회원아이디",example="well4149",dataType = "String",paramType = "path")
 	})
 	@GetMapping("/myarticle/{id}")
-	public Map<String,Object> myarticle(@PathVariable(value="id",required = true)String userId)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+	public ResponseDto<?> myarticle(@PathVariable(value="id",required = true)String userId)throws Exception{
+				
 		List<MypageDto.MypageArticle> article =null;
+			
+		article = service.myarticle(userId);
 		
-		try {
-			
-			article = service.myarticle(userId);
-		
-			if(article !=null) {
-			
-				result.put("myarticle", article);
-			
-			}else if(article == null) {
-			
-				result.put("not myarticle", article);
-			
-			}
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			result.put(e.getMessage(),500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),article);
 	}
 }

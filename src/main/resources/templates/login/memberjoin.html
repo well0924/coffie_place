@@ -32,6 +32,7 @@ layout:decorate="~{layout/leafframe}">
 							</div>
 							<div id="msg"></div>
 						</div>
+						<div id="valid_userId"></div>
 						<div class="form-group">
 							<label for="user_pw">비밀번호</label>
 							<input type="password" id="user_pw" name="userPw" class="form-control" autocomplete="off"/>
@@ -40,14 +41,17 @@ layout:decorate="~{layout/leafframe}">
 							<!-- 확인창 -->
 							<div id="pwcheck"></div>
 						</div>
+						<div id="valid_userPw"></div>
 						<div class="form-group">
 							<label for="user_name">이름</label>
 							<input type="text" id="user_name" name="userName" class="form-control"/>
 						</div>
+						<div id="valid_userName"></div>
 						<div class="form-group">
 							<label for="user_name">나이</label>
 							<input type="text" id="user_age" name="userAge" class="form-control"/>
 						</div>
+						<div id="valid_userAge"></div>
 						<div class="form-group">
 							<label for="user_gender">성별</label>
 							</br>
@@ -60,12 +64,14 @@ layout:decorate="~{layout/leafframe}">
 							  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="userGender" value="여성" onclick="checkvalid(this)">
 							</div>
 						</div>
+						<div id="valid_userGender"></div>
 						<div class="form-group">
 							<label for="user_email">이메일</label>
 							<div class="input-group">
 								<input type="text" id="user_email" name="userEmail" class="form-control"/>
 							</div>
 						</div>
+						<div id="valid_userEmail"></div>
 						<!-- 이메일 인증부분 -->
 <!-- 						<div class="mail_check_wrap" style=display:inline;> -->
 <!-- 							인증번호 입력 박스 -->
@@ -84,15 +90,17 @@ layout:decorate="~{layout/leafframe}">
 							<label for="user_phone">전화번호</label>
 							<input type="text" id="user_phone" name="userPhone" class="form-control"/>
 						</div>
+						<div id="valid_userPhone"></div>
 						<div class="form-group">
 							<label style="display: block;" >주소</label>
-							<input class="form-control" style="width: 70%; display: inline;" placeholder="도로명 주소" name="userAddr1" id="signUpUserPostNo" type="text" readonly="readonly" required="required">
+							<input class="form-control" style="width: 70%; display: inline;" placeholder="도로명 주소" name="userAddr1" id="signUpUserPostNo" type="text" readonly="readonly">
 							<button type="button" class="btn btn-default" onclick="AddressCode();">
 							<i class="fa fa-search"></i> 주소찾기</button>
 						</div>
 						<div class="form-group">
-							<input class="form-control" style="top: 5px;" placeholder="상세 주소" name="userAddr2" id="signUpUserAddress" type="text" required="required"/>
+							<input class="form-control" style="top: 5px;" placeholder="상세 주소" name="userAddr2" id="signUpUserAddress" type="text"/>
 						</div>
+						<div id="valid_userAddr1"></div>
 						<div class="form-group">
 							<div class="text-right">
 								<button type="button" class="btn btn-primary" onclick="memberjoin()">회원가입</button>
@@ -106,54 +114,6 @@ layout:decorate="~{layout/leafframe}">
 	</div>
 </div>
 <script type="text/javascript">
-//회원 가입 페이지 유효성 검사
-function validation(){
-	
-	var id = $('#user_id').val();
-	var pw = $('#user_pw').val();
-	var name = $('#user_name').val();
-	var age = $('#user_age').val();
-	var gender = $('input[name=userGender]:checked').val();
-	var email = $('#user_email').val();
-	var phone = $('#user_phone').val();
-	var addr1 = $('#signUpUserPostNo').val();
-	var addr2 = $('#signUpUserAddress').val();
-	
-	if(id.trim().length == 0){
-		alert('아이디를 입력해주세요.');
-		return false;
-	}
-	if(pw.trim().length == 0){
-		alert('비밀번호를 입력해주세요.');
-		return false;
-	}
-	if(name.trim().length == 0){
-		alert('이름을 입력해주세요.');
-		return false;
-	}
-	if(age.trim().length==0){
-		alert('나이를 입력해주세요.');
-		return false;
-	}
-	if(gender.trim().length == 0){
-		alert('성별을 체크해주세요.');
-		return false;
-	}
-	if(email.trim().length == 0){
-		alert('이메일을 입력해주세요.');
-		return false;
-	}
-	if(phone.trim().length == 0){
-		alert('전화번호를 입력해주세요.');
-		return false;
-	}
-	if(addr1.trim().length == 0){
-		alert('주소를 입력해주세요.');
-		return false;
-	}
-	return true;
-}
-
 //아이디 중복 검사 o.k
 function idcheck(){
 	var id = $('#user_id').val();
@@ -165,7 +125,7 @@ function idcheck(){
 		contentType:"application/json; charset=UTF-8"
 	}).done(function(resp){
 		console.log(resp);
-		if(resp.userId == 1){
+		if(resp.data == 1){
 			document.getElementById('msg').innerHTML = '</br>아이디가 중복!';
 			document.getElementById('msg').style.color='red';
 		}else{
@@ -202,23 +162,6 @@ function checkvalid(chk){
 	}	
 }
 
-//이메일 형식 체크o.k
-function validemail(){
-	//이메일 입력값
-	var useremail = $('#user_email').val();
-	//이메일 양식 확인하는 정규식
-	var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-	//형식검사
-	if(useremail.trim().length == 0){
-		alert('이메일을 입력해주세요.');
-		return false;
-	}
-	if(!regEmail.test(useremail)){
-		alert('이메일 형식이 아닙니다.');
-		return false;
-	}
-	return true;
-}
 var code = '';
 $("#mail_check_button").click(function(){
 	//이메일 값
@@ -330,9 +273,58 @@ function memberjoin(){
 		dataType:'json',
 		contentType:'application/json; charset=utf-8'
 	}).done(function(resp){
-		alert('회원가입이 되었습니다.');
 		
-		location.href='/page/main/mainpage';
+		if(resp.status==200){
+			
+			alert('회원가입이 되었습니다.');
+			location.href='/page/main/mainpage';	
+		}
+		
+		if(resp.status==400){
+			
+			if(resp.data.hasOwnProperty('valid_userId')){
+				$('#valid_userId').text(resp.data.valid_userId);
+				$('#valid_userId').css('color','red');
+			}else{
+				$('#valid_userId').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_userPw')){
+				$('#valid_userPw').text(resp.data.valid_userPw);
+				$('#valid_userPw').css('color','red');
+			}else{
+				$('#valid_userPw').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_userName')){
+				$('#valid_userName').text(resp.data.valid_userName);
+				$('#valid_userName').css('color','red');
+			}else{
+				$('#valid_userName').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_userGender')){
+				$('#valid_userGender').text(resp.data.valid_userGender);
+				$('#valid_userGender').css('color','red');
+			}else{
+				$('#valid_userGender').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_userEmail')){
+				$('#valid_userEmail').text(resp.data.valid_userEmail);
+				$('#valid_userEmail').css('color','red');
+			}else{
+				$('#valid_userEmail').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_userPhone')){
+				$('#valid_userPhone').text(resp.data.valid_userPhone);
+				$('#valid_userPhone').css('color','red');
+			}else{
+				$('#valid_userPhone').text('');
+			}
+			if(resp.data.hasOwnProperty('valid_userAddr1')){
+				$('#valid_userAddr1').text(resp.data.valid_userAddr1);
+				$('#valid_userAddr1').css('color','red');
+			}else{
+				$('#valid_userAddr1').text('');
+			}
+		}
 	});
 }
 </script>

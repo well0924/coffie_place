@@ -3,12 +3,10 @@ package com.kr.coffie.board.vo.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
-import com.kr.coffie.common.file.vo.dto.FileDto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

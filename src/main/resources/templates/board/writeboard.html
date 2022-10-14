@@ -41,7 +41,6 @@ layout:decorate="~{layout/leafframe}">
 						<label for="addfile">첨부 파일</label>
 						<input type="file" id="addfile" name="file" class="form-control" multiple='multiple'/>
 					</div>
-					<div id="file"></div>
 					<div id="valid_file"></div>
 					<div class="form-group">
 						<div class="text-right">
@@ -106,22 +105,31 @@ function sendImage(file,el){
 
 //파일 유효성 검사
 function fileCheck(){
+	
 	var filecount = 6;
 	var inputFiles = $("input[name='file']");
 	var files = inputFiles[0].files;
 	
-	//유효성 검사
-	if(!inputFiles){
-		$('#valid_file').text('파일을 입력해주세요.');
+	console.log(files);
+	console.log(inputFiles);
+	
+	//파일첨부 제한.
+	if(files.length > filecount){
+		$('#valid_file').text('파일은 6개까지 입니다.');
 		$('#valid_file').css('color','red');
 		return false;
 	}
 	
-	//파일첨부 제한.
-	if(files > filecount){
-		$('#valid_file').text('파일은 6개까지 입니다.');
-		$('#valid_file').css('color','red');
-		return false;
+	//첨부한 만큼 반복문을 돌린다.
+	if(inputFiles != null){
+		for(var i = 0; i<files.length;i++){
+			console.log(files[i]);
+			formdate.append("file",files[i]);
+		}
+	} 
+	
+	if(inputFiles == null){
+		writeboard();	
 	}
 	
 	return true;
@@ -135,7 +143,7 @@ function writeboard(){
 	var contents= $('#board_Contents').val();
 	var pwd = $('#passWd').val();
 	var fileid = $('#fileGroupId').val();
-
+    
 	var formdate = new FormData();
 		
 	formdate.append("boardTitle",title);
@@ -143,55 +151,40 @@ function writeboard(){
 	formdate.append("boardAuthor",author);
 	formdate.append("fileGroupId",fileid);
 	formdate.append("passWd",pwd);
-	//첨부파일(다중)
-	var inputFiles = $("input[name='file']");
-	var files = inputFiles[0].files;
 		
-	//첨부한 만큼 반복문을 돌린다.
-	if(inputFiles != null){
-		for(var i = 0; i<files.length;i++){
-			console.log(files[i]);
-			formdate.append("file",files[i]);
-		}	
+	if(fileCheck()){
+		$.ajax({
+			url:'/api/board/write',
+			type:'post',
+			data:formdate,
+			processData: false,
+			contentType : false,
+			cache:false,
+			enctype: 'multipart/form-data',
+		}).done(function(resp){
+			
+			if(resp.status == 200){
+				alert('글이 작성 되었습니다.');	
+				location.href='/page/board/list';
+			}
+			
+			if(resp.status == 400){
+				
+				if(resp.data.hasOwnProperty('valid_boardTitle')){
+					$('#valid_boardTitle').text(resp.data.valid_boardTitle);
+					$('#valid_boardTitle').css('color','red');
+				}else{
+					$('#valid_boardTitle').text('');
+				}
+				if(resp.data.hasOwnProperty('valid_boardContents')){
+					$('#valid_boardContents').text(resp.data.valid_boardContents);
+					$('#valid_boardContents').css('color','red');
+				}else{
+					$('#valid_boardContents').text('');
+				}
+			}
+		});	
 	}
-
-	$.ajax({
-		url:'/api/board/write',
-		type:'post',
-		data:formdate,
-		processData: false,
-		contentType : false,
-		cache:false,
-		enctype: 'multipart/form-data',
-	}).done(function(resp){
-		
-		console.log(resp);
-		console.log(resp.data);
-		console.log(resp.status);
-		
-		if(resp.status == 200){
-			alert('글이 작성 되었습니다.');	
-			
-			location.href='/page/board/list';
-		}
-		if(resp.status == 400){
-			console.log("valid");
-			
-			if(resp.data.hasOwnProperty('valid_boardTitle')){
-				$('#valid_boardTitle').text(resp.data.valid_boardTitle);
-				$('#valid_boardTitle').css('color','red');
-			}else{
-				$('#valid_boardTitle').text('');
-			}
-			if(resp.data.hasOwnProperty('valid_boardContents')){
-				$('#valid_boardContents').text(resp.data.valid_boardContents);
-				$('#valid_boardContents').css('color','red');
-			}else{
-				$('#valid_boardContents').text('');
-			}
-		}
-
-	});	
 } 
 </script>
 </th:block>

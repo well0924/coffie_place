@@ -1,9 +1,11 @@
 package com.kr.coffie.place.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.common.page.Criteria;
 import com.kr.coffie.common.page.Paging;
+import com.kr.coffie.exception.ResponseDto;
 import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
@@ -55,39 +58,20 @@ public class PlaceApiController {
 		@ApiImplicitParam(name="searchType",value="검색타입",example="T",dataType = "String",paramType = "query")
 	})
 	@GetMapping(value="/placelist")
-	public Map<String,Object>placelist(
-			@ApiParam(name="페이징 및 검색 객체",required = true)
-			Criteria cri)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String,Object>();
-		
+	public ResponseDto<?> placelist(@ApiParam(name="페이징 및 검색 객체",required = true)Criteria cri)throws Exception{
+			
 		List<PlaceDto.PlaceResponseDto>placelist =null;
 		
 		int totalplace = 0;
 		
-		try {
-			placelist = service.placelist(cri);
-			totalplace = service.placetotal(cri);
+		placelist = service.placelist(cri);
+		totalplace = service.placetotal(cri);
 			
-			if(placelist != null) {
-			
-				result.put("placelist", placelist);
-				result.put("totalplace",totalplace);
-			}else {
-			
-				result.put("bad request", 400);
-			
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
-		
 		Paging paging = new Paging();
 		paging.setCri(cri);
 		paging.setTotalCount(totalplace);
 		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),placelist);
 	}
 	
 	@ApiResponses({
@@ -103,28 +87,11 @@ public class PlaceApiController {
 		@ApiImplicitParam(required = true,name="id",value="가게번호",example="1",dataType = "Integer",paramType = "path")
 	})
 	@GetMapping("/placedetail/{id}")
-	public Map<String,Object>placedetail(@PathVariable(value="id")Integer placeId,
-			@ApiIgnore
-			PlaceDto.PlaceResponseDto dto)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String, Object>();
-		
-		try {
+	public ResponseDto<?> placedetail(@PathVariable(value="id")Integer placeId, @ApiIgnore PlaceDto.PlaceResponseDto dto)throws Exception{
+					
+		dto = service.placeDetail(placeId);
 			
-			dto = service.placeDetail(placeId);
-			
-			if(dto != null) {
-				result.put("placeDetail", dto);
-			}else {
-				result.put("bad request", 400);
-			}
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			result.put(e.getMessage(), 500);
-		}
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),dto);
 	}
 	
 	@ApiResponses({
@@ -156,43 +123,20 @@ public class PlaceApiController {
 	})
 	@ApiOperation(value = "가게등록기능",notes = "가게등록페이지에서 가게등록기능")
 	@PostMapping("/placeregister")
-	public Map<String,Object>placeregister(
-		@ApiParam(name="가게 dto",required = true)	
-		@RequestBody
-		@ModelAttribute PlaceDto.PlaceRequestDto dto,
-		@ApiParam(name="파일 dto",required = true)
-		@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
-		
-		Map<String,Object> result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> placeregister(
+		@ApiParam(name="가게 dto",required = true) @Valid @RequestBody @ModelAttribute PlaceDto.PlaceRequestDto dto,
+		@ApiParam(name="파일 dto",required = true) @ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
+				
 		int registerresult = 0;
 		
-		try {
-	
-			dto.setPlaceAuthor("admin");
+		dto.setPlaceAuthor("admin");
 			
-			imgvo.setImgGroup("coffieplace");
-			imgvo.setFileType("place");
+		imgvo.setImgGroup("coffieplace");
+		imgvo.setFileType("place");
 			
-			registerresult = service.placeregister(dto,imgvo);
-			
-			if(registerresult > 0 ) {
-			
-				result.put("common o.k", 200);
-			
-			}else if( registerresult < 0) {
-			
-				result.put("fail", 400);
-			
-			}
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		}
+		registerresult = service.placeregister(dto,imgvo);
 		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -208,43 +152,21 @@ public class PlaceApiController {
 		@ApiImplicitParam(required = true,name="id",value="가게번호",example="1",dataType = "Integer",paramType = "path")
 	})
 	@PutMapping("/placeupdate/{id}")
-	public Map<String,Object>placeupdate(@PathVariable(value="id",required = true)Integer placeId,
-			@ApiParam(name="가게 dto")
-			@ModelAttribute PlaceDto.PlaceRequestDto dto,
-			@ApiIgnore
-			@ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> placeupdate(
+			@PathVariable(value="id",required = true)Integer placeId,
+			@ApiParam(name="가게 dto") @ModelAttribute PlaceDto.PlaceRequestDto dto,
+			@ApiIgnore @ModelAttribute FileDto.ImageRequestDto imgvo)throws Exception{
+				
 		int updateresult = 0;
 		
-		try {
-	
-			dto.setPlaceAuthor("admin");
+		dto.setPlaceAuthor("admin");
 			
-			imgvo.setImgGroup("coffieplace");
-			imgvo.setFileType("place");
+		imgvo.setImgGroup("coffieplace");
+		imgvo.setFileType("place");
 			
-			updateresult = service.placeupdate(dto,imgvo);
+		updateresult = service.placeupdate(dto,imgvo);
 			
-			if(updateresult>0) {
-			
-				result.put("common o.k", 200);
-			
-			}else if(updateresult < 0) {
-			
-				result.put("fail", 400);
-			}
-		
-		
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-			
-			result.put(e.getMessage(), 500);
-		}
-		
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 	
 	@ApiResponses({
@@ -260,34 +182,13 @@ public class PlaceApiController {
 		@ApiImplicitParam(required = true,name="id",value="가게번호",example="10",dataType = "Integer",paramType = "path")
 	})
 	@DeleteMapping("/placedelete/{id}")
-	public Map<String,Object>placedelete(@PathVariable(value="id",required = true)Integer placeId)throws Exception{
-		
-		Map<String,Object>result = new HashMap<String, Object>();
-		
+	public ResponseDto<?> placedelete(@PathVariable(value="id",required = true)Integer placeId)throws Exception{
+				
 		int deleteresult = 0;
 		
-		try {
+		deleteresult = service.placedelete(placeId);
 			
-			deleteresult = service.placedelete(placeId);
-			
-			if(deleteresult > 0) {
-	
-				result.put("common o.k", 200);
-			
-			}else if( deleteresult < 0) {
-			
-				result.put("fail", 400);
-			
-			}
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			result.put(e.getMessage(), 500);
-		
-		}
-
-		return result;
+		return new ResponseDto<>(HttpStatus.OK.value(),200);
 	}
 
 }
