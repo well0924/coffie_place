@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kr.coffie.exception.ResponseDto;
+import com.kr.coffie.exception.dto.ResponseDto;
 import com.kr.coffie.mypage.service.MypageService;
 import com.kr.coffie.mypage.vo.dto.MypageDto;
 

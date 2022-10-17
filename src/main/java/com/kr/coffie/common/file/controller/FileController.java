@@ -14,7 +14,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kr.coffie.common.ecxcel.ExcelService;
 import com.kr.coffie.common.file.service.FileService;
 import com.kr.coffie.common.file.vo.dto.FileDto;
+import com.kr.coffie.exception.dto.DownloadResponseDto;
 import com.kr.coffie.place.service.PlaceService;
 import com.kr.coffie.place.vo.dto.PlaceDto;
 
@@ -50,52 +50,44 @@ public class FileController {
 	})
 	@ApiOperation(value = "게시판 다운로드",notes = "자유게시판 조회페이지에서 파일 다운로드기능")
 	@GetMapping("/boarddownload")
-	public ResponseEntity<Resource>boardfiledownload(
-			@ApiParam(required = true,value="boardId",name="게시글 번호",example="1")
-			@RequestParam Integer boardId)throws Exception{
+	public DownloadResponseDto<?>boardfiledownload(@ApiParam(required = true,value="boardId",name="게시글 번호",example="1") @RequestParam Integer boardId)throws Exception{
 		
 		HttpHeaders header = new HttpHeaders();
 	
 		Resource res = null;
 		
-		try {
-			//파일 다운로드
-			//첨부파일 목록 가져오기.
-			List<FileDto.FileResponseDto> vo = service.boardFileList(boardId);
+		//파일 다운로드
+		//첨부파일 목록 가져오기.
+		List<FileDto.FileResponseDto> vo = service.boardFileList(boardId);
+		
+		//파일 경로
+		String filePath =  vo.get(0).getFilePath();
+		//원본명
+		String originName = vo.get(0).getOriginName();
+	    //풀경로
+		String fullPath = filePath ;
+		 
+		//파일객체 생성
+		File targetFile = new File(fullPath);
+		
+		if(targetFile.exists()) {//파일이 존재를 했을 경우
+			String mimeType = Files.probeContentType(Paths.get(targetFile.getAbsolutePath()));
 			
-			//파일 경로
-			String filePath =  vo.get(0).getFilePath();
-			//원본명
-			String originName = vo.get(0).getOriginName();
-		    //풀경로
-			String fullPath = filePath ;
+			if(mimeType == null) {
+				mimeType = "application/octet-stream";
+			}
+			//절대경로를 지정해주면 해당경로의 파일을 가져와 준다.
+			res = new UrlResource(targetFile.toURI());
 			 
-			//파일객체 생성
-			File targetFile = new File(fullPath);
+			String encodingFileName = URLEncoder.encode(originName, "UTF-8").replace("+","%20");
+			 
+			header.set("Content-Disposition","attachment;filename="+ encodingFileName+";filename*=UTF-8''"+encodingFileName);
+			header.setCacheControl("no-cache");
+			header.setContentType(MediaType.parseMediaType(mimeType));
 			
-			if(targetFile.exists()) {//파일이 존재를 했을 경우
-				String mimeType = Files.probeContentType(Paths.get(targetFile.getAbsolutePath()));
-				
-				if(mimeType == null) {
-					mimeType = "application/octet-stream";
-				}
-				//절대경로를 지정해주면 해당경로의 파일을 가져와 준다.
-				res = new UrlResource(targetFile.toURI());
-				 
-				String encodingFileName = URLEncoder.encode(originName, "UTF-8").replace("+","%20");
-				 
-				header.set("Content-Disposition","attachment;filename="+ encodingFileName+";filename*=UTF-8''"+encodingFileName);
-				header.setCacheControl("no-cache");
-				header.setContentType(MediaType.parseMediaType(mimeType));
-				
-			}	
-		} catch (Exception e) {
-	
-			e.printStackTrace();
-	
-		}
-	
-		return new ResponseEntity<Resource>(res,header,HttpStatus.OK);
+		}	
+		
+		return new DownloadResponseDto<>(HttpStatus.OK.value(),header,res);
 	}
 
 	//공지게시판 다운로드
@@ -106,7 +98,7 @@ public class FileController {
 	})
 	@ApiOperation(value = "공지게시판 다운로드",notes = "공지게시판 조회페이지에서 파일 다운로드기능")
 	@GetMapping("/noticedownload")
-	public ResponseEntity<Resource>noticefiledownload(
+	public DownloadResponseDto<Resource>noticefiledownload(
 			@ApiParam(value="noticeId",name="공지게시판 번호",required = true,example="1")
 			@RequestParam Integer noticeId)throws Exception{
 		
@@ -114,49 +106,43 @@ public class FileController {
 
 		Resource res = null;
 		
-		try {
-			//파일 다운로드
-			//첨부파일 목록 가져오기.
-			List<FileDto.FileResponseDto> vo = service.noticeFileList(noticeId);
+		//파일 다운로드
+		//첨부파일 목록 가져오기.
+		List<FileDto.FileResponseDto> vo = service.noticeFileList(noticeId);
+		
+		//파일 경로
+		String filePath =  vo.get(0).getFilePath();
+		//원본명
+		String originName = vo.get(0).getOriginName();
+	    //풀경로
+		String fullPath = filePath ;
+		 
+		//파일객체 생성
+		File targetFile = new File(fullPath);
+		
+		if(targetFile.exists()) {//파일이 존재를 했을 경우
+	
+			String mimeType = Files.probeContentType(Paths.get(targetFile.getAbsolutePath()));
 			
-			//파일 경로
-			String filePath =  vo.get(0).getFilePath();
-			//원본명
-			String originName = vo.get(0).getOriginName();
-		    //풀경로
-			String fullPath = filePath ;
+			if(mimeType == null) {
+			
+				mimeType = "application/octet-stream";
+			
+			}
+			//절대경로를 지정해주면 해당경로의 파일을 가져와 준다.
+			res = new UrlResource(targetFile.toURI());
 			 
-			//파일객체 생성
-			File targetFile = new File(fullPath);
+			String encodingFileName = URLEncoder.encode(originName, "UTF-8").replace("+","%20");
+			 
+			header.set("Content-Disposition","attachment;filename="+ encodingFileName+";filename*=UTF-8''"+encodingFileName);
+
+			header.setCacheControl("no-cache");
+
+			header.setContentType(MediaType.parseMediaType(mimeType));
 			
-			if(targetFile.exists()) {//파일이 존재를 했을 경우
+		}	
 		
-				String mimeType = Files.probeContentType(Paths.get(targetFile.getAbsolutePath()));
-				
-				if(mimeType == null) {
-				
-					mimeType = "application/octet-stream";
-				
-				}
-				//절대경로를 지정해주면 해당경로의 파일을 가져와 준다.
-				res = new UrlResource(targetFile.toURI());
-				 
-				String encodingFileName = URLEncoder.encode(originName, "UTF-8").replace("+","%20");
-				 
-				header.set("Content-Disposition","attachment;filename="+ encodingFileName+";filename*=UTF-8''"+encodingFileName);
-	
-				header.setCacheControl("no-cache");
-	
-				header.setContentType(MediaType.parseMediaType(mimeType));
-				
-			}	
-		} catch (Exception e) {
-		
-			e.printStackTrace();
-		
-		}
-		
-		return new ResponseEntity<Resource>(res,header,HttpStatus.OK);
+		return new DownloadResponseDto<>(HttpStatus.OK.value(),header,res);
 	}
 	
 	@ApiResponses({
@@ -166,9 +152,8 @@ public class FileController {
 	})
 	@ApiOperation(value = "엑섹다운로드기능",notes = "가게목록페이지에서 어드민으로 로그인을 했을경우 엑셀목록으로 받는 기능")
 	@GetMapping("/exceldown")
-	public void placeExcelDown(HttpServletRequest req, HttpServletResponse res) {
+	public DownloadResponseDto<?>placeExcelDown(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
-		try {
 		
 			List<PlaceDto.PlaceResponseDto>placelist = placeservice.excellist();
 	
@@ -176,11 +161,7 @@ public class FileController {
 			
 			excellist.downloadExcel(res);
 			
-		} catch (Exception e) {
-	
-			e.printStackTrace();
-		
-		}
+		return new DownloadResponseDto<>();
 	}
 
 }

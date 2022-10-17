@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kr.coffie.admin.service.AdminService;
 import com.kr.coffie.config.email.MailService;
-import com.kr.coffie.exception.ResponseDto;
+import com.kr.coffie.exception.dto.ResponseDto;
 import com.kr.coffie.login.service.LoginService;
 import com.kr.coffie.login.vo.dto.LoginDto;
 

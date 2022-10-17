@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.kr.coffie.exception.ResponseDto;
+import com.kr.coffie.exception.dto.ResponseDto;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -14,4 +14,5 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseDto<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),e.getMessage());
 	}
+	
 }

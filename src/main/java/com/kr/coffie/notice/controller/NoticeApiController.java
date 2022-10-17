@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.common.page.Criteria;
 import com.kr.coffie.common.page.Paging;
-import com.kr.coffie.exception.ResponseDto;
+import com.kr.coffie.exception.dto.ResponseDto;
 import com.kr.coffie.notice.service.NoticeService;
 import com.kr.coffie.notice.vo.dto.NoticeDto;
 

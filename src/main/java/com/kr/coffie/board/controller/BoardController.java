@@ -73,9 +73,7 @@ public class BoardController {
 		List<FileDto.FileResponseDto>fileList = null;
 		
 		detail = service.boarddetail(boardId);
-		log.info(detail);
 		fileList = fileservice.boardFileList(boardId);
-		log.info(fileList);
 		Imagelist = fileservice.imagelist(boardId);
 		
 		//조회수 증가

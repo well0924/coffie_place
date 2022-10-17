@@ -21,7 +21,7 @@ import com.kr.coffie.board.vo.dto.BoardDto;
 import com.kr.coffie.common.file.vo.dto.FileDto;
 import com.kr.coffie.common.page.Criteria;
 import com.kr.coffie.common.page.Paging;
-import com.kr.coffie.exception.ResponseDto;
+import com.kr.coffie.exception.dto.ResponseDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -105,8 +105,7 @@ public class BoardApiController {
 	})
 	@ApiOperation(value = "자유게시판 글작성 API",notes="자유게시글에서 글을 작성하는 기능입니다. 작성기능은 로그인이 필요합니다.")
 	@PostMapping(value="/write")
-	public ResponseDto<?>articleinsert(
-			@Valid @ApiParam(value="게시글 객체",required = true) @RequestBody @ModelAttribute BoardDto.BoardRequestDto dto, 
+	public ResponseDto<?>articleinsert(@Valid @ApiParam(value="게시글 객체",required = true) @RequestBody @ModelAttribute BoardDto.BoardRequestDto dto, 
 			BindingResult bindingresult,
 			@ApiIgnore @RequestBody @ModelAttribute FileDto.FileRequestDto fvo)throws Exception{
 				

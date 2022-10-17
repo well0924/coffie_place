@@ -52,9 +52,6 @@ public class MainController {
 			total = boardservice.totalarticle(cri);
 			total = noticeservice.noticetotalcount(cri);
 			
-			log.info("게시판:"+board);
-			log.info("공지:"+notice);
-			log.info("이미지:"+placelist);
 			Paging paging = new Paging();
 			paging.setCri(cri);
 			paging.setTotalCount(total);
