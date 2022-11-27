@@ -16,4 +16,4 @@
 
 # 위키 주소
 
-[Coffies](https://github.com/well0924/coffie_place/wiki/Main)
+[Coffies](https://github.com/well0924/coffie_place/wiki)
