@@ -81,9 +81,9 @@
 	FROM
 		tbl_board b
 	WHERE
- 		b.board_author=#{userId}
+ 		b.board_author= #{userId}
 )
-	UNION ALL 
+UNION ALL 
 (
 	SELECT
 		n.notice_id AS id,
@@ -95,7 +95,7 @@
 	FROM
 		tbl_notice_board n
 	WHERE 
-		n.notice_author =#{userId}
+		n.notice_author = #{userId}
 )
 </select>
 </mapper>

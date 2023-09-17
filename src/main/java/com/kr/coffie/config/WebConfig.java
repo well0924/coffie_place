@@ -53,6 +53,7 @@ public class WebConfig implements WebMvcConfigurer{
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
 		registry
         .addResourceHandler("/img/**")
         .addResourceLocations("classpath:/static/img/")
@@ -76,16 +77,12 @@ public class WebConfig implements WebMvcConfigurer{
         registry
         .addResourceHandler("/webjars/**")
         .addResourceLocations("classpath:/META-INF/resources/webjars/"); 
-
-        registry
-        .addResourceHandler(imgStatic + "**")
-        .addResourceLocations("file:///" + imgPath)
-        .setCachePeriod(0)
-        .resourceChain(true)
-        .addResolver(new PathResourceResolver());
         
         String resourceLocation = "classpath:/static/";
-        registry.addResourceHandler("/static/**").addResourceLocations(resourceLocation);	
+        
+        registry
+        .addResourceHandler("/static/**")
+        .addResourceLocations(resourceLocation);	
         
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 	}

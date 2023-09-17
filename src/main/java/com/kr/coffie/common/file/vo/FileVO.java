@@ -22,12 +22,19 @@ import lombok.ToString;
 public class FileVO {
 	
 	private Integer fileId;
+	
 	private Integer boardId;
+	
 	private Integer noticeId;
+	
 	private String filePath;
+	
 	private MultipartFile[]file;
+	
 	private String storedName;
+	
 	private String originName;
+	
 	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
 	private LocalDateTime createdAt;
 

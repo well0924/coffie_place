@@ -86,12 +86,7 @@ public class PlaceService {
 				
 			}
 		}
-		
-		//파일없이 가게 작성 한 경우
-		if(imagelist == null || imagelist.size() == 0) {
-			result = mapper.placeregister(dto);
-		}
-				
+						
 		return result;
 	};
 

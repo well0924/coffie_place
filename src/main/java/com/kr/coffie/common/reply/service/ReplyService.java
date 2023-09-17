@@ -72,9 +72,7 @@ public class ReplyService {
 	};
 	
 	public void updateStar(Integer placeId)throws Exception{
-		
 		Double starAvg = mapper.getStarAvgByPlaceId(placeId);
 		placeservice.cafeReviewRate(placeId, starAvg);
-	
 	}
 }

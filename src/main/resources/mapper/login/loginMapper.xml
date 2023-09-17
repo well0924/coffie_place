@@ -13,7 +13,7 @@
 		from 
 			tbl_user 
 		where 
-			user_name  = #{userName} and user_email = #{userEmail}
+			user_name = #{userName} and user_email = #{userEmail}
 	</select>
 	
 	<update id="pwSearch" parameterType="com.kr.coffie.login.vo.dto.LoginDto$LoginRequestDto">

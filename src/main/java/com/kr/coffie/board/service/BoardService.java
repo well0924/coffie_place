@@ -70,7 +70,8 @@ public class BoardService {
 	};
 	
 	public int boardupdate(BoardDto.BoardRequestDto dto,FileDto.FileRequestDto fvo)throws Exception{
-	    int updateresult = mapper.boardupdate(dto);
+	    
+		int updateresult = mapper.boardupdate(dto);
 	    
 	    List<FileDto.FileResponseDto> filelists = filemapper.boardFileList(dto.getBoardId());
 		
@@ -80,16 +81,11 @@ public class BoardService {
 			if(filelists != null) {
 				//첨부파일을 삭제->그 다음 파일을 업로드+첨부파일 인서트
 				for(int i= 0; i<filelists.size(); i++) {			
-					
 					String filepath = filelists.get(i).getFilePath();
-					
 					File path = new File(filepath);
-					
 					//경로 삭제
 					if(path.exists()) {
-					
-						path.delete();
-					
+						path.delete();		
 					}
 					//디비에 저장된 파일 삭제
 					filemapper.boardFileDelete(dto.getBoardId());
@@ -97,12 +93,9 @@ public class BoardService {
 			}
 			//파일 업로드
 			filelists = utile.fileupload(fvo);
-	
 			//파일 재첨부 
 			for(FileDto.FileResponseDto fileVO : filelists) {
-			
 				fileVO.setBoardId(dto.getBoardId());				
-				
 				int attachresult = filemapper.boardFileInsert(fileVO);
 			}
 		}
@@ -144,6 +137,7 @@ public class BoardService {
 				filemapper.boardFileDelete(boardId);
 			}
 		}	
+
 		return result;
 	};
 	

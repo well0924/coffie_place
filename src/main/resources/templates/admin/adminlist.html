@@ -120,6 +120,7 @@ function cchkClicked(){
 //선택 삭제 기능o.k
 function selectDelete(){
 	var MemberArray = [];
+	
 	$("input:checkbox[name=cchk]:checked").each(function(){
 		MemberArray.push($(this).val());
 		console.log(MemberArray);
@@ -129,6 +130,7 @@ function selectDelete(){
 		alert("삭제할 항목을 선택해주세요.");
 		return false;
 	}
+	
 	var confirmAlert = confirm('정말로 삭제하시겠습니까?');
 	
 	if(confirmAlert){

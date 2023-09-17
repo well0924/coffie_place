@@ -150,7 +150,7 @@ public class FileController {
         @ApiResponse(code=400, message="bad request"),
         @ApiResponse(code=500, message="error")
 	})
-	@ApiOperation(value = "엑섹다운로드기능",notes = "가게목록페이지에서 어드민으로 로그인을 했을경우 엑셀목록으로 받는 기능")
+	@ApiOperation(value = "엑셀다운로드기능",notes = "가게목록페이지에서 어드민으로 로그인을 했을경우 엑셀목록으로 받는 기능")
 	@GetMapping("/exceldown")
 	public DownloadResponseDto<?>placeExcelDown(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		

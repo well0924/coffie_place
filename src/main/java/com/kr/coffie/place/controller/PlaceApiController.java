@@ -87,7 +87,7 @@ public class PlaceApiController {
 		@ApiImplicitParam(required = true,name="id",value="가게번호",example="1",dataType = "Integer",paramType = "path")
 	})
 	@GetMapping("/placedetail/{id}")
-	public ResponseDto<?> placedetail(@PathVariable(value="id")Integer placeId, @ApiIgnore PlaceDto.PlaceResponseDto dto)throws Exception{
+	public ResponseDto<?> placedetail(@PathVariable(value="id")Integer placeId, PlaceDto.PlaceResponseDto dto)throws Exception{
 					
 		dto = service.placeDetail(placeId);
 			
