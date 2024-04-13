@@ -111,7 +111,8 @@ public class MypageApiController {
 		@ApiImplicitParam(required = true,example="1",name="fid",value="가게번호",dataType = "Integer",paramType = "path")
 	})
 	@PostMapping("/wishcheck/{fid}/{id}")
-	public ResponseDto<?> wishcheck(@PathVariable(value="id",required = true)String userId,@PathVariable(value="fid",required = true)Integer placeId,
+	public ResponseDto<?> wishcheck(@PathVariable(value="id",required = true)String userId,
+									@PathVariable(value="fid",required = true)Integer placeId,
 		@ApiIgnore
 		@RequestBody 
 		MypageDto.MypageRequestDto dto)throws Exception{

@@ -54,7 +54,8 @@ public class SecutrityConfig extends WebSecurityConfigurerAdapter{
 		web
 		.ignoring()
 		.antMatchers("/webjars/**", "/dist/**", "/plugins/**", "/css/**", "/user/**","/swagger-resources/**")
-		.antMatchers("/images/**", "/JS/**", "/font", "/webfonts/**", "/main/**", "/swagger-ui/**", "/v2/**");
+		.antMatchers("/images/**", "/JS/**", "/font", "/webfonts/**", "/main/**", "/swagger-ui/**", "/v2/**")
+		.antMatchers("/v3/api-docs/**", "/swagger-ui/**");
 	}
 
 	private static final String[] PERMIT_URL_ARRAY = {
